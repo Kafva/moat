@@ -38,8 +38,8 @@ function usb-install() {
 
 #----------------------------#
 # The easiest method for debugging is to start the app manually and then
-# find the process and attach to it via Xcode
-
+# find the process and attach to it via Xcode (or just simply run it with the 'play' button
+# in Xcode)
 
 if [ "$1" = build ]; then
 
@@ -52,8 +52,8 @@ elif [ "$1" = usb ]; then
 elif [ "$1" = install ]; then
 	# The ios-deploy solution currently throws an error
 	#	https://developer.apple.com/forums/thread/658376
-	# install &&
 	# The [-m] flag avoids reinstalling the app and starts debugging immediatelly
+	# install &&
 	# ios-deploy -m -b build/Release-iphoneos/${PROJECT}.app 
 	
 	# Using the `test` command is the quickest way of re-installing the
