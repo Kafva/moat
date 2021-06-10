@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A1F2671FF970010BF19 /* SpriteSheet.swift */; };
+		DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A2326727D920010BF19 /* SpriteScene.swift */; };
+		DD939A262672A9370010BF19 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A252672A9370010BF19 /* Config.swift */; };
 		DDA951F62670F139003D760D /* SwiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA951F52670F139003D760D /* SwiveApp.swift */; };
 		DDA951F82670F139003D760D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA951F72670F139003D760D /* ContentView.swift */; };
 		DDA951FA2670F13B003D760D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDA951F92670F13B003D760D /* Assets.xcassets */; };
@@ -35,6 +37,8 @@
 
 /* Begin PBXFileReference section */
 		DD939A1F2671FF970010BF19 /* SpriteSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteSheet.swift; sourceTree = "<group>"; };
+		DD939A2326727D920010BF19 /* SpriteScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteScene.swift; sourceTree = "<group>"; };
+		DD939A252672A9370010BF19 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		DDA951F22670F139003D760D /* Swive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDA951F52670F139003D760D /* SwiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiveApp.swift; sourceTree = "<group>"; };
 		DDA951F72670F139003D760D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -97,6 +101,8 @@
 		DDA951F42670F139003D760D /* Swive */ = {
 			isa = PBXGroup;
 			children = (
+				DD939A252672A9370010BF19 /* Config.swift */,
+				DD939A2326727D920010BF19 /* SpriteScene.swift */,
 				DD939A1F2671FF970010BF19 /* SpriteSheet.swift */,
 				DDA951F52670F139003D760D /* SwiveApp.swift */,
 				DDA951F72670F139003D760D /* ContentView.swift */,
@@ -264,6 +270,8 @@
 			files = (
 				DDA951F82670F139003D760D /* ContentView.swift in Sources */,
 				DDA951F62670F139003D760D /* SwiveApp.swift in Sources */,
+				DD939A262672A9370010BF19 /* Config.swift in Sources */,
+				DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */,
 				DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -433,6 +441,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com..Swive;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
