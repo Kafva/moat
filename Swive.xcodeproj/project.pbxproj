@@ -16,6 +16,7 @@
 		DDA951FD2670F13B003D760D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDA951FC2670F13B003D760D /* Preview Assets.xcassets */; };
 		DDA952082670F13B003D760D /* SwiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952072670F13B003D760D /* SwiveTests.swift */; };
 		DDA952132670F13B003D760D /* SwiveUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952122670F13B003D760D /* SwiveUITests.swift */; };
+		DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6E182267361CD0039A899 /* Color+hex.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		DDA9520E2670F13B003D760D /* SwiveUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiveUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDA952122670F13B003D760D /* SwiveUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiveUITests.swift; sourceTree = "<group>"; };
 		DDA952142670F13B003D760D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDD6E182267361CD0039A899 /* Color+hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+hex.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 		DDA951F42670F139003D760D /* Swive */ = {
 			isa = PBXGroup;
 			children = (
+				DDD6E182267361CD0039A899 /* Color+hex.swift */,
 				DD939A252672A9370010BF19 /* Config.swift */,
 				DD939A2326727D920010BF19 /* SpriteScene.swift */,
 				DD939A1F2671FF970010BF19 /* SpriteSheet.swift */,
@@ -271,6 +274,7 @@
 				DDA951F82670F139003D760D /* ContentView.swift in Sources */,
 				DDA951F62670F139003D760D /* SwiveApp.swift in Sources */,
 				DD939A262672A9370010BF19 /* Config.swift in Sources */,
+				DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */,
 				DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */,
 				DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */,
 			);
@@ -430,7 +434,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"Swive/Preview Content\"";
 				DEVELOPMENT_TEAM = R394CK45KY;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Swive/Info.plist;
@@ -453,7 +456,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"Swive/Preview Content\"";
 				DEVELOPMENT_TEAM = R394CK45KY;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Swive/Info.plist;
