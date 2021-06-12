@@ -5,64 +5,54 @@ import SwiftUI
 // 2. Get file content
 // 3. Write file content (maybe)
 
-let PATH_REGEX     = "^/(([ A-Za-z0-9.]+)/)+$"; 
-let ROOT_DIR_REGEX = "^/([ A-Za-z0-9.]+)/";
 
-enum EntryType {
-   case Directory
-   case File
-}
-
-class Entry: ObservableObject {
-   // The codable property enables a struct to be
-   // serialised/deserialised
-   // https://www.hackingwithswift.com/swift4
-   // https://www.hackingwithswift.com/books/ios-swiftui/sending-and-receiving-codable-data-with-urlsession-and-swiftui
-   let name: String
-   let type: EntryType
-   var subentries: [Entry]?
-   let id = UUID();
-   
-   
-   init(name: String, type: EntryType){
-      self.name = name;
-      self.type = type;
-      self.subentries = nil;
-   }
-}
-
-/// Fetch a list of all entries from the provided path
-/// on the remote server
-func getEntries(path: String) -> [Entry] {
-    var arr: [Entry] = [];
-
-    for i in 0...4 {
-        arr.append( Entry(name:"Item \(i)", type: .File) );
-    }
-
-   return arr;
-   
-   
-   //if ( path.range(of: PATH_REGEX, options: .regularExpression) != nil ){
-
-   //}
-   //else {
-   //   NSLog("Path validation failed: \(path)");
-   //}
-}
 
 struct ListingView: View {
 
    let dirPath: String;
    
+   // TODO implement check agianst top level 'root' state
    @State var entries = [Entry]();
    
-   init(_ dirPath: String) {
+   init?(_ dirPath: String) {
       // https://stackoverflow.com/questions/57128547/swiftui-list-color-background
       UITableView.appearance().backgroundColor = .clear
       UITableViewCell.appearance().backgroundColor = .clear
       
-      self.dirPath = dirPath;
+      if  dirPath.range(of: PATH_REGEX, options: .regularExpression) != nil {
+         self.dirPath = dirPath;
+      }
+      else {
+         NSLog("Path validation failed: \(dirPath)");
+         self.dirPath = "/invalid/"; // TODO
+      }
+   }
+   
+   /// Fetch a list of all entries from the provided path
+   /// on the remote server
+   func loadEntries() -> Void {
+      guard let url = URL(string: "http://10.0.1.30:8080/dir.json") else { return } 
+      let req = URLRequest(url: url);
+
+      URLSession.shared.dataTask(with: req) { data, response, err in
+         // Create a background task to fetch data from the server
+         if data != nil {
+            do { 
+               
+               let decoded = try JSONDecoder().decode(Entry.self, from: data!) 
+               // If the response data was successfully decoded dispatch an update in the
+               // main thread (all UI updates should be done in the main thread)
+               // to update the state in the view
+               DispatchQueue.main.async {
+                  self.entries = decoded.subentries ?? [];
+               }
+            }
+            catch { NSLog("Decoding failure \(error)"); }
+         }
+         else {
+            NSLog("Error fetching data: \(err?.localizedDescription ?? "Unknown error")");
+         }
+      }.resume(); // Execute the task immediatelly
    }
 
    var body: some View {
@@ -81,14 +71,12 @@ struct ListingView: View {
                     Text("Go to loading view")
                   }
                }
-
-               // Without a VStack the list entries will adhear
-               // to the enclosing ZStack
-               // We need the entry class to have an ID
-               // to iterate over it using ForEach()
-               ForEach( getEntries(path: self.dirPath), id: \.id ) { entry in
                
-                  NavigationLink(destination: ListingView( self.dirPath + entry.name ) ) {
+               ForEach(entries, id: \.id ) { entry in
+                  // We need the entry class to have an ID
+                  // to iterate over it using ForEach()
+               
+                  NavigationLink(destination: ListingView( "\(self.dirPath)\(entry.name)/" ) ) {
                         HStack(alignment: .firstTextBaseline) {
                            Image("umbreon")
                               .resizable() // Must be applied before modifying the frame size
@@ -99,18 +87,14 @@ struct ListingView: View {
                               .foregroundColor(.white)
                               .font(.system(size:30))
                               .fontWeight(.bold)
-                        }
-                        .padding(10)
                      }
+                     .padding(10)
                   }
+               }
             }
             .listRowBackground(Color.clear)
-            
-            
-            
-            
-            
-            
+            .onAppear(perform: loadEntries)
+
             
             //NavigationView {
             //VStack {

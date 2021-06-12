@@ -1,10 +1,10 @@
 #!/bin/bash
 exitErr(){ echo -e "$1" >&2 ; exit 1; }
-usage="usage: $(basename $0) [-n <device name>] <build|debug|install>"
+usage="usage: $(basename $0) [-n <device name>] <build|usb-install|test>"
 helpStr=""
 PROJECT=Swive
 DEVICENAME=sheep
-STUB_SCHEME=Install
+SCHEME=Install
 
 
 while getopts ":h:d:" opt
@@ -49,7 +49,7 @@ if [ "$1" = build ]; then
 elif [ "$1" = usb ]; then
 	usb-install
 
-elif [ "$1" = install ]; then
+elif [ "$1" = test ]; then
 	# The ios-deploy solution currently throws an error
 	#	https://developer.apple.com/forums/thread/658376
 	# The [-m] flag avoids reinstalling the app and starts debugging immediatelly
@@ -57,11 +57,11 @@ elif [ "$1" = install ]; then
 	# ios-deploy -m -b build/Release-iphoneos/${PROJECT}.app 
 	
 	# Using the `test` command is the quickest way of re-installing the
-	# application (and can be done over pure WiFi), it is therefore
-	# preferable to have scheme with stub tests which exits immediatelly
+	# application (and can be done over pure WiFi),
+	# one can have a scheme with stub tests which exits immediatelly to install using this method
 	xcodebuild test \
 		GCC_PREPROCESSOR_DEFINITIONS="DEBUG=1" \
-		-scheme $STUB_SCHEME \
+		-scheme $SCHEME \
 		-allowProvisioningUpdates \
 		-configuration "Debug" \
 		-destination "platform=iOS,id=$deviceId"

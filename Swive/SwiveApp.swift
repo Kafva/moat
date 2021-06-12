@@ -25,6 +25,7 @@ import SwiftUI
     // of views were we don't want to pass a state a value around just to use
     // it one place 
     @EnvironmentObject var root: Entry 
+    //@EnvironmentObject var serverUrl:  = "http://localhost:8080";
 
     @State private var spawnSprites: Bool = true;
     @State private var isLoading: Bool = false;
@@ -44,6 +45,8 @@ import SwiftUI
                 NavigationView {
                     ListingView("/root/")    
                 }
+                //  https://stackoverflow.com/a/64752414/9033629
+                .navigationViewStyle(StackNavigationViewStyle())
             }
         }
     }
