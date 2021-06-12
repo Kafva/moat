@@ -11,12 +11,12 @@
 		DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A2326727D920010BF19 /* SpriteScene.swift */; };
 		DD939A262672A9370010BF19 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A252672A9370010BF19 /* Config.swift */; };
 		DDA951F62670F139003D760D /* SwiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA951F52670F139003D760D /* SwiveApp.swift */; };
-		DDA951F82670F139003D760D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA951F72670F139003D760D /* ContentView.swift */; };
+		DDA951F82670F139003D760D /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA951F72670F139003D760D /* LoadingView.swift */; };
 		DDA951FA2670F13B003D760D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDA951F92670F13B003D760D /* Assets.xcassets */; };
-		DDA951FD2670F13B003D760D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDA951FC2670F13B003D760D /* Preview Assets.xcassets */; };
 		DDA952082670F13B003D760D /* SwiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952072670F13B003D760D /* SwiveTests.swift */; };
 		DDA952132670F13B003D760D /* SwiveUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952122670F13B003D760D /* SwiveUITests.swift */; };
 		DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6E182267361CD0039A899 /* Color+hex.swift */; };
+		DDD6E1852673841E0039A899 /* ListingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6E1842673841E0039A899 /* ListingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,9 +42,8 @@
 		DD939A252672A9370010BF19 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		DDA951F22670F139003D760D /* Swive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDA951F52670F139003D760D /* SwiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiveApp.swift; sourceTree = "<group>"; };
-		DDA951F72670F139003D760D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		DDA951F72670F139003D760D /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		DDA951F92670F13B003D760D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		DDA951FC2670F13B003D760D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		DDA951FE2670F13B003D760D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDA952032670F13B003D760D /* SwiveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiveTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDA952072670F13B003D760D /* SwiveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiveTests.swift; sourceTree = "<group>"; };
@@ -53,6 +52,7 @@
 		DDA952122670F13B003D760D /* SwiveUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiveUITests.swift; sourceTree = "<group>"; };
 		DDA952142670F13B003D760D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDD6E182267361CD0039A899 /* Color+hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+hex.swift"; sourceTree = "<group>"; };
+		DDD6E1842673841E0039A899 /* ListingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,25 +103,17 @@
 		DDA951F42670F139003D760D /* Swive */ = {
 			isa = PBXGroup;
 			children = (
+				DDD6E1842673841E0039A899 /* ListingView.swift */,
 				DDD6E182267361CD0039A899 /* Color+hex.swift */,
 				DD939A252672A9370010BF19 /* Config.swift */,
 				DD939A2326727D920010BF19 /* SpriteScene.swift */,
 				DD939A1F2671FF970010BF19 /* SpriteSheet.swift */,
 				DDA951F52670F139003D760D /* SwiveApp.swift */,
-				DDA951F72670F139003D760D /* ContentView.swift */,
+				DDA951F72670F139003D760D /* LoadingView.swift */,
 				DDA951F92670F13B003D760D /* Assets.xcassets */,
 				DDA951FE2670F13B003D760D /* Info.plist */,
-				DDA951FB2670F13B003D760D /* Preview Content */,
 			);
 			path = Swive;
-			sourceTree = "<group>";
-		};
-		DDA951FB2670F13B003D760D /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				DDA951FC2670F13B003D760D /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		DDA952062670F13B003D760D /* SwiveTests */ = {
@@ -245,7 +237,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDA951FD2670F13B003D760D /* Preview Assets.xcassets in Resources */,
 				DDA951FA2670F13B003D760D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,9 +262,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDA951F82670F139003D760D /* ContentView.swift in Sources */,
+				DDA951F82670F139003D760D /* LoadingView.swift in Sources */,
 				DDA951F62670F139003D760D /* SwiveApp.swift in Sources */,
 				DD939A262672A9370010BF19 /* Config.swift in Sources */,
+				DDD6E1852673841E0039A899 /* ListingView.swift in Sources */,
 				DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */,
 				DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */,
 				DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */,

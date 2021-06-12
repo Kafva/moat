@@ -1,10 +1,14 @@
 import SwiftUI
 
 /***** Colors *******/
-let BKG_GRADIENT = Gradient(colors: [
-    Color(hex: "#606c88"),
-    Color(hex: "#3f4c6b")
-]); 
+let BKG_GRADIENT_LINEAR = LinearGradient(
+    gradient: Gradient(colors: [
+        Color(hex: "#606c88"),
+        Color(hex: "#3f4c6b")
+    ]), 
+    startPoint: .top, 
+    endPoint: .bottom
+);
 
 /***** Sprites *******/
 let BASE_NODE_NAME = "node";

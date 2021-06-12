@@ -1,0 +1,34 @@
+{
+	"name": "root",
+	"type": "d",
+	"id": "776FAF9E-CC22-403F-8EB6-8003F9B8A897",
+	"entries": [
+		
+		"name": "first",
+		"type": "d",
+		"id": "776FAF9E-CC22-403F-8EB6-8003F9B8A897",
+		"entries": {
+			"name": "f.txt",
+			"type": "f",
+			"id": "776FAF9E-CC22-403F-8EB6-8003F9B8A897"
+		},
+		
+		"name": "second",
+		"type": "d",
+		"id": "776FAF9E-CC22-403F-8EB6-8003F9B8A897",
+		"entries": {
+			"name": "f2.txt",
+			"type": "f",
+			"id": "776FAF9E-CC22-403F-8EB6-8003F9B8A897"
+		},
+		
+		"name": "third",
+		"type": "d",
+		"id": "776FAF9E-CC22-403F-8EB6-8003F9B8A897",
+		"entries": {
+			"name": "f2.txt",
+			"type": "f",
+			"id": "776FAF9E-CC22-403F-8EB6-8003F9B8A897"
+		}
+	]
+}
