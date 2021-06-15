@@ -1,30 +1,7 @@
 use std::fs::File;
 use std::io::BufReader;
 use std::io::prelude::*; // Needed for .lines()
-
-use super::global;
-
-pub struct Config {
-    pub cache_path: String,
-    pub verbose: bool
-}
-
-impl Config {
-    pub fn new() -> Config {
-        Config {
-            cache_path: global::default_cache_path(),
-            verbose: false
-        } 
-    }
-}
-
-/// Implementing Display is usually redundant since we can get
-/// the same functionality using #[derive(Debug)]
-impl std::fmt::Display for Config {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_> ) -> std::fmt::Result {
-        return write!(f, "({})", self.cache_path);
-    }
-}
+use super::global::Config; // We need `global` as a pub module in lib.rs for this to work
 
 /// The config file contains newline seperated settings on the form
 ///     key=value
@@ -78,7 +55,7 @@ pub fn get_config(config_path: &str) -> Result<Config, std::io::Error> {
         }
     }
     
-    return Ok(config);
+    Ok(config)
 }
 
 /******* Tests **********/
@@ -99,33 +76,32 @@ mod tests {
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: Missing value for key at ../mocks/missing_value.conf:1")]
+    #[should_panic(expected = "Invalid configuration: Missing value for key at ./mocks/missing_value.conf:1")]
     fn test_missing_value(){
-        super::get_config("../mocks/missing_value.conf").unwrap();
+        super::get_config("./mocks/missing_value.conf").unwrap();
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: Missing key for value at ../mocks/missing_key.conf:1")]
+    #[should_panic(expected = "Invalid configuration: Missing key for value at ./mocks/missing_key.conf:1")]
     fn test_missing_key(){
-        super::get_config("../mocks/missing_key.conf").unwrap();
+        super::get_config("./mocks/missing_key.conf").unwrap();
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: Unrecognized key at ../mocks/invalid_key.conf:1")]
+    #[should_panic(expected = "Invalid configuration: Unrecognized key at ./mocks/invalid_key.conf:1")]
     fn test_invalid_key(){
-        super::get_config("../mocks/invalid_key.conf").unwrap();
+        super::get_config("./mocks/invalid_key.conf").unwrap();
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: Missing '=' at ../mocks/missing_equals.conf:1")]
+    #[should_panic(expected = "Invalid configuration: Missing '=' at ./mocks/missing_equals.conf:1")]
     fn test_missing_equals(){
-        super::get_config("../mocks/missing_equals.conf").unwrap();
+        super::get_config("./mocks/missing_equals.conf").unwrap();
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: More than one '=' found at ../mocks/too_many_equals.conf:1")]
+    #[should_panic(expected = "Invalid configuration: More than one '=' found at ./mocks/too_many_equals.conf:1")]
     fn test_too_many_equals(){
-        super::get_config("../mocks/too_many_equals.conf").unwrap();
+        super::get_config("./mocks/too_many_equals.conf").unwrap();
     }
-
 }
