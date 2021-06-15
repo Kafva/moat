@@ -1,5 +1,14 @@
 use chrono::{DateTime, Utc};
 
+// We can't have the cache.db from our laptop served constantly
+// so we use a hook to automatically push it to the remoat server
+// everytime newsboat is launched.
+// To sync which articles have been read through the iOS client
+// with the local machine we begin by always copying the cache.db 
+// from the server to our main machine
+// We can thus write to the cache.db through remoat and have the
+// changes persist 
+
 #[derive(Debug)]
 struct RssFeed {
     rss_url: String,
@@ -42,7 +51,6 @@ struct RssItem {
 //    
 //}
 
-#[test]
 fn test_feed() -> Result<(),rusqlite::Error> {
     let cache_path = format!("{}/.newsboat/cache.db", std::env::var("HOME").unwrap());
     
