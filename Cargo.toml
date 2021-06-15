@@ -1,11 +1,11 @@
 [package]
 name = "remoat_server"
 version = "0.1.0"
-authors = ["Kafva <Martensson.Jonas98@gmail.com>"]
+authors = ["Kafva <https://github.com/Kafva>"]
 edition = "2018"
 
 [dependencies]
-rocket = "0.5.0-rc.1"
+rocket = { version = "0.5.0-rc.1", features = ["json"] }
 rusqlite = "0.25.3"
-chrono = "0.4"
 clap = "3.0.0-beta.2"
+serde = "1.0.126"

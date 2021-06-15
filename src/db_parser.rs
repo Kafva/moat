@@ -17,18 +17,15 @@ pub fn get_feed_list(cache_path: &str) -> Result<Vec<RssFeed>,rusqlite::Error> {
             rssurl, url, title, lastmodified 
         FROM rss_feed ORDER BY lastmodified ASC;")?;
     
-    // Use a lambda statement on each roww to create an iterator
+    // Use a lambda statement on each row to create an iterator
     // over all feed objects from the query
     let feed_iter = stmt.query_map([], |row| {
         
-        let lastmodified:String = row.get(3)?;
-
         Ok(RssFeed::new(
             row.get(0)?,
             row.get(1)?,
             row.get(2)?,
-            lastmodified.parse::<u32>()
-                .expect("Failed to parse 'lastmodified' column of entry in rss_feed table")
+            row.get(3)? 
         ))
     })?;
 
@@ -53,12 +50,18 @@ mod tests {
 
     #[test]
     fn test_get_feeds() {
-        let feeds = get_feed_list("/Users/jonas------/.newsboat/cache.db");
+        
+        let feeds = get_feed_list(
+            &format!("{}/.newsboat/cache.db", 
+                std::env::var("HOME").unwrap()
+            ).as_str()
+        ).unwrap();
 
-        for feed in feeds {
-            println!("{:?}", feed);
-            assert_eq!(1,2);
-        }
+
+        // NOTE that we can use the .into_iter() method instead of manually
+        // defining an `impl` for next() for the class in question
+        //  https://doc.rust-lang.org/rust-by-example/trait/iter.html
+        assert!( feeds.into_iter().count() > 0 );
     }
 }
 
