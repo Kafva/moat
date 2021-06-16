@@ -7,6 +7,7 @@ use clap::{AppSettings, Clap};
 // with the corresponding name
 mod routes;
 mod global;
+mod errors;
 mod config_parser;
 mod db_parser;
 use global::Config;
@@ -35,6 +36,11 @@ fn rocket() -> Rocket<Build> {
     // start the server with each route mounted at '/'
     rocket::build()
         .manage(Config::from(config))
+        .register("/", catchers![
+            errors::internal_error,
+            errors::not_found,
+            errors::default
+        ])
         .mount("/", routes![
         routes::feeds, 
         routes::items, 
