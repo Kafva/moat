@@ -33,7 +33,7 @@ fn rocket() -> Rocket<Build> {
     let config: Config = 
         get_config(&opts.config.to_string()).unwrap();
     
-    // Pass the config into the models state of rocket and
+    // Pass the config into the global state of rocket and
     // start the server with each route mounted at '/'
     rocket::build()
         .manage(Config::from(config))
