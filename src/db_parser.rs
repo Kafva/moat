@@ -2,11 +2,11 @@ extern crate base64;
 use super::global::{RssItem, RssFeed};
 
 // We can't have the cache.db from our laptop served constantly
-// so we use a hook to automatically push it to the remoat server
+// so we use a hook to automatically push it to the 'remoat' server
 // everytime newsboat is launched.
 // To sync which articles have been read through the iOS client
 // with the local machine we begin by always copying the cache.db 
-// from the server to our main machine
+// from the server to our main machine when launching newsboat
 // We can thus write to the cache.db through remoat and have
 // changes persist 
 
@@ -85,11 +85,6 @@ pub fn get_items_from_feed(cache_path: &str, rssurl: &str) -> Result<Vec<RssItem
 }
 
 /******* Tests **********/
-// The convention is to include unit tests for functions inside a 
-// `mod tests {}` block of each file and to have integration tests
-// in the `tests` directory at the same level as `src`
-// The cfg(test) attribute ensures that the module is only included
-// when running `cargo test`
 #[cfg(test)]
 mod tests {
 
@@ -121,10 +116,6 @@ mod tests {
             "https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA"
         ).unwrap();
 
-
-        // NOTE that we can use the .into_iter() method instead of manually
-        // defining an `impl` for next() for the class in question
-        //  https://doc.rust-lang.org/rust-by-example/trait/iter.html
         assert!( items.into_iter().count() > 0 );
     }
 

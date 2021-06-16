@@ -3,15 +3,15 @@ use rocket::http::Status;
 
 #[catch(500)]
 pub fn internal_error() -> &'static str {
-    "Internal Server error"
+    "{ \"success\": false }"
 }
 
 #[catch(404)]
-pub fn not_found(req: &Request) -> String {
-    format!("Not found: {}", req.uri())
+pub fn not_found(_req: &Request) -> &'static str {
+    "{ \"success\": false }"
 }
 
 #[catch(default)]
-pub fn default(status: Status, req: &Request) -> String {
-    format!("{} ({})", status, req.uri())
+pub fn default(_status: Status, _req: &Request) -> &'static str {
+    "{ \"success\": false }"
 }
