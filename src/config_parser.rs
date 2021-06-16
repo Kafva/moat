@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::BufReader;
 use std::io::prelude::*; // Needed for .lines()
-use super::global::Config;
+use super::models::Config;
 
 /// The config file contains newline seperated settings on the form
 ///     key=value
