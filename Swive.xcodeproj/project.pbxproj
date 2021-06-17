@@ -10,6 +10,8 @@
 		DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A1F2671FF970010BF19 /* SpriteSheet.swift */; };
 		DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A2326727D920010BF19 /* SpriteScene.swift */; };
 		DD939A262672A9370010BF19 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A252672A9370010BF19 /* Config.swift */; };
+		DDA1FE2A267B462C003EB9CA /* Models in Resources */ = {isa = PBXBuildFile; fileRef = DDA1FE29267B462C003EB9CA /* Models */; };
+		DDA1FE2C267B4637003EB9CA /* Views in Resources */ = {isa = PBXBuildFile; fileRef = DDA1FE2B267B4637003EB9CA /* Views */; };
 		DDA951F62670F139003D760D /* SwiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA951F52670F139003D760D /* SwiveApp.swift */; };
 		DDA951F82670F139003D760D /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA951F72670F139003D760D /* LoadingView.swift */; };
 		DDA951FA2670F13B003D760D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDA951F92670F13B003D760D /* Assets.xcassets */; };
@@ -41,6 +43,8 @@
 		DD939A1F2671FF970010BF19 /* SpriteSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteSheet.swift; sourceTree = "<group>"; };
 		DD939A2326727D920010BF19 /* SpriteScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteScene.swift; sourceTree = "<group>"; };
 		DD939A252672A9370010BF19 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		DDA1FE29267B462C003EB9CA /* Models */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Models; sourceTree = "<group>"; };
+		DDA1FE2B267B4637003EB9CA /* Views */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Views; sourceTree = "<group>"; };
 		DDA951F22670F139003D760D /* Swive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDA951F52670F139003D760D /* SwiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiveApp.swift; sourceTree = "<group>"; };
 		DDA951F72670F139003D760D /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -105,6 +109,8 @@
 		DDA951F42670F139003D760D /* Swive */ = {
 			isa = PBXGroup;
 			children = (
+				DDA1FE2B267B4637003EB9CA /* Views */,
+				DDA1FE29267B462C003EB9CA /* Models */,
 				DDA9A41A2675028F0092536F /* Entry.swift */,
 				DDD6E1842673841E0039A899 /* ListingView.swift */,
 				DDD6E182267361CD0039A899 /* Color+hex.swift */,
@@ -240,6 +246,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDA1FE2C267B4637003EB9CA /* Views in Resources */,
+				DDA1FE2A267B462C003EB9CA /* Models in Resources */,
 				DDA951FA2670F13B003D760D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
