@@ -56,6 +56,7 @@ fn default_cache_path() -> String {
 
 pub struct Config {
     pub cache_path: String,
+    pub newsboat_path: String,
     pub verbose: bool
 }
 
@@ -63,7 +64,12 @@ impl Config {
     pub fn new() -> Config {
         Config {
             cache_path: default_cache_path(),
-            verbose: false
+            verbose: false,
+
+            #[cfg(target_os = "macos")]
+            newsboat_path: "/usr/local/bin/newsboat".to_string(),
+            #[cfg(target_os = "linux")]
+            newsboat_path: "/usr/bin/newsboat".to_string()
         } 
     }
 }

@@ -8,6 +8,7 @@ use super::db_parser::{get_feed_list, get_items_from_feed, toggle_read_status};
 //  1. Fetch a list of all feeds
 //  2. Fetch all items from a feed
 //  3. Update the 'unread' status of a perticular item or all items in a feed
+//  4. Reload all feeds
 
 /// curl -X POST -H "x-creds: test" http://localhost:8000/read -d "id=5384&read=0" 
 /// If the <id> parameter does not conform to the u32 type rocket
@@ -28,6 +29,19 @@ pub fn read(_key: Creds<'_>,  config: &State<Config>, data: ReadToggleData ) -> 
     else { 
         "{ \"success\": false }"
     } 
+}
+
+/// curl -H "x-creds: test" -X GET http://localhost:5000/reload 
+#[get("/reload")]
+pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
+    // Newsboat has a built in command to reload all feeds in the background
+    //      `newsboat -x reload`
+    let _ = std::process::Command::new(config.newsboat_path.as_str())
+    .arg("-x reload")
+    .output()
+    .expect("Failed to update cache.db");
+
+    "{ \"success\": true }"
 }
 
 #[get("/feeds")]
