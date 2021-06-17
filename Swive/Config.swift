@@ -1,5 +1,10 @@
 import SwiftUI
 
+/***** UI dimensions *****/
+let IMAGE_WIDTH = CGFloat(50);
+let ROW_HEIGHT = CGFloat(50);
+
+
 /***** Colors *******/
 let BKG_GRADIENT_LINEAR = LinearGradient(
     gradient: Gradient(colors: [

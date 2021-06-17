@@ -5,19 +5,21 @@ pub struct RssFeed {
     rssurl: String, // Can be utilised to fetch video thumbnails
     url: String,    // URL to actual page
     title: String,
-    unread_count: u32 // Computed attribute, not present in cache.db
+    // Computed attributes, not present in cache.db
+    unread_count: u32, 
+    total_count: u32  
 }
 
 impl RssFeed {
     // There is an attribute named 'lastmodified' in cache.db but it seems
     // to always be set to zero
-    pub fn new(rssurl: String, url: String, title: String, unread_count: u32) -> RssFeed {
+    pub fn new(rssurl: String, url: String, title: String, unread_count: u32, total_count: u32) -> RssFeed {
         RssFeed {
             rssurl,
             url,
             title,
             unread_count,
-            //total_count TODO
+            total_count
         }
     }
 }
