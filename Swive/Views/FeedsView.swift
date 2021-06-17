@@ -15,10 +15,16 @@ struct FeedsView: View {
 
    @State var feeds = [RssFeed]();
    
+   @State var searchString = "";
+
    init?() {
       // https://stackoverflow.com/questions/57128547/swiftui-list-color-background
       UITableView.appearance().backgroundColor = .clear
       UITableViewCell.appearance().backgroundColor = .clear
+      
+      // https://stackoverflow.com/a/58974331/9033629 
+      UINavigationBar.appearance().barTintColor = .clear
+      UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
    }
    
    /// Fetch a list of all entries from the provided path
@@ -57,31 +63,60 @@ struct FeedsView: View {
             
             BKG_GRADIENT_LINEAR
                .edgesIgnoringSafeArea(.vertical) // Fill entire screen 
-               
-            VStack(alignment: .leading, spacing: 20) {
-               
-               ForEach(feeds, id: \.id ) { feed in
-                  // We need the entry class to have an ID
-                  // to iterate over it using ForEach()
-               
-                  NavigationLink(destination: LoadingView("YEP") ){
-                        HStack(alignment: .firstTextBaseline) {
-                           Image("umbreon")
-                              .resizable() // Must be applied before modifying the frame size
-                              .clipShape(Circle())
-                              .frame(width: 50, height: 50, alignment: .leading)
+            
 
-                           Text("\(feed.title)")
-                              .foregroundColor(.white)
-                              .font(.system(size:30))
-                              .fontWeight(.bold)
+            ScrollView(.vertical) { 
+               // The alignment parameter for a VStack concerns horizontal alignment
+               VStack(alignment: .center, spacing: 0) {
+                  
+                  HStack (alignment: .center, spacing: 5){
+                     Image(systemName: "magnifyingglass")
+                     TextField("Search...", text: $searchString)
+                           .padding(10)
+                           .background(Color.black.opacity(0.2))
+                           .cornerRadius(5)
+                           .frame(
+                              minWidth: 50, idealWidth: 200, maxWidth: 250, 
+                              minHeight: 50, idealHeight: 50, maxHeight: 50, 
+                              alignment: .center
+                           )
+                           //.shadow(color: .gray, radius: 10)
+                  }
+
+                  ForEach(feeds, id: \.id ) { feed in
+                     // We need the entry class to have an ID
+                     // to iterate over it using ForEach()
+                  
+                     if feed.title.contains(searchString) || searchString == "" {
+                        NavigationLink(destination: LoadingView("YEP") ){
+                              HStack(alignment: .firstTextBaseline) {
+                                 Image("umbreon")
+                                    .resizable() // Must be applied before modifying the frame size
+                                    .clipShape(Circle())
+                                    .frame(width: 50, height: 50, alignment: .center)
+
+                                 VStack {
+                                    Text("\(feed.title)")
+                                       .foregroundColor(.white)
+                                       .font(.system(size:17))
+                                       .fontWeight(.bold)
+                                    Link("Site", destination: URL(string: feed.url)! )
+                                       .foregroundColor(.blue)
+                                       .font(.system(size:12))
+                                 }
+                                 .frame(maxWidth: .infinity)
+                                 
+                                 Text( "\(feed.unread)/90" )
+                                    .frame(maxWidth: .infinity)
+                           }
+                           .padding(10)
+                        }
                      }
-                     .padding(10)
                   }
                }
+               .listRowBackground(Color.clear)
+               .onAppear(perform: loadFeeds)
             }
-            .listRowBackground(Color.clear)
-            .onAppear(perform: loadFeeds)
       }
    }
 }
