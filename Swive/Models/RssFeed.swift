@@ -1,3 +1,5 @@
+import SwiftUI
+
 
 class RssFeed: ObservableObject, Codable, Equatable {
    // The codable property enables a struct to be
@@ -27,7 +29,7 @@ class RssFeed: ObservableObject, Codable, Equatable {
       case rssurl
       case url
       case title 
-      case unread 
+      case unread = "unread_count" 
    } 
    
    func encode(to encoder: Encoder) throws {
