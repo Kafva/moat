@@ -11,34 +11,88 @@ import SwiftUI
 //       - Swipe to toggle unread status
 //       - Fetch video thumbnails for the images
 
-//private extension FeedsView {
-//   struct SearchView: View {
-//
-//      var barWidth: CGFloat;
-//      var searchString: String;
-//
-//      var body: some View {
-//         HStack (alignment: .center, spacing: 5){
-//            Image(systemName: "magnifyingglass")
-//            TextField("Search...", text: searchString)
-//               .padding(10)
-//               .background(Color.black.opacity(0.2))
-//               .cornerRadius(5)
-//               .frame(
-//                  width: self.barWidth, 
-//                  height: ROW_HEIGHT, 
-//                  alignment: .center
-//              )
-//         }
-//      }
-//   }
-//}
+struct SearchView: View {
+
+   var barWidth: CGFloat;
+   @Binding var searchBinding: String;
+
+   var body: some View {
+      HStack (alignment: .center, spacing: 5){
+         Image(systemName: "magnifyingglass")
+         TextField("Search...", text: $searchBinding)
+            .padding(10)
+            .background(Color.black.opacity(0.2))
+            .cornerRadius(5)
+            .frame(
+               width: self.barWidth, 
+               height: ROW_HEIGHT, 
+               alignment: .center
+           )
+      }
+   }
+}
+
+struct RssFeedRowView: View {
+
+   var feed: RssFeed;
+   var screenWidth: CGFloat;
+
+   var body: some View {
+      // | 50px | 0.7 %      | 0.3 % - 50px |
+      HStack {
+         NavigationLink(destination: LoadingView("YEP") ){
+            Image("umbreon")
+               .resizable() // Must be applied before modifying the frame size
+               .clipShape(Circle())
+               .frame(
+                  width: IMAGE_WIDTH,  
+                  height: ROW_HEIGHT, 
+                  alignment: .center
+            )
+         }
+
+         VStack (alignment: .leading, spacing: 5){
+            NavigationLink(destination: LoadingView("YEP") ){
+               Text("\(feed.title)")
+                  .foregroundColor(.white)
+                  .font(.system(size:22,weight: .bold))
+                  .lineLimit(1)
+            }
+            Link("Site", destination: URL(string: feed.url)! )
+               .foregroundColor(.blue)
+               .font(.system(size:18))
+               .lineLimit(1)
+         }
+         // This is required for the elements in the stack to actually
+         // "float" to the left
+         .frame(
+            width: self.screenWidth * 0.5, 
+            alignment: .leading
+         )
+         
+         
+         Text( "\(feed.unread_count)/\(feed.item_count)" )
+            .padding(7)
+            .background(Color.black.opacity(0.2))
+            .cornerRadius(5)
+            .foregroundColor(.white)
+            .font(Font.system(size:18, weight: .bold))
+            .frame(
+               width: self.screenWidth * 0.5  - IMAGE_WIDTH, 
+               alignment: Alignment.center
+            )
+            .lineLimit(1) 
+      }
+      .padding(.bottom, 5)
+
+   }
+}
 
 struct FeedsView: View {
 
    @State var feeds = [RssFeed]();
    
-   @State var searchString = "";
+   @State var searchString: String = "";
 
    init?() {
       // https://stackoverflow.com/questions/57128547/swiftui-list-color-background
@@ -93,18 +147,8 @@ struct FeedsView: View {
                // The alignment parameter for a VStack concerns horizontal alignment
                VStack(alignment: .center, spacing: 0) {
                   
-                  HStack (alignment: .center, spacing: 5){
-                     Image(systemName: "magnifyingglass")
-                     TextField("Search...", text: searchString)
-                        .padding(10)
-                        .background(Color.black.opacity(0.2))
-                        .cornerRadius(5)
-                        .frame(
-                           width: geometry.size.width * 0.7, 
-                           height: ROW_HEIGHT, 
-                           alignment: .center
-                       )
-                  }
+                  SearchView( barWidth: geometry.size.width * 0.7, searchBinding: $searchString )
+                     .padding(.bottom, 20)
 
                   ForEach(feeds, id: \.id ) { feed in
                      // We need the entry class to have an ID
@@ -112,53 +156,7 @@ struct FeedsView: View {
                   
                      if feed.title.contains(searchString) || searchString == "" {
                         
-                        // | 50px | 0.7 %      | 0.3 % - 50px |
-                        HStack {
-                           NavigationLink(destination: LoadingView("YEP") ){
-                              Image("umbreon")
-                                 .resizable() // Must be applied before modifying the frame size
-                                 .clipShape(Circle())
-                                 .frame(
-                                    width: IMAGE_WIDTH,  
-                                    height: ROW_HEIGHT, 
-                                    alignment: .center
-                              )
-                           }
-
-                           VStack (alignment: .leading, spacing: 5){
-                              NavigationLink(destination: LoadingView("YEP") ){
-                                 Text("\(feed.title)")
-                                    .foregroundColor(.white)
-                                    .font(.system(size:22))
-                                    .fontWeight(.bold)
-                                    .lineLimit(1)
-                              }
-                              Link("Site", destination: URL(string: feed.url)! )
-                                 .foregroundColor(.blue)
-                                 .font(.system(size:18))
-                                 .lineLimit(1)
-                           }
-                           // This is required for the elements in the stack to actually
-                           // "float" to the left
-                           .frame(
-                              width: geometry.size.width * 0.65, 
-                              alignment: .leading
-                           )
-                           
-                           
-                           Text( "\(feed.unread_count)/\(feed.item_count)" )
-                              .background(Color.black.opacity(0.2))
-                              .cornerRadius(5)
-                              .foregroundColor(.white)
-                              .font(.system(size:18))
-                              .fontWeight(.bold)
-                              .frame(
-                                 width: geometry.size.width * 0.35  - IMAGE_WIDTH, 
-                                 alignment: .leading
-                              )
-                              .lineLimit(1) 
-                        }
-                        .padding(10)
+                        RssFeedRowView(feed: feed, screenWidth: geometry.size.width)
                      }
                   }
                }
@@ -171,3 +169,4 @@ struct FeedsView: View {
 
    }
 }
+

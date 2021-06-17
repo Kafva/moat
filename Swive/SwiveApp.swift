@@ -49,6 +49,9 @@ import SwiftUI
 
                 NavigationView {
                    FeedsView() 
+                        // https://stackoverflow.com/questions/57517803/how-to-remove-the-default-navigation-bar-space-in-swiftui-navigationview 
+                        .navigationBarTitle("")
+                        .navigationBarHidden(true)
                 }
                 //  https://stackoverflow.com/a/64752414/9033629
                 .navigationViewStyle(StackNavigationViewStyle())
