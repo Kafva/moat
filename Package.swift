@@ -3,8 +3,8 @@
 //  https://medium.com/swlh/ios-development-on-vscode-27be37293fe1
 
 // For linting to work with external packages we need to add them into this file as well, the LSP does not
-// know about anything outside this file. It may be necccessary to compile the project using the `swift`
-// executable if dependecies are not resolved
+// know about anything outside this file. It may be necessary to compile the project using the `swift`
+// executable if dependencies are not resolved
 //  https://forums.swift.org/t/sourcekitd-no-such-module-error/18321/14
 
 //  swift package update && \
@@ -16,7 +16,7 @@
 
 // The flags to `swift build` are the same ones needed for the `sourcekit-lsp.serverArguments` key settings.json in VScode
 
-// Note that it should not matter what method is used to fetch the dependecy in question for the actual project, i.e. it should work to use both CocoaPods and the built in SPM in Xcode from `File > Swift Packages > Add Package Dependency...`
+// Note that it should not matter what method is used to fetch the dependency in question for the actual project, i.e. it should work to use both CocoaPods and the built in SPM in Xcode from `File > Swift Packages > Add Package Dependency...`
 
 import PackageDescription
 let packageName = "Swive"
