@@ -11,12 +11,14 @@ import SpriteKit
 struct LoadingView: View {
     
     // TODO make updateable
-    var loadingText: String 
-
-    init(_ loadingText: String) {
+    @State var loadingText: String 
+    
+    init(width: CGFloat, height: CGFloat, loadingText: String) {
         self.loadingText = loadingText;
-        UINavigationBar.appearance().backgroundColor = .clear
-        UINavigationBar.appearance().isHidden = false
+        self.sceneSize = CGSize(
+            width: width,
+            height: height
+        )
     }
 
     // @StateObject is needed to annotate that a property is required for
@@ -24,10 +26,7 @@ struct LoadingView: View {
     // and re-drawn)
     @State private var visible: Bool = true;
 
-    var sceneSize: CGSize = CGSize(
-        width: UIScreen.main.bounds.width, 
-        height: UIScreen.main.bounds.height
-    );
+    var sceneSize: CGSize;
 
     // Give the view a computed scene attribute
     // which creates a SpriteScene instance of a given size
@@ -38,29 +37,11 @@ struct LoadingView: View {
         return scene;
     }
     
-    private func pulsateText() {
-        // .withAnimation is an explicit animation while
-        // .animation provides implicit animations
-        //  https://swiftui-lab.com/swiftui-animations-part1/
-        withAnimation(Animation.easeInOut(duration: 1)
-            .repeatForever(autoreverses: true)) {
-            visible.toggle()
-        }
-    } 
-
     // The `body` property of a SwiftUI view describes its content, layout, 
     // and behavior 
     var body: some View {
 
         ZStack {
-            // The Gradient background needs to be placed inside the ZStack to appear beneath
-            // the scene (which we give a transparent background)
-            BKG_GRADIENT_LINEAR
-                .edgesIgnoringSafeArea(.vertical) // Fill entire screen 
-                // To avoid the pulsating effect from applying beyond the loading text
-                // we need to set the implicit animation value to nil
-                .animation(nil)
-
             // We can add our scene as any other node in a SwiftUI `SpriteView`
             // Note that we set the same width/height as for the scene
             SpriteView( scene: self.scene, options: [.allowsTransparency] ).frame( 
@@ -70,6 +51,7 @@ struct LoadingView: View {
             .onDisappear(perform: {
                 // Clean up when the SpriteView is left
                 NSLog("DISSAPPEARING!!");
+                // TODO doesn't work
 
                 // Remove all sprites
                 //for sprite in self.scene.sprites {
@@ -77,20 +59,17 @@ struct LoadingView: View {
                 //}
 
                 // Deactivate all timers
-                // TODO move up this STATE!
                 
                 self.scene.spawnTimer?.invalidate()
                 self.scene.spriteFrameTimer?.invalidate()
             })
+            .animation(nil)
             
             
             Text(self.loadingText)
                 .font(.largeTitle).bold()
-                .opacity(visible ? 1 : 0.5)
-                .onAppear(perform: pulsateText) 
-                .navigationBarHidden(true) //TODO
+                .animation(Animation.easeOut(duration: 1).repeatForever(autoreverses: true) )
         }
-        //.statusBar(hidden: true)
     }
     
 }

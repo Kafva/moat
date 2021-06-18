@@ -26,6 +26,7 @@ struct SettingsView: View {
 
             // Configure secret key
             // Configure server address  
+            Text("wow")
         }
 
       }
