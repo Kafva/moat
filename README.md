@@ -42,14 +42,14 @@ The extension relies on the `Package.swift` file in the project but the actual b
 "swift.languageServerPath": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp",
 "sourcekit-lsp.serverPath": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp",
 "sourcekit-lsp.serverArguments": [
-"-Xswiftc",
-"-sdk",
-"-Xswiftc",
-"/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk",
-"-Xswiftc",
-"-target",
-"-Xswiftc",
-"x86_64-apple-ios14.5-simulator"
+	"-Xswiftc",
+	"-sdk",
+	"-Xswiftc",
+	"/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk",
+	"-Xswiftc",
+	"-target",
+	"-Xswiftc",
+	"x86_64-apple-ios14.5-simulator"
 ]
 ```
 
