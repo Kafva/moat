@@ -36,7 +36,7 @@ npm run createDevPackage
 code --install-extension out/sourcekit-lsp-vscode-dev.vsix
 ```
 
-The extension relies on the `Package.swift` file in the project but the actual build process does not use it, i.e. the `Package.swift` file is a stub with the sole purpose of enabling sourcekit-lsp! Certain options in `settings.json` for VScode were found to be necessary:
+The extension relies on the `Package.swift` file in the project but the actual build process does not use it, i.e. the `Package.swift` file is a stub with the sole purpose of enabling sourcekit-lsp! Certain options in `settings.json` for VScode were found to be necessary for the extension to work:
 
 ```json
 "swift.languageServerPath": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp",
