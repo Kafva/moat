@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 class RssFeed: ObservableObject, Codable, Equatable {
    // The codable property enables a struct to be
    // serialised/deserialised
@@ -12,6 +11,7 @@ class RssFeed: ObservableObject, Codable, Equatable {
    var unread_count: Int
    var item_count: Int
    let id = UUID(); // client-side only attribute
+   var items: [RssItem] = [] // Only maintained client side
    
    /// Returns true if the provided feeds have the same
    /// properties, ignores differences in the `id` property
@@ -54,11 +54,12 @@ class RssFeed: ObservableObject, Codable, Equatable {
       self.item_count = try values.decode(Int.self, forKey: .item_count)
    }
 
-   init(rssurl: String, url: String, title: String, unread_count: Int, item_count: Int) {
+   init(rssurl: String, url: String, title: String, unread_count: Int, item_count: Int, items: [RssItem] = []) {
       self.rssurl = rssurl;
       self.url = url;
       self.title = title;
       self.unread_count = unread_count;
       self.item_count = item_count;
+      self.items = items;
    }
 }

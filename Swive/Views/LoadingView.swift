@@ -63,7 +63,6 @@ struct LoadingView: View {
                 self.scene.spawnTimer?.invalidate()
                 self.scene.spriteFrameTimer?.invalidate()
             })
-            .animation(nil)
             
             
             Text(self.loadingText)

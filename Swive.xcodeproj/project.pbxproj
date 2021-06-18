@@ -12,6 +12,10 @@
 		DD45CC0B267B4AAC000B0A99 /* RssItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC09267B4AAC000B0A99 /* RssItem.swift */; };
 		DD45CC0C267B4AAC000B0A99 /* RssFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC0A267B4AAC000B0A99 /* RssFeed.swift */; };
 		DD80E6E0267CA6C7003B686A /* Creds.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD80E6DF267CA6C7003B686A /* Creds.swift */; };
+		DD88D79D267CED0800BA6E91 /* RssFeedRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88D79B267CED0800BA6E91 /* RssFeedRowView.swift */; };
+		DD88D79E267CED0800BA6E91 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88D79C267CED0800BA6E91 /* SearchView.swift */; };
+		DD88D7A0267CEE8F00BA6E91 /* ItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88D79F267CEE8F00BA6E91 /* ItemsView.swift */; };
+		DD88D7A2267CF38000BA6E91 /* String+base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88D7A1267CF38000BA6E91 /* String+base64.swift */; };
 		DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A1F2671FF970010BF19 /* SpriteSheet.swift */; };
 		DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A2326727D920010BF19 /* SpriteScene.swift */; };
 		DD939A262672A9370010BF19 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A252672A9370010BF19 /* Config.swift */; };
@@ -49,6 +53,10 @@
 		DD45CC09267B4AAC000B0A99 /* RssItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssItem.swift; sourceTree = "<group>"; };
 		DD45CC0A267B4AAC000B0A99 /* RssFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssFeed.swift; sourceTree = "<group>"; };
 		DD80E6DF267CA6C7003B686A /* Creds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Creds.swift; sourceTree = "<group>"; };
+		DD88D79B267CED0800BA6E91 /* RssFeedRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssFeedRowView.swift; sourceTree = "<group>"; };
+		DD88D79C267CED0800BA6E91 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		DD88D79F267CEE8F00BA6E91 /* ItemsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsView.swift; sourceTree = "<group>"; };
+		DD88D7A1267CF38000BA6E91 /* String+base64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+base64.swift"; sourceTree = "<group>"; };
 		DD939A1F2671FF970010BF19 /* SpriteSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteSheet.swift; sourceTree = "<group>"; };
 		DD939A2326727D920010BF19 /* SpriteScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteScene.swift; sourceTree = "<group>"; };
 		DD939A252672A9370010BF19 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -105,6 +113,9 @@
 		DD45CC05267B4A28000B0A99 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DD88D79F267CEE8F00BA6E91 /* ItemsView.swift */,
+				DD88D79B267CED0800BA6E91 /* RssFeedRowView.swift */,
+				DD88D79C267CED0800BA6E91 /* SearchView.swift */,
 				DDA951F72670F139003D760D /* LoadingView.swift */,
 				DDFB1313267C89B10033528E /* SettingsView.swift */,
 				DD45CC06267B4A28000B0A99 /* FeedsView.swift */,
@@ -124,6 +135,7 @@
 		DD80E6DE267CA6C7003B686A /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				DD88D7A1267CF38000BA6E91 /* String+base64.swift */,
 				DDD6E182267361CD0039A899 /* Color+hex.swift */,
 				DD80E6DF267CA6C7003B686A /* Creds.swift */,
 				DD939A2326727D920010BF19 /* SpriteScene.swift */,
@@ -372,7 +384,11 @@
 				DD939A262672A9370010BF19 /* Config.swift in Sources */,
 				DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */,
 				DDFB1314267C89B10033528E /* SettingsView.swift in Sources */,
+				DD88D79D267CED0800BA6E91 /* RssFeedRowView.swift in Sources */,
 				DD80E6E0267CA6C7003B686A /* Creds.swift in Sources */,
+				DD88D79E267CED0800BA6E91 /* SearchView.swift in Sources */,
+				DD88D7A2267CF38000BA6E91 /* String+base64.swift in Sources */,
+				DD88D7A0267CEE8F00BA6E91 /* ItemsView.swift in Sources */,
 				DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */,
 				DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */,
 				DD45CC07267B4A28000B0A99 /* FeedsView.swift in Sources */,

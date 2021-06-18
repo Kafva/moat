@@ -8,21 +8,14 @@
 import SwiftUI
 
 
-public class GlobalState: ObservableObject {
-    
-    var isLoading: Bool = false
-    var alertTitle: String = ""
-    var alertMessage: String = ""
-    var showAlert: Bool = false
-}
+//public class GlobalState: ObservableObject {
+//    
+//    var isLoading: Bool = false
+//    var alertTitle: String = ""
+//    var alertMessage: String = ""
+//    var showAlert: Bool = false
+//}
 
-public class RssFeeds: ObservableObject {
-    var feeds: [RssFeed]
-
-    init(feeds: [RssFeed] = []){
-        self.feeds = feeds
-    }
-}
 
 //func makeAlert(env: Binding<GlobalState>, title: String, err: Error?) {
 //  env.alertTitle = title; 
