@@ -1,3 +1,4 @@
+Pods
 build
 .DS_Store
 /.build
@@ -47,3 +48,4 @@ Cargo.lock
 secret/*
 untracked/*
 *~
+Package.resolved

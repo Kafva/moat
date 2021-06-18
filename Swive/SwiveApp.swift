@@ -42,6 +42,7 @@ import SwiftUI
         // type (in this case `WindowGroup` which adhears to the Scene
         // protocol)
         WindowGroup {    
+            
             if isLoading {
                ProgressView() 
             }
@@ -55,6 +56,7 @@ import SwiftUI
                 }
                 //  https://stackoverflow.com/a/64752414/9033629
                 .navigationViewStyle(StackNavigationViewStyle())
+                
             }
         }
     }

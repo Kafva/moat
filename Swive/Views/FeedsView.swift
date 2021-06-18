@@ -38,7 +38,7 @@ struct RssFeedRowView: View {
    var screenWidth: CGFloat;
 
    var body: some View {
-      // | 50px | 0.7 %      | 0.3 % - 50px |
+      // | 50px | 0.5 %      | 0.5 % - 50px |
       HStack {
          NavigationLink(destination: LoadingView("YEP") ){
             Image("umbreon")
@@ -49,6 +49,7 @@ struct RssFeedRowView: View {
                   height: ROW_HEIGHT, 
                   alignment: .center
             )
+            .padding(.leading, 5)
          }
 
          VStack (alignment: .leading, spacing: 5){
@@ -58,7 +59,7 @@ struct RssFeedRowView: View {
                   .font(.system(size:22,weight: .bold))
                   .lineLimit(1)
             }
-            Link("Site", destination: URL(string: feed.url)! )
+            Link("\(URL(string: feed.url)?.host ?? "???")", destination: URL(string: feed.url)! )
                .foregroundColor(.blue)
                .font(.system(size:18))
                .lineLimit(1)
@@ -78,7 +79,8 @@ struct RssFeedRowView: View {
             .foregroundColor(.white)
             .font(Font.system(size:18, weight: .bold))
             .frame(
-               width: self.screenWidth * 0.5  - IMAGE_WIDTH, 
+               // The image leads with 5px of padding
+               width: self.screenWidth * 0.5  - (IMAGE_WIDTH+5), 
                alignment: Alignment.center
             )
             .lineLimit(1) 
@@ -94,6 +96,10 @@ struct FeedsView: View {
    
    @State var searchString: String = "";
 
+   @State var showAlert: Bool = false;
+   @State var alertMessage: String = "";
+   @State var alertTitle: String = "";
+
    init?() {
       // https://stackoverflow.com/questions/57128547/swiftui-list-color-background
       UITableView.appearance().backgroundColor = .clear
@@ -104,6 +110,13 @@ struct FeedsView: View {
       UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
    }
    
+   func makeAlert(title: String, err: Error?) {
+      self.alertTitle = title; 
+      self.alertMessage = "\(err?.localizedDescription ?? "Unknown error")";
+      self.showAlert = true;
+      NSLog("\(title): \(self.alertMessage)");
+   }
+
    /// Fetch a list of all entries from the provided path
    /// on the remote server
    func loadFeeds() -> Void {
@@ -124,15 +137,15 @@ struct FeedsView: View {
                   self.feeds = decoded;
                }
             }
-            catch { NSLog("Decoding failure \(error)"); }
+            catch { makeAlert(title: "Decoding error", err: err); }
          }
-         else {
-            NSLog("Error fetching data: \(err?.localizedDescription ?? "Unknown error")");
-         }
+         else { makeAlert(title: "Connection error", err: err) }
       }.resume(); // Execute the task immediatelly
    }
 
    var body: some View {
+      
+
       GeometryReader { geometry in 
          // Gain access to the screen dimensions to perform proper sizing
       
@@ -147,21 +160,45 @@ struct FeedsView: View {
                // The alignment parameter for a VStack concerns horizontal alignment
                VStack(alignment: .center, spacing: 0) {
                   
-                  SearchView( barWidth: geometry.size.width * 0.7, searchBinding: $searchString )
-                     .padding(.bottom, 20)
+                  HStack(alignment: .top) {
+                     SearchView( barWidth: geometry.size.width * 0.6, searchBinding: $searchString )
+                        .padding(.bottom, 20)
+                     
+                     // Settings and reload buttons
+                     NavigationLink(destination: LoadingView("Settings") ){
+                        Image(systemName: "slider.horizontal.3").resizable().frame(
+                           width: 25, height: 25, alignment: .center
+                        )
+                     }
+                     .padding(10)
+                     Button(action: {
+                        NSLog("Reload!")
+                     }) {
+                        Image(systemName: "arrow.clockwise").resizable().frame(
+                           width: 25, height: 25, alignment: .center
+                        )
+                     }
+                     .padding(10)
+                  }
 
                   ForEach(feeds, id: \.id ) { feed in
                      // We need the entry class to have an ID
                      // to iterate over it using ForEach()
                   
                      if feed.title.contains(searchString) || searchString == "" {
-                        
                         RssFeedRowView(feed: feed, screenWidth: geometry.size.width)
                      }
                   }
                }
                .listRowBackground(Color.clear)
                .onAppear(perform: loadFeeds)
+               .alert(isPresented: self.$showAlert) {
+                  Alert(
+                     title: Text(self.alertTitle), 
+                     message: Text(self.alertMessage), 
+                     dismissButton: .default(Text("OK"))
+                  )
+               }
             }
          }
       
