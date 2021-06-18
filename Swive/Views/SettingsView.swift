@@ -1,10 +1,5 @@
 import SwiftUI
 
-// One would have prefered to use CocoaPods but for the LSP to reconginze the
-// dependceny we need to use the built in Xcode option to add a package
-//  File > Swift Packages > Add Package Dependency...
-import KeychainAccess
-
 struct SettingsView: View {
 
    //init?() {
@@ -17,9 +12,6 @@ struct SettingsView: View {
    //   UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
    //}
    
-   func getCreds(){
-   }
-
    var body: some View {
       
       GeometryReader { geometry in 
