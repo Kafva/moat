@@ -51,55 +51,31 @@ class ApiWrapper<T: Codable> {
       .resume(); // Execute the task immediatelly
   }
   
-
-
-   // One could make a /thumb/<item-id> endpoint and relied
-   // completly on the server to fetch images. This would give
-   // better performance since the server usually has a better connenction
-   // than the client. It would however require the server to fetch
-   // the XML for each feed for every image, this request should definitly
-   // be cached unless it isn't automatically
-
-   //func getThumbnailUrls(
-   //  image_urls: ObservableArray<String>,
-   //  rssurl: String,
-   //  alert: AlertState,
-   //  isLoading: Binding<Bool>
-   // ) -> Void {
-   //   
-   //   guard let url = URL(string: rssurl) else { return } 
-   //   let req = URLRequest(url: url);
-   //
-   //    URLSession.shared.dataTask(with: req) { data, response, err in
-   //    
-   //       if data != nil {
-   //        do { 
-   //            let xml = try XML.parse(
-   //               String(bytes: data!, encoding: .utf8)!
-   //            )
-   //            var index = 0;
-
-   //            while let image_url = 
-   //               xml["feed", "entry", index, "media:group", "media:thumbnail"].attributes["url"] {
-
-   //               image_urls.arr.append(image_url)
-   //               index += 1
-   //            } 
-   //        }
-   //        catch { 
-   //          alert.makeAlert(
-   //             title: "Decoding error", err: err, isLoading: isLoading
-   //          ); 
-   //        }
-   //       }
-   //       else { 
-   //          alert.makeAlert(
-   //             title: "Connection error", err: err, isLoading: isLoading
-   //          ); 
-   //       }
-   //     }
-   //     .resume(); // Execute the task immediatelly
-   //}
+  /// Thumbnails for YouTube videos are served from the endpoint:
+  ///      https://img.youtube.com/vi/<video id>/default.jpg
+  func loadThumbnail(
+    videoId: String,
+    image: Binding<UIImage>,  
+    alert: AlertState,
+    isLoading: Binding<Bool>
+   ) -> Void {
+     
+      guard let url = URL(string:"https://img.youtube.com/vi/\(videoId)/default.jpg" ) 
+      else { return } 
+      
+      URLSession.shared.dataTask(with: URLRequest(url: url)) { data, response, err in
+        // Create a background task to fetch data from the server
+        if data != nil {
+           image.wrappedValue = UIImage(data: data! ) ?? UIImage();
+        }
+        else { 
+           alert.makeAlert(
+              title: "Connection error", err: err, isLoading: isLoading
+           ); 
+        }
+      }
+      .resume(); // Execute the task immediatelly
+  }
 
 }
 

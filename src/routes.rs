@@ -77,6 +77,3 @@ pub fn items(_key: Creds<'_>, config: &State<Config>, b64_rssurl: &str) -> Json<
         .unwrap()
     )
 }
-
-
-
