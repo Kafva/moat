@@ -3,7 +3,6 @@ use rocket::serde::{json::Json};
 use super::models::{Config, RssItem, RssFeed};
 use super::dataguards::{ReadToggleData, Creds};
 use super::db_parser::{get_feed_list, get_items_from_feed, toggle_read_status};
-use std::{thread, time};
 
 // The client will need an API to:
 //  1. Fetch a list of all feeds
@@ -48,8 +47,6 @@ pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
 #[get("/feeds")]
 pub fn feeds(_key: Creds<'_>, config: &State<Config>) -> Json<Vec<RssFeed>> {
     
-    //thread::sleep(time::Duration::from_millis(10_000));
-
     Json( 
         get_feed_list( config.cache_path.as_str() )
             .unwrap() 

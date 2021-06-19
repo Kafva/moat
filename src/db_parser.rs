@@ -35,8 +35,9 @@ pub fn get_feed_list(cache_path: &str) -> Result<Vec<RssFeed>,rusqlite::Error> {
         // statement we use the rssurl/feedurl as a unique identifer to determine
         // how many unread articles each feed has
         conn.prepare("
-        SELECT feedurl, rss_feed.url, author, SUM(unread), COUNT(*) 
-        FROM rss_item JOIN rss_feed ON rss_feed.rssurl = feedurl GROUP BY feedurl;"
+        SELECT feedurl, rss_feed.url, author, SUM(unread) AS unread_count, COUNT(*) 
+        FROM rss_item JOIN rss_feed ON rss_feed.rssurl = feedurl GROUP BY feedurl
+        ORDER BY unread_count DESC;"
     )?;
     
     // Use a lambda statement on each row to create an iterator
@@ -62,7 +63,8 @@ pub fn get_items_from_feed(cache_path: &str, rssurl: &str) -> Result<Vec<RssItem
     let mut stmt = 
         conn.prepare( &format!("
             SELECT id, title, author, url, pubdate, unread FROM rss_item
-            WHERE feedurl = '{}';", rssurl 
+            WHERE feedurl = '{}'
+            ORDER BY pubdate DESC;", rssurl 
         ).as_str()
     )?;
     
