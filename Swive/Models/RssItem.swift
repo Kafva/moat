@@ -1,12 +1,12 @@
 import SwiftUI
 
 class RssItem: ObservableObject, Codable {
-    let id: Int
-    let title: String
-    let author: String
-    let url: String
-    let pubdate: Int
-    let unread: Bool
+   let id: Int
+   let title: String
+   let author: String
+   let url: String
+   let pubdate: Int
+   let unread: Bool
 
    private enum CodingKeys: String, CodingKey {
         case id
@@ -45,5 +45,16 @@ class RssItem: ObservableObject, Codable {
       self.url = url;
       self.pubdate = pubdate;
       self.unread = unread;
+   }
+   
+   func DateText() -> Text {
+      let fmt = DateFormatter()
+      fmt.dateStyle = .short
+      fmt.timeStyle = .none
+      
+      return Text( Date(
+         timeIntervalSince1970: Double(self.pubdate)), 
+         formatter: fmt 
+      )
    }
 }

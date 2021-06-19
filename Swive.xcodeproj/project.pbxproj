@@ -11,7 +11,12 @@
 		DD45CC07267B4A28000B0A99 /* FeedsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC06267B4A28000B0A99 /* FeedsView.swift */; };
 		DD45CC0B267B4AAC000B0A99 /* RssItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC09267B4AAC000B0A99 /* RssItem.swift */; };
 		DD45CC0C267B4AAC000B0A99 /* RssFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC0A267B4AAC000B0A99 /* RssFeed.swift */; };
-		DD80E6E0267CA6C7003B686A /* Creds.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD80E6DF267CA6C7003B686A /* Creds.swift */; };
+		DD7C3070267DCB1500D88DD1 /* ActionBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7C306F267DCB1400D88DD1 /* ActionBarView.swift */; };
+		DD7C3072267DCD9F00D88DD1 /* ApiWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7C3071267DCD9F00D88DD1 /* ApiWrapper.swift */; };
+		DD7C3074267DD40800D88DD1 /* RssItemRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7C3073267DD40800D88DD1 /* RssItemRowView.swift */; };
+		DD80E6E0267CA6C7003B686A /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD80E6DF267CA6C7003B686A /* Util.swift */; };
+		DD85F22C267D29FD00561D97 /* ObservableArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD85F22B267D29FD00561D97 /* ObservableArray.swift */; };
+		DD85F230267D370F00561D97 /* AlertState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD85F22F267D370F00561D97 /* AlertState.swift */; };
 		DD88D79D267CED0800BA6E91 /* RssFeedRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88D79B267CED0800BA6E91 /* RssFeedRowView.swift */; };
 		DD88D79E267CED0800BA6E91 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88D79C267CED0800BA6E91 /* SearchView.swift */; };
 		DD88D7A0267CEE8F00BA6E91 /* ItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88D79F267CEE8F00BA6E91 /* ItemsView.swift */; };
@@ -52,7 +57,12 @@
 		DD45CC06267B4A28000B0A99 /* FeedsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedsView.swift; sourceTree = "<group>"; };
 		DD45CC09267B4AAC000B0A99 /* RssItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssItem.swift; sourceTree = "<group>"; };
 		DD45CC0A267B4AAC000B0A99 /* RssFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssFeed.swift; sourceTree = "<group>"; };
-		DD80E6DF267CA6C7003B686A /* Creds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Creds.swift; sourceTree = "<group>"; };
+		DD7C306F267DCB1400D88DD1 /* ActionBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionBarView.swift; sourceTree = "<group>"; };
+		DD7C3071267DCD9F00D88DD1 /* ApiWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiWrapper.swift; sourceTree = "<group>"; };
+		DD7C3073267DD40800D88DD1 /* RssItemRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssItemRowView.swift; sourceTree = "<group>"; };
+		DD80E6DF267CA6C7003B686A /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		DD85F22B267D29FD00561D97 /* ObservableArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableArray.swift; sourceTree = "<group>"; };
+		DD85F22F267D370F00561D97 /* AlertState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertState.swift; sourceTree = "<group>"; };
 		DD88D79B267CED0800BA6E91 /* RssFeedRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssFeedRowView.swift; sourceTree = "<group>"; };
 		DD88D79C267CED0800BA6E91 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		DD88D79F267CEE8F00BA6E91 /* ItemsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsView.swift; sourceTree = "<group>"; };
@@ -113,6 +123,8 @@
 		DD45CC05267B4A28000B0A99 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DD7C3073267DD40800D88DD1 /* RssItemRowView.swift */,
+				DD7C306F267DCB1400D88DD1 /* ActionBarView.swift */,
 				DD88D79F267CEE8F00BA6E91 /* ItemsView.swift */,
 				DD88D79B267CED0800BA6E91 /* RssFeedRowView.swift */,
 				DD88D79C267CED0800BA6E91 /* SearchView.swift */,
@@ -126,6 +138,8 @@
 		DD45CC08267B4AAC000B0A99 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				DD85F22F267D370F00561D97 /* AlertState.swift */,
+				DD85F22B267D29FD00561D97 /* ObservableArray.swift */,
 				DD45CC09267B4AAC000B0A99 /* RssItem.swift */,
 				DD45CC0A267B4AAC000B0A99 /* RssFeed.swift */,
 			);
@@ -135,9 +149,10 @@
 		DD80E6DE267CA6C7003B686A /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				DD7C3071267DCD9F00D88DD1 /* ApiWrapper.swift */,
 				DD88D7A1267CF38000BA6E91 /* String+base64.swift */,
 				DDD6E182267361CD0039A899 /* Color+hex.swift */,
-				DD80E6DF267CA6C7003B686A /* Creds.swift */,
+				DD80E6DF267CA6C7003B686A /* Util.swift */,
 				DD939A2326727D920010BF19 /* SpriteScene.swift */,
 				DD939A1F2671FF970010BF19 /* SpriteSheet.swift */,
 			);
@@ -382,15 +397,20 @@
 				DDA951F62670F139003D760D /* SwiveApp.swift in Sources */,
 				DD45CC0C267B4AAC000B0A99 /* RssFeed.swift in Sources */,
 				DD939A262672A9370010BF19 /* Config.swift in Sources */,
+				DD85F230267D370F00561D97 /* AlertState.swift in Sources */,
+				DD85F22C267D29FD00561D97 /* ObservableArray.swift in Sources */,
+				DD7C3072267DCD9F00D88DD1 /* ApiWrapper.swift in Sources */,
 				DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */,
 				DDFB1314267C89B10033528E /* SettingsView.swift in Sources */,
 				DD88D79D267CED0800BA6E91 /* RssFeedRowView.swift in Sources */,
-				DD80E6E0267CA6C7003B686A /* Creds.swift in Sources */,
+				DD80E6E0267CA6C7003B686A /* Util.swift in Sources */,
 				DD88D79E267CED0800BA6E91 /* SearchView.swift in Sources */,
 				DD88D7A2267CF38000BA6E91 /* String+base64.swift in Sources */,
 				DD88D7A0267CEE8F00BA6E91 /* ItemsView.swift in Sources */,
 				DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */,
+				DD7C3070267DCB1500D88DD1 /* ActionBarView.swift in Sources */,
 				DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */,
+				DD7C3074267DD40800D88DD1 /* RssItemRowView.swift in Sources */,
 				DD45CC07267B4A28000B0A99 /* FeedsView.swift in Sources */,
 				DD45CC0B267B4AAC000B0A99 /* RssItem.swift in Sources */,
 			);

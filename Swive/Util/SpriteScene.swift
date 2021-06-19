@@ -91,9 +91,9 @@ class SpriteScene: SKScene {
     func addSprite(_ spawnPosition: CGPoint, _ targetPos: CGPoint) {
         
         guard nodeCount < MAX_SPRITE_COUNT else { 
-            #if DEBUG
-                NSLog("Limit reached (\(nodeCount)/\(MAX_SPRITE_COUNT)) -- not adding a new sprite");
-            #endif
+            //#if DEBUG
+            //    NSLog("Limit reached (\(nodeCount)/\(MAX_SPRITE_COUNT)) -- not adding a new sprite");
+            //#endif
             return; 
         }
 
@@ -106,7 +106,7 @@ class SpriteScene: SKScene {
             self.nodeCount+=1
 
             sprite.position = spawnPosition;
-            NSLog("Placing new sprite at (\(round(sprite.position.x)),\(round(sprite.position.y)))"); 
+            //NSLog("Placing new sprite at (\(round(sprite.position.x)),\(round(sprite.position.y)))"); 
             
             self.sprites.append(sprite);
             self.addChild(sprite);
@@ -166,9 +166,9 @@ class SpriteScene: SKScene {
         
         self.addSprite(location, targetPos);
         
-        #if DEBUG 
-            NSLog("Touched (\(round(location.x)),\(round(location.y)))");
-            NSLog("Node count: \(self.getNodeCount())");
-        #endif
+        //#if DEBUG 
+        //    NSLog("Touched (\(round(location.x)),\(round(location.y)))");
+        //    NSLog("Node count: \(self.getNodeCount())");
+        //#endif
     }
 }
