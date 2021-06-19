@@ -36,8 +36,8 @@ struct ItemsView: View {
                      alert: alertState, 
                      isLoading: $isLoading,
                      rssurl: self.feedurl                  
-                  )} 
-               )
+                  ) 
+               })
             }
             else {
                ScrollView(.vertical) { 
@@ -45,7 +45,7 @@ struct ItemsView: View {
                   VStack(alignment: .center, spacing: 0) {
 
                      ForEach(self.items.arr, id: \.id ) { item in
-                        RssItemRowView(item: item, screenWidth: geometry.size.width)
+                        RssItemRowView(item: item, screenWidth: geometry.size.width, thumbnailUrl: "")
                      }
                      .listRowBackground(Color.clear)
                      .frame(width: geometry.size.width, alignment: .center)

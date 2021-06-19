@@ -5,6 +5,7 @@ target 'Swive' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
   pod "KeychainAccess"
+  pod "SwiftyXMLParser", :git => 'https://github.com/yahoojapan/SwiftyXMLParser.git'
 
   #target 'SwiveTests' do
   #  inherit! :search_paths

@@ -2,13 +2,22 @@ import SwiftUI
 
 struct RssItemRowView: View {
 
+   var thumbnailUrl: String
    var item: RssItem;
    var screenWidth: CGFloat;
+
+   init(item: RssItem, screenWidth: CGFloat, thumbnailUrl: String){
+      self.thumbnailUrl = thumbnailUrl
+      self.item = item
+      self.screenWidth = screenWidth
+   }
 
    var body: some View {
       // | 50px | 0.5 %      | 0.5 % - 50px |
       HStack {
         //AsyncImage(url: URL(string: "https://i.imgur.com/yywewrD.png"))
+        
+        
         Image("umbreon")
               .resizable() // Must be applied before modifying the frame size
               .clipShape(Circle())
@@ -32,7 +41,7 @@ struct RssItemRowView: View {
         // This is required for the elements in the stack to actually
         // "float" to the left
         .frame(
-           width: self.screenWidth  - IMAGE_WIDTH, 
+           width: self.screenWidth  - IMAGE_WIDTH - 10, 
            alignment: .leading
         )
       }
