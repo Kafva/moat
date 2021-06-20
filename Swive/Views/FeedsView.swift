@@ -18,6 +18,7 @@ struct FeedsView: View {
    
    @State var isLoading: Bool = true;
    @State var searchString: String = "";
+   //@State var loadingText: String = "Loading..."
 
    var apiWrapper = ApiWrapper<RssFeed>()
 
@@ -29,18 +30,24 @@ struct FeedsView: View {
          GeometryReader { geometry in 
             // Gain access to the screen dimensions to perform proper sizing
             if self.isLoading {
-               LoadingView(
-                  width: geometry.size.width, 
-                  height: geometry.size.height,  
-                  loadingText:"Loading..."
-               )
-               .onAppear(perform: {
-                  self.apiWrapper.loadRows(
-                     rows: feeds, 
-                     alert: alertState, 
-                     isLoading: $isLoading
-                  )} 
-               )
+               ZStack {
+                   LoadingView(
+                      //loadingText: $loadingText, 
+                      sceneSize: CGSize(
+                         width: geometry.size.width, 
+                         height: geometry.size.height
+                      )
+                   )
+                   .onAppear(perform: {
+                      self.apiWrapper.loadRows(
+                         rows: feeds, 
+                         alert: alertState, 
+                         isLoading: $isLoading
+                      )} 
+                   )
+                   
+                   LoadingTextView()
+               }
             }
             else {
                ScrollView(.vertical) { 
@@ -53,6 +60,7 @@ struct FeedsView: View {
                      )
                      // When the rows are not loaded we need to add additional padding for the items in the bar 
                      .padding(.leading,  feeds.arr.count == 0 ? 15 : 0 )
+                     .environmentObject(feeds) // Passed onward to SettingsView
 
                      ForEach(feeds.arr, id: \.id ) { feed in
                         // We need the entry class to have an ID

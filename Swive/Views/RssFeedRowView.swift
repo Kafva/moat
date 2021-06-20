@@ -6,18 +6,9 @@ struct RssFeedRowView: View {
    var screenWidth: CGFloat;
 
    var body: some View {
-      // | 50px | 0.5 %      | 0.5 % - 50px |
       HStack {
-         NavigationLink(destination: ItemsView(feed.rssurl) ){
-            Image("umbreon")
-               .resizable() // Must be applied before modifying the frame size
-               .clipShape(Circle())
-               .frame(
-                  width: IMAGE_WIDTH,  
-                  height: ROW_HEIGHT, 
-                  alignment: .center
-            )
-            .padding(.leading, 5)
+         NavigationLink(destination: ItemsView(feed.rssurl) ) {
+            FeedLogoView(channelId: feed.getChannelId() ?? "")
          }
 
          VStack (alignment: .leading, spacing: 5){

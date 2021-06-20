@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ActionBarView: View {
    
+   @EnvironmentObject var feeds: ObservableArray<RssFeed>
    @Binding var searchString: String;
    var searchBarWidth: CGFloat;
 
@@ -11,7 +12,7 @@ struct ActionBarView: View {
             .padding(.bottom, 20)
          
          // Settings and reload buttons
-         NavigationLink(destination: SettingsView() ){
+        NavigationLink(destination: SettingsView(feeds: feeds.arr) ){
             Image(systemName: "slider.horizontal.3").resizable().frame(
                width: 25, height: 25, alignment: .center
             )

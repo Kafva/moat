@@ -67,9 +67,6 @@ import SwiftUI
             }
             //  https://stackoverflow.com/a/64752414/9033629
             .navigationViewStyle(StackNavigationViewStyle())
-            // Pass the global state variable down to the feeds view
-            // as an @EnviromentObject
-            //.environmentObject(feeds)
         }
     }
 }
