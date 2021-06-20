@@ -25,6 +25,7 @@
 		DD88D79E267CED0800BA6E91 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88D79C267CED0800BA6E91 /* SearchView.swift */; };
 		DD88D7A0267CEE8F00BA6E91 /* ItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88D79F267CEE8F00BA6E91 /* ItemsView.swift */; };
 		DD88D7A2267CF38000BA6E91 /* String+base64.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88D7A1267CF38000BA6E91 /* String+base64.swift */; };
+		DD9150F9267FCD7000F622C0 /* ServerConnectionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD9150F8267FCD7000F622C0 /* ServerConnectionError.swift */; };
 		DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A1F2671FF970010BF19 /* SpriteSheet.swift */; };
 		DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A2326727D920010BF19 /* SpriteScene.swift */; };
 		DD939A262672A9370010BF19 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A252672A9370010BF19 /* Config.swift */; };
@@ -33,7 +34,7 @@
 		DDA951FA2670F13B003D760D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDA951F92670F13B003D760D /* Assets.xcassets */; };
 		DDA952082670F13B003D760D /* SwiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952072670F13B003D760D /* SwiveTests.swift */; };
 		DDA952132670F13B003D760D /* SwiveUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952122670F13B003D760D /* SwiveUITests.swift */; };
-		DDD1585E267F4A60007B7D1E /* Logos.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1585D267F4A60007B7D1E /* Logos.swift */; };
+		DDD1585E267F4A60007B7D1E /* YtLogosApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1585D267F4A60007B7D1E /* YtLogosApi.swift */; };
 		DDD15860267F526D007B7D1E /* LoadingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1585F267F526D007B7D1E /* LoadingTextView.swift */; };
 		DDD15862267F6950007B7D1E /* InputField+customStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD15861267F6950007B7D1E /* InputField+customStyle.swift */; };
 		DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6E182267361CD0039A899 /* Color+hex.swift */; };
@@ -78,6 +79,7 @@
 		DD88D79C267CED0800BA6E91 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		DD88D79F267CEE8F00BA6E91 /* ItemsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsView.swift; sourceTree = "<group>"; };
 		DD88D7A1267CF38000BA6E91 /* String+base64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+base64.swift"; sourceTree = "<group>"; };
+		DD9150F8267FCD7000F622C0 /* ServerConnectionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConnectionError.swift; sourceTree = "<group>"; };
 		DD939A1F2671FF970010BF19 /* SpriteSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteSheet.swift; sourceTree = "<group>"; };
 		DD939A2326727D920010BF19 /* SpriteScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteScene.swift; sourceTree = "<group>"; };
 		DD939A252672A9370010BF19 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -92,7 +94,7 @@
 		DDA9520E2670F13B003D760D /* SwiveUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiveUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDA952122670F13B003D760D /* SwiveUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiveUITests.swift; sourceTree = "<group>"; };
 		DDA952142670F13B003D760D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DDD1585D267F4A60007B7D1E /* Logos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logos.swift; sourceTree = "<group>"; };
+		DDD1585D267F4A60007B7D1E /* YtLogosApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YtLogosApi.swift; sourceTree = "<group>"; };
 		DDD1585F267F526D007B7D1E /* LoadingTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingTextView.swift; sourceTree = "<group>"; };
 		DDD15861267F6950007B7D1E /* InputField+customStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InputField+customStyle.swift"; sourceTree = "<group>"; };
 		DDD6E182267361CD0039A899 /* Color+hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+hex.swift"; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				DD85F22B267D29FD00561D97 /* ObservableArray.swift */,
 				DD45CC09267B4AAC000B0A99 /* RssItem.swift */,
 				DD45CC0A267B4AAC000B0A99 /* RssFeed.swift */,
+				DD9150F8267FCD7000F622C0 /* ServerConnectionError.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -167,7 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				DDD15861267F6950007B7D1E /* InputField+customStyle.swift */,
-				DDD1585D267F4A60007B7D1E /* Logos.swift */,
+				DDD1585D267F4A60007B7D1E /* YtLogosApi.swift */,
 				DD6A3E10267F3EF0005CD6DB /* ImageLoader.swift */,
 				DD6A3E0E267F273E005CD6DB /* String+matches.swift */,
 				DD7C3071267DCD9F00D88DD1 /* ApiWrapper.swift */,
@@ -417,6 +420,7 @@
 				DDA951F82670F139003D760D /* LoadingView.swift in Sources */,
 				DDA951F62670F139003D760D /* SwiveApp.swift in Sources */,
 				DD45CC0C267B4AAC000B0A99 /* RssFeed.swift in Sources */,
+				DD9150F9267FCD7000F622C0 /* ServerConnectionError.swift in Sources */,
 				DD939A262672A9370010BF19 /* Config.swift in Sources */,
 				DD6A3E0F267F273E005CD6DB /* String+matches.swift in Sources */,
 				DD85F230267D370F00561D97 /* AlertState.swift in Sources */,
@@ -435,7 +439,7 @@
 				DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */,
 				DDD15862267F6950007B7D1E /* InputField+customStyle.swift in Sources */,
 				DD7C3074267DD40800D88DD1 /* RssItemRowView.swift in Sources */,
-				DDD1585E267F4A60007B7D1E /* Logos.swift in Sources */,
+				DDD1585E267F4A60007B7D1E /* YtLogosApi.swift in Sources */,
 				DD45CC07267B4A28000B0A99 /* FeedsView.swift in Sources */,
 				DD6A3E13267F4037005CD6DB /* FeedLogoView.swift in Sources */,
 				DDD15860267F526D007B7D1E /* LoadingTextView.swift in Sources */,

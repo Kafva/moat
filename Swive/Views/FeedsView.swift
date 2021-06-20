@@ -1,16 +1,5 @@
 import SwiftUI
 
-// Views:  
-//    1. Feed list view
-//       - (Image)   |name|url|unread cnt|
-//       - Swipe to toggle all items unread status?
-//       - Search field
-//       - Reload button ( GET /reload && GET /feeds ) -> Enter loading view
-//    2. Item list view
-//       - (Image)   |title with link|pubdate
-//       - Swipe to toggle unread status
-//       - Fetch video thumbnails for the images
-
 struct FeedsView: View {
 
    @StateObject var feeds: ObservableArray<RssFeed> = ObservableArray();

@@ -9,7 +9,6 @@ struct LoadingTextView: View {
     Text(loadingText)
       .font(.largeTitle).bold()
       .animation(Animation.easeOut(duration: 1).repeatForever(autoreverses: true) )
-      //.frame(width: .infinity, alignment: .center)
   }
 }
 

@@ -24,6 +24,7 @@ struct ActionBarView: View {
          .padding(10)
 
          // Bruh... https://developer.apple.com/forums/thread/677333
+         // this only seems to be a partial fix
          NavigationLink(destination: EmptyView()) {
             EmptyView()
          }
