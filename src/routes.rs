@@ -47,6 +47,9 @@ pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
 #[get("/feeds")]
 pub fn feeds(_key: Creds<'_>, config: &State<Config>) -> Json<Vec<RssFeed>> {
     
+    //use std::{thread, time}; 
+    //thread::sleep(time::Duration::from_millis(10_000));
+
     Json( 
         get_feed_list( config.cache_path.as_str() )
             .unwrap() 

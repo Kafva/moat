@@ -15,6 +15,7 @@ func setViewTransparency() {
   // https://stackoverflow.com/questions/57128547/swiftui-list-color-background
   UITableView.appearance().backgroundColor = .clear
   UITableViewCell.appearance().backgroundColor = .clear
+  UIButton.appearance().backgroundColor = .clear // Required for the save button in settings
 
   // https://stackoverflow.com/a/58974331/9033629 
   UINavigationBar.appearance().barTintColor = .clear

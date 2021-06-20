@@ -1,19 +1,4 @@
-//
-//  SwiveApp.swift
-//  Swive
-//
-//  Created by Jonas Mårtensson on 2021-06-09.
-//
-
 import SwiftUI
-
-
-//public class GlobalState: ObservableObject {
-//    
-//    var screenSize: CGSize?
-//}
-
-
 
 // '@main' denotes the entrypoint for the application
 @main struct SwiveApp: App {

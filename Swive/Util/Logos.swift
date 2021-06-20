@@ -4,14 +4,13 @@ func getLogoUrl(channelId: String, name: String,  completion: @escaping (String)
 
   let channel_url = URL(string: "https://www.youtube.com/channel/\(channelId)/about")!
 
-  // To bypass the consent screen we need to inject a cookie into
-  // the request
+  // To bypass the consent screen we need to inject a cookie into the request
   if let cookie = HTTPCookie(properties: [
-     .domain: ".youtube.com",
-     .path: "/",
-     .name: "CONSENT",
-     .value: "YES+cb.20210615-14-p0.en-GB+FX+503",
-     .secure: "TRUE",
+    .domain: ".youtube.com",
+    .path: "/",
+    .name: "CONSENT",
+    .value: "YES+cb.20210615-14-p0.en-GB+FX+503",
+    .secure: "TRUE",
   ]) {
     // Note that we use both the 'shared' session and cookie storage
     HTTPCookieStorage.shared.setCookie(cookie)
@@ -21,7 +20,6 @@ func getLogoUrl(channelId: String, name: String,  completion: @escaping (String)
   let req = URLRequest(url: channel_url)
   
   URLSession.shared.dataTask(with: req) { data, res, err in
-      
       if let data = data {
         completion(
           extractLogoUrl( String(decoding: data, as: UTF8.self), name: name ) ?? "" 
