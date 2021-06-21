@@ -30,7 +30,7 @@ class ApiWrapper<T: Codable> {
       }
 
       guard let url = URL(string: api_url) else { return } 
-      var req = URLRequest(url: url);
+      var req = URLRequest(url: url, timeoutInterval: SERVER_REQUEST_TIMEOUT);
       req.addValue(serverKey, forHTTPHeaderField: "x-creds")
 
        URLSession.shared.dataTask(with: req) { data, res, err in
