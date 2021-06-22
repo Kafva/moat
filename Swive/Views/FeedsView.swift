@@ -63,18 +63,38 @@ struct FeedsView: View {
                         // to iterate over it using ForEach()
                      
                         if feed.title.contains(searchString) || searchString == "" {
-                           RssFeedRowView(feed: feed, screenWidth: geometry.size.width)
+                           RssFeedRowView(feed: feed, screenWidth: geometry.size.width) 
+                           .environmentObject(alertState)
                         }
                      }
                   }
                   .listRowBackground(Color.clear)
                }
+               // We pass the alertState object downwards, updates to it will
+               // always use this alert() definition
                .alert(isPresented: $alertState.show ) {
-                     Alert(
+                  var a: Alert;
+                  if alertState.alertWithTwoButtons {
+                     a = Alert(
+                        title: Text(alertState.title),
+                        primaryButton: .destructive(
+                           Text("No"),
+                           action: {}
+                        ),
+                        secondaryButton: .default(
+                           Text("Yes"), 
+                           action: {} 
+                        )
+                     )
+                  }
+                  else {
+                     a = Alert(
                         title: Text(alertState.title), 
                         message: Text(alertState.message), 
                         dismissButton: .default(Text("OK"))
-                  )
+                     )
+                  }
+                  return a
                }
             }
          }
