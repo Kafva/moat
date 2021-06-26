@@ -12,8 +12,9 @@ let THUMBNAIL_HEIGHT = CGFloat(180/2);
 let BUTTON_WIDTH = CGFloat(25);
 let BUTTON_HEIGHT = CGFloat(25);
 
-
+/****** Drag gestures *******/
 let INITIAL_X_POS = THUMBNAIL_WIDTH + 35
+let COMMIT_X_POS = INITIAL_X_POS + 150
 
 /***** Colors *******/
 let BKG_GRADIENT_LINEAR = LinearGradient(

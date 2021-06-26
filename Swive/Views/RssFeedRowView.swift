@@ -5,7 +5,7 @@ struct RssFeedRowView: View {
    var feed: RssFeed;
    var screenWidth: CGFloat;
    @EnvironmentObject var alertState: AlertState
-
+   
    var body: some View {
       HStack {
          NavigationLink(destination: ItemsView(feed.rssurl) ) {
@@ -47,7 +47,7 @@ struct RssFeedRowView: View {
             .onTapGesture {
                self.alertState.title = "Mark all entries for \(self.feed.title) as read?" 
                self.alertState.message = ""
-               self.alertState.alertWithTwoButtons = true
+               self.alertState.feedUrl = self.feed.rssurl;
                self.alertState.show.toggle() 
             }
       }

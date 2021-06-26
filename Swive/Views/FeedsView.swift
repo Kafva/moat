@@ -74,16 +74,16 @@ struct FeedsView: View {
                // always use this alert() definition
                .alert(isPresented: $alertState.show ) {
                   var a: Alert;
-                  if alertState.alertWithTwoButtons {
+                  if alertState.feedUrl != "" {
                      a = Alert(
                         title: Text(alertState.title),
                         primaryButton: .destructive(
                            Text("No"),
-                           action: {}
+                           action: { print(alertState.feedUrl)  }
                         ),
                         secondaryButton: .default(
                            Text("Yes"), 
-                           action: {} 
+                           action: { print(alertState.feedUrl) } 
                         )
                      )
                   }

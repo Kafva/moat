@@ -7,14 +7,17 @@ class AlertState: ObservableObject {
    @Published var show: Bool = false;
    var title: String = "";
    var message: String = "";
-   var alertWithTwoButtons: Bool = false
+
+   /// When producing alerts for the 'mark all as read' feature this attribute
+   /// will corresponnd to the rssurl of the feed in question
+   var feedUrl: String = "";
    
    /// Unhides an alert and sets the loading state to false
-   func makeAlert(title: String, err: Error?, isLoading: Binding<Bool>, alertWithTwoButtons: Bool = false ) {
+   func makeAlert(title: String, err: Error?, isLoading: Binding<Bool>, feedUrl: String = "") {
       
       self.title = title; 
       self.message = "\(err?.localizedDescription ?? "No description available")";
-      self.alertWithTwoButtons = alertWithTwoButtons
+      self.feedUrl = feedUrl
       
       DispatchQueue.main.async {
          // UI changes need to be performed on the main thread

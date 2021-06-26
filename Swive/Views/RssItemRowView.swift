@@ -4,19 +4,38 @@ struct RssItemRowView: View {
 
    var item: RssItem;
    var screenWidth: CGFloat;
+   @State var opacity: Double = 1;
    
    @State private var location: CGPoint = CGPoint(x: INITIAL_X_POS, y: 0)
    var toggleReadGesture: some Gesture {
       DragGesture()
          .onChanged { value in
-            // Only accept horizontal dragging motions
             print("@x:\(self.location.x) moved to \(value.location.x)")
-            self.location.x = value.location.x
+
+            if value.location.x >= INITIAL_X_POS {
+               //DispatchQueue.main.async {
+                  self.opacity =   Double(
+                     abs(COMMIT_X_POS - value.location.x)  / 
+                     COMMIT_X_POS
+                  ) 
+                  print("YEP")
+               //}
+
+               // Only accept horizontal dragging motions
+               self.location.x = value.location.x
+            }
          }
          .onEnded({ _ in
+         
+               if self.location.x >= COMMIT_X_POS {
+                  print("Commit change!")
+               }
+
                // Reset to original position on ended drag gesture
                print("Resetting to x:\(INITIAL_X_POS)")
                self.location.x = INITIAL_X_POS
+               self.opacity = 1;
+               
          })
    } 
 
@@ -73,6 +92,7 @@ struct RssItemRowView: View {
            alignment: .leading
         )  
       }
+      .opacity( self.opacity )
       .frame(width: self.screenWidth, alignment: .leading)
       .padding(.bottom, 7)
       .position(location)
@@ -85,7 +105,7 @@ struct RssItemRowView: View {
       // common for drag gestures to be registered when we mean to
       // scroll vertically (they still do to some extent)
       // https://developer.apple.com/forums/thread/123034
-      .onTapGesture {}
+      //.onTapGesture {}   // This disables the link...
       .gesture(toggleReadGesture)
       .onTapGesture {
          UIApplication.shared.open(URL(string: item.url)!)
