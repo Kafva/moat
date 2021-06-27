@@ -4,11 +4,13 @@ struct RssFeedRowView: View {
 
    var feed: RssFeed;
    var screenWidth: CGFloat;
-   @EnvironmentObject var alertState: AlertState
+   @StateObject var alertState: AlertState = AlertState()
    
    // This state is passed onwards to the  ItemsView for each feed so
    // that the unread_count is upated in the feeds view when changes are made
    @State var unread_count: Int
+   
+   var apiWrapper = ApiWrapper<ServerResponse>()
    
    init(feed: RssFeed, screenWidth: CGFloat){
       self.feed = feed
@@ -60,11 +62,42 @@ struct RssFeedRowView: View {
             .onTapGesture {
                self.alertState.title = "Mark all entries for \(self.feed.title) as read?" 
                self.alertState.message = ""
-               self.alertState.feedUrl = self.feed.rssurl;
-               self.alertState.show.toggle() 
+               self.alertState.type = AlertType.Choice
+               self.alertState.show = true 
             }
       }
       .padding(.bottom, 5)
+      .alert(isPresented: $alertState.show ) {
+            var a: Alert
+            if alertState.type == AlertType.Choice {
+               a = Alert(
+                  title: Text(alertState.title),
+                  primaryButton: .destructive(
+                     Text("No"),
+                     action: { /* Do nothing */ }
+                  ),
+                  secondaryButton: .default(
+                     Text("Yes"), 
+                     action: { 
+                        self.apiWrapper.setAllItemsAsRead(
+                           unread_count: self.$unread_count,
+                           rssurl: self.feed.rssurl, 
+                           alert: self.alertState 
+                        )
+                     } 
+                  )
+               )
+            }
+            else {
+               a = Alert(
+                  title: Text(alertState.title), 
+                  message: Text(alertState.message), 
+                  dismissButton: .default(Text("OK"))
+               )
+            }
+            return a
+      }
+
    }
 }
 

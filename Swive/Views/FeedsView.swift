@@ -8,7 +8,7 @@ struct FeedsView: View {
    @State var isLoading: Bool = true;
    @State var searchString: String = "";
 
-   var apiWrapper = ApiWrapper<RssFeed>()
+   var apiWrapper       = ApiWrapper<RssFeed>()
 
    init?() {
       setViewTransparency()
@@ -57,6 +57,16 @@ struct FeedsView: View {
                      .padding(.leading,  feeds.arr.count == 0 ? 15 : 0 )
                      .environmentObject(feeds) // Passed onward to SettingsView
                      .environmentObject(alertState)
+                     // Note that we cannot mount more than one alert in the same 
+                     // parent-child hierachy for a view and since each `RssFeedRow` has its own alert 
+                     // we thus can't place this alert around the entire body
+                     .alert(isPresented: $alertState.show ) {
+                        Alert(
+                           title: Text(alertState.title), 
+                           message: Text(alertState.message), 
+                           dismissButton: .default(Text("OK"))
+                        )
+                     }
 
                      ForEach(feeds.arr, id: \.id ) { feed in
                         // We need the entry class to have an ID
@@ -64,37 +74,10 @@ struct FeedsView: View {
                      
                         if feed.title.contains(searchString) || searchString == "" {
                            RssFeedRowView(feed: feed, screenWidth: geometry.size.width) 
-                           .environmentObject(alertState)
                         }
                      }
                   }
                   .listRowBackground(Color.clear)
-               }
-               // We pass the alertState object downwards, updates to it will
-               // always use this alert() definition
-               .alert(isPresented: $alertState.show ) {
-                  var a: Alert;
-                  if alertState.feedUrl != "" {
-                     a = Alert(
-                        title: Text(alertState.title),
-                        primaryButton: .destructive(
-                           Text("No"),
-                           action: { print(alertState.feedUrl)  }
-                        ),
-                        secondaryButton: .default(
-                           Text("Yes"), 
-                           action: { print(alertState.feedUrl) } 
-                        )
-                     )
-                  }
-                  else {
-                     a = Alert(
-                        title: Text(alertState.title), 
-                        message: Text(alertState.message), 
-                        dismissButton: .default(Text("OK"))
-                     )
-                  }
-                  return a
                }
             }
          }

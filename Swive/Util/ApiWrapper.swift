@@ -82,10 +82,75 @@ class ApiWrapper<T: Codable> {
       .resume(); // Execute the task immediatelly
   }
   
-  func setUnreadStatus(unread_count: Binding<Int>, unread_binding: Binding<Bool>, rssurl: String, video_id: Int = 0, alert: AlertState, isLoading: Binding<Bool>?) -> Void {
+  func setAllItemsAsRead(unread_count: Binding<Int>, rssurl: String, alert: AlertState) -> Void {
+      guard let (serverLocation, serverKey) = 
+         self.getServerConfig(alert: alert, isLoading: nil) 
+      else { return }
+      
+      let api_url = "http://\(serverLocation)/unread"
+
+      guard let url = URL(string: api_url) else { return } 
+      var req = URLRequest(url: url, timeoutInterval: SERVER_REQUEST_TIMEOUT);
+      req.addValue(serverKey, forHTTPHeaderField: "x-creds")
+      
+      // Add POST data
+      req.httpMethod = "POST"
+      req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+      req.httpBody = "rssurl=\(rssurl)&unread=false".data(using: .ascii)
+
+      URLSession.shared.dataTask(with: req) { data, res, err in
+         if (res as? HTTPURLResponse)?.statusCode == 401 {
+            alert.makeAlert(
+               title: "Unauthorized", 
+               err: ServerConnectionError.invalidKey, 
+               isLoading: nil
+            ); 
+         } 
+         else {
+            if data != nil {
+             do { 
+               
+               let decoded = try JSONDecoder().decode(ServerResponse.self, from: data!); 
+
+               // If the response data was successfully decoded dispatch an update in the
+               // main thread (all UI updates should be done in the main thread)
+               // to update the state in the view
+               DispatchQueue.main.async {
+                  if !decoded.success {
+                     alert.makeAlert(
+                        title: "Bad request", 
+                        err: ServerConnectionError.unexpected(code: 400) , 
+                        isLoading: nil
+                     )
+                  }
+                  else  {
+                     // Update the binding to the unread_count value for the
+                     // RssFeedRow in question
+                     unread_count.wrappedValue = 0
+                  }
+               }
+             }
+             catch { 
+               alert.makeAlert(
+                  title: "Decoding error", err: err, isLoading: nil
+               ); 
+             }
+            }
+            else { 
+               alert.makeAlert(
+                  title: "Connection error", err: err, isLoading: nil
+               ); 
+            }
+         }
+      }
+      .resume(); // Execute the task immediatelly
+
+   }
+  
+  func setUnreadStatus(unread_count: Binding<Int>, unread_binding: Binding<Bool>, rssurl: String, video_id: Int, alert: AlertState) -> Void {
      
       guard let (serverLocation, serverKey) = 
-         self.getServerConfig(alert: alert, isLoading: isLoading) 
+         self.getServerConfig(alert: alert, isLoading: nil) 
       else { return }
       
       if video_id == 0 && rssurl == "" {
@@ -113,7 +178,7 @@ class ApiWrapper<T: Codable> {
             alert.makeAlert(
                title: "Unauthorized", 
                err: ServerConnectionError.invalidKey, 
-               isLoading: isLoading
+               isLoading: nil
             ); 
          } 
          else {
@@ -130,7 +195,7 @@ class ApiWrapper<T: Codable> {
                      alert.makeAlert(
                         title: "Bad request", 
                         err: ServerConnectionError.unexpected(code: 400) , 
-                        isLoading: isLoading
+                        isLoading: nil
                      )
                   }
                   else  {
@@ -139,19 +204,17 @@ class ApiWrapper<T: Codable> {
                      unread_count.wrappedValue += unread_binding.wrappedValue ? -1 : 1 
                      unread_binding.wrappedValue = !unread_binding.wrappedValue
                   }
-
-                  isLoading?.wrappedValue = false;
                }
              }
              catch { 
                alert.makeAlert(
-                  title: "Decoding error", err: err, isLoading: isLoading
+                  title: "Decoding error", err: err, isLoading: nil
                ); 
              }
             }
             else { 
                alert.makeAlert(
-                  title: "Connection error", err: err, isLoading: isLoading
+                  title: "Connection error", err: err, isLoading: nil
                ); 
             }
          }

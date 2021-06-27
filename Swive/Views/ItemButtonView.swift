@@ -27,8 +27,7 @@ struct ItemButtonView: View {
               unread_binding: $unread, 
               rssurl: self.rssurl, 
               video_id: video_id, 
-              alert: alertState, 
-              isLoading: nil
+              alert: alertState
             )
          }) {
            ZStack {
