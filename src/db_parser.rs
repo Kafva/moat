@@ -14,6 +14,35 @@ use super::models::{RssItem, RssFeed};
 // if these are to be included we will perform this fetch client side (XML
 // parsing is probably easier from there)
 
+// Newsboat keeps a cache.db internally with:
+//  CREATE TABLE rss_feed (  
+//    rssurl VARCHAR(1024) PRIMARY KEY NOT NULL
+//    url VARCHAR(1024) NOT NULL
+//    title VARCHAR(1024) NOT NULL , 
+//    lastmodified INTEGER(11) NOT NULL DEFAULT 0,
+//    is_rtl INTEGER(1) NOT NULL DEFAULT 0,
+//    etag VARCHAR(128) NOT NULL DEFAULT ""
+//  );
+//  and...
+//  CREATE TABLE rss_item (  
+//      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+//      guid VARCHAR(64) NOT NULL
+//      title VARCHAR(1024) NOT NULL
+//      author VARCHAR(1024) NOT NULL
+//      url VARCHAR(1024) NOT NULL
+//      feedurl VARCHAR(1024) NOT NULL
+//      pubDate INTEGER NOT NULL
+//      content VARCHAR(65535) NOT NULL
+//      unread INTEGER(1) NOT NULL 
+//      enclosure_url VARCHAR(1024)
+//      enclosure_type VARCHAR(1024)
+//      enqueued INTEGER(1) NOT NULL DEFAULT 0
+//      flags VARCHAR(52)
+//      deleted INTEGER(1) NOT NULL DEFAULT 0
+//      base VARCHAR(128) NOT NULL DEFAULT ""
+//      content_mime_type VARCHAR(255) NOT NULL DEFAULT ""
+//  );
+
 /// Returns the number of changed rows on success
 pub fn toggle_read_status(cache_path: &str, rssurl: Option<String>, id: Option<u32>, unread: bool) -> Result<usize,rusqlite::Error> {
 
@@ -136,32 +165,3 @@ mod tests {
     }
 
 }
-
-// Newsboat keeps a cache.db internally with:
-//  CREATE TABLE rss_feed (  
-//    rssurl VARCHAR(1024) PRIMARY KEY NOT NULL
-//    url VARCHAR(1024) NOT NULL
-//    title VARCHAR(1024) NOT NULL , 
-//    lastmodified INTEGER(11) NOT NULL DEFAULT 0,
-//    is_rtl INTEGER(1) NOT NULL DEFAULT 0,
-//    etag VARCHAR(128) NOT NULL DEFAULT ""
-//  );
-//  and...
-//  CREATE TABLE rss_item (  
-//      id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-//      guid VARCHAR(64) NOT NULL
-//      title VARCHAR(1024) NOT NULL
-//      author VARCHAR(1024) NOT NULL
-//      url VARCHAR(1024) NOT NULL
-//      feedurl VARCHAR(1024) NOT NULL
-//      pubDate INTEGER NOT NULL
-//      content VARCHAR(65535) NOT NULL
-//      unread INTEGER(1) NOT NULL 
-//      enclosure_url VARCHAR(1024)
-//      enclosure_type VARCHAR(1024)
-//      enqueued INTEGER(1) NOT NULL DEFAULT 0
-//      flags VARCHAR(52)
-//      deleted INTEGER(1) NOT NULL DEFAULT 0
-//      base VARCHAR(128) NOT NULL DEFAULT ""
-//      content_mime_type VARCHAR(255) NOT NULL DEFAULT ""
-//  );
