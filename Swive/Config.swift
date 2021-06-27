@@ -12,12 +12,22 @@ let THUMBNAIL_HEIGHT = CGFloat(180/2);
 let BUTTON_WIDTH = CGFloat(25);
 let BUTTON_HEIGHT = CGFloat(25);
 
-/****** Drag gestures *******/
 let INITIAL_X_POS = THUMBNAIL_WIDTH + 35
-let COMMIT_X_POS = INITIAL_X_POS + 150
+let BUTTON_WIDTH_PERCENTAGE_OF_ROW = CGFloat(0.1)
+
+let Y_AXIS_SPACING_FOR_ITEMS = CGFloat(5)
 
 /***** Colors *******/
 let BKG_GRADIENT_LINEAR = LinearGradient(
+    gradient: Gradient(colors: [
+        Color(hex: "#606c88"),
+        Color(hex: "#3f4c6b")
+    ]), 
+    startPoint: .top, 
+    endPoint: .bottom
+);
+
+let UNREAD_GRADIENT = LinearGradient(
     gradient: Gradient(colors: [
         Color(hex: "#606c88"),
         Color(hex: "#3f4c6b")

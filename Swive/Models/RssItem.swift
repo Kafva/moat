@@ -6,7 +6,7 @@ class RssItem: ObservableObject, Codable {
    let author: String
    let url: String
    let pubdate: Int
-   let unread: Bool
+   var unread: Bool
 
    private enum CodingKeys: String, CodingKey {
         case id

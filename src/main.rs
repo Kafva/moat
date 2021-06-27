@@ -50,6 +50,6 @@ fn rocket() -> Rocket<Build> {
         routes::feeds, 
         routes::items,
         routes::reload,
-        routes::read
+        routes::unread
     ])
 }
