@@ -1,13 +1,13 @@
 import KeychainAccess
 import SwiftUI
 
-func setCreds(){
-  let keychain = Keychain(service: "com..Swive")
-  keychain["creds"] = "test"
+func setCreds(_ value: String){
+  let keychain = Keychain(service: BUNDLE_IDENTIFIER)
+  keychain["creds"] = value
 }
 
 func getCreds() -> String {
-  let keychain = Keychain(service: "com..Swive")
+  let keychain = Keychain(service: BUNDLE_IDENTIFIER)
   return keychain["creds"] ?? ""
 }
 

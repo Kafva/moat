@@ -1,5 +1,7 @@
 import SwiftUI
 
+let BUNDLE_IDENTIFIER = "com..Swive"
+
 let SERVER_REQUEST_TIMEOUT = 3.0
 
 /***** UI dimensions *****/
