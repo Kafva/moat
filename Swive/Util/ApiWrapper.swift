@@ -96,7 +96,7 @@ class ApiWrapper<T: Codable> {
       // Add POST data
       req.httpMethod = "POST"
       req.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-      req.httpBody = "rssurl=\(rssurl)&unread=false".data(using: .ascii)
+      req.httpBody = "rssurl=\(rssurl.toBase64())&unread=false".data(using: .ascii)
 
       URLSession.shared.dataTask(with: req) { data, res, err in
          if (res as? HTTPURLResponse)?.statusCode == 401 {

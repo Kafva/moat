@@ -10,8 +10,8 @@ use super::db_parser::{get_feed_list, get_items_from_feed, toggle_read_status};
 //  3. Update the 'unread' status of a perticular item or all items in a feed
 //  4. Reload all feeds
 
-/// TODO supprt rssurl argument
 /// curl -X POST -H "x-creds: test" http://localhost:5000/unread -d "id=5384&unread=0" 
+/// curl -X POST -H "x-creds: test" http://localhost:5000/unread/ -d "rssurl=$(printf 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64 )"
 /// If the <id> parameter does not conform to the u32 type rocket
 /// will try other potentially matching routes (based on `rank`) until
 /// no matching alternatives remain, at which point 404 is given
@@ -20,7 +20,8 @@ pub fn unread(_key: Creds<'_>,  config: &State<Config>, data: ReadToggleData ) -
 
     let success = toggle_read_status(
         &config.cache_path.as_str(), 
-        data.id, 
+        data.rssurl, 
+        data.id,
         data.unread
     ).unwrap(); 
     
