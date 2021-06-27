@@ -5,6 +5,7 @@ struct SettingsView: View {
    var feeds: [RssFeed]
    @State var finishedCount: Int = 0; 
    @State var isLoading: Bool = false;
+   @State var infiniteLoad: Bool = false;
    
    @State var spritesOn: Bool = UserDefaults.standard.bool(forKey: "spritesOn") ;
    @State var serverLocation: String = UserDefaults.standard.string(forKey: "serverLocation") ?? ""
@@ -43,6 +44,8 @@ struct SettingsView: View {
                  // To prevent the loadingView from being redrawn whenever
                  // the loading text changes we keep them seperate from each other
                  LoadingTextView( loadingText: 
+                    self.infiniteLoad ? 
+                    "Loading..." : 
                     String(format: "Fetching icons\n%.0f %%", 
                        (Double(self.finishedCount)/Double(self.feeds.count)) * 100
                     )
@@ -94,6 +97,14 @@ struct SettingsView: View {
                        })
                      }) {
                         Label("Reload YouTube feed logos", systemImage: "arrow.clockwise")
+                     }
+                     .padding(10)
+
+                     Button(action: {
+                       self.infiniteLoad = true
+                       self.isLoading = true
+                     }) {
+                        Label("Infinite loading screen", systemImage: "timelapse")
                      }
                      .padding(10)
                }

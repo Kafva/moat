@@ -13,7 +13,6 @@ struct ItemThumbnailView: View {
            .lineLimit(2)
            
            HStack {
-             
              item.DateText()
               .foregroundColor(.white)
               .font(.system(size:16))
@@ -31,7 +30,7 @@ struct ItemThumbnailView: View {
           alignment: .leading
        )  
        .onTapGesture {
-          // Make the entire left side clickable to visit the link
+          // Make the entire text field clickable to visit the link
           UIApplication.shared.open(URL(string: item.url)!)
        }   
    }
