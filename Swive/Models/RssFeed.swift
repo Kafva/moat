@@ -5,10 +5,10 @@ class RssFeed: ObservableObject, Codable, Equatable {
    // serialised/deserialised
    // https://www.hackingwithswift.com/swift4
    // https://www.hackingwithswift.com/books/ios-swiftui/sending-and-receiving-codable-data-with-urlsession-and-swiftui
+   @Published var unread_count: Int
    let rssurl: String
    let url: String
    let title: String
-   var unread_count: Int
    var item_count: Int
    let id = UUID(); // client-side only attribute
    

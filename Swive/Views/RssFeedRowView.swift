@@ -6,14 +6,28 @@ struct RssFeedRowView: View {
    var screenWidth: CGFloat;
    @EnvironmentObject var alertState: AlertState
    
+   // This state is passed onwards to the  ItemsView for each feed so
+   // that the unread_count is upated in the feeds view when changes are made
+   @State var unread_count: Int
+   
+   init(feed: RssFeed, screenWidth: CGFloat){
+      self.feed = feed
+      self.screenWidth = screenWidth
+      self.unread_count = feed.unread_count
+   }
+   
    var body: some View {
       HStack {
-         NavigationLink(destination: ItemsView(feed.rssurl) ) {
+         NavigationLink(destination: 
+            ItemsView(feedurl: feed.rssurl, unread_count: $unread_count)
+         ) {
             FeedLogoView(channelId: feed.getChannelId() ?? "")
          }
 
          VStack (alignment: .leading, spacing: 5){
-            NavigationLink(destination: ItemsView(feed.rssurl) ){
+            NavigationLink(destination: 
+               ItemsView(feedurl: feed.rssurl, unread_count: $unread_count) 
+            ){
                 Text("\(feed.title)")
                   .foregroundColor(.white)
                   .font(.system(size:22,weight: .bold))
@@ -31,8 +45,7 @@ struct RssFeedRowView: View {
             alignment: .leading
          )
          
-         
-         Text( "\(feed.unread_count)/\(feed.item_count)" )
+         Text( "\(self.unread_count)/\(feed.item_count)" )
             .padding(7)
             .background(Color.black.opacity(0.2))
             .cornerRadius(5)

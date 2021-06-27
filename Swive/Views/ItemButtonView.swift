@@ -2,29 +2,35 @@ import SwiftUI
 
 struct ItemButtonView: View {
 
+   var rssurl: String;
    var video_id: Int;
    var screenWidth: CGFloat;
    var apiWrapper: ApiWrapper<ServerResponse>;
    @State var unread: Bool;
+   @Binding var unread_count: Int;
    @EnvironmentObject var alertState: AlertState;
 
-   init(unread_binding: Bool, video_id: Int, screenWidth: CGFloat, apiWrapper: ApiWrapper<ServerResponse>){
+   init(unread_count: Binding<Int>, unread: Bool, video_id: Int, rssurl: String, screenWidth: CGFloat, apiWrapper: ApiWrapper<ServerResponse>){
       self.apiWrapper = apiWrapper
       self.video_id = video_id
+      self.rssurl = rssurl
       self.screenWidth = screenWidth
-      self.unread = unread_binding
+      self._unread_count = unread_count
+      self.unread = unread
    }
    
    var body: some View {
-        // The button on the right side will toggle the 'read' status of an entry
+        // The button will toggle the 'read' status of an entry
         Button(action: {
            self.apiWrapper.setUnreadStatus(
+              unread_count: $unread_count,
               unread_binding: $unread, 
+              rssurl: self.rssurl, 
               video_id: video_id, 
               alert: alertState, 
               isLoading: nil
             )
-        }) {
+         }) {
            ZStack {
               // To prevent the image from being scaled to fill the entire button
               // we use a ZStack with a background beneath the image itself
