@@ -61,6 +61,38 @@ class ApiWrapper<T: Codable> {
       .resume(); // Execute the task immediatelly
   }
 
+  /// Makes the server issue `newsboat -r` to update the cache.db and implicitly
+  /// calls loadRows() afterwards
+  func reloadFeeds(rows: ObservableArray<T>, alert: AlertState, isLoading: Binding<Bool>, rssurl: String = "") -> Void {
+      
+      guard let (serverLocation, serverKey) = 
+         self.getServerConfig(alert: alert, isLoading: isLoading) 
+      else { return }
+
+      guard let req = self.makeBaseRequest(api_url: "http://\(serverLocation)/reload", serverKey: serverKey) 
+      else { return }
+
+      self.sendRequest(req: req, alert: alert, isLoading: isLoading, callback: { data in 
+         do { 
+           let decoded = try JSONDecoder().decode(ServerResponse.self, from: data); 
+           if decoded.success {
+              self.loadRows(rows: rows, alert: alert, isLoading: isLoading)
+           }
+           else {
+              alert.makeAlert(
+                 title: "Error reloading feeds", err: ServerConnectionError.unexpected(code: 400), isLoading: isLoading
+              ); 
+           }
+         }
+         catch { 
+           alert.makeAlert(
+              title: "Decoding error", err: ServerConnectionError.unexpected(code: 400), isLoading: isLoading
+           ); 
+         }
+      })
+     
+  }
+
   /// Fetch a list of all feeds or all items for a perticular feed
   /// The arbitrary type needs to implemennt the codable protocol
   func loadRows(rows: ObservableArray<T>, alert: AlertState, isLoading: Binding<Bool>, rssurl: String = "") -> Void {

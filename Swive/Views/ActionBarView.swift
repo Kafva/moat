@@ -31,11 +31,11 @@ struct ActionBarView: View {
 
          Button(action: {
             isLoading = true
-            self.apiWrapper.loadRows(
-               rows: feeds, 
-               alert: alertState, 
+            self.apiWrapper.reloadFeeds(
+               rows: feeds,
+               alert: alertState,
                isLoading: $isLoading
-            ) 
+            )
          }) {
             Image(systemName: "arrow.clockwise").resizable().frame(
                width: 25, height: 25, alignment: .center

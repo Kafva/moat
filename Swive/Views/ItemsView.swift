@@ -30,12 +30,17 @@ struct ItemsView: View {
             if self.isLoading {
                ZStack {
                   if UserDefaults.standard.bool(forKey: "spritesOn") {
-                      LoadingView(
-                         sceneSize: CGSize(
-                            width: geometry.size.width, 
-                            height: geometry.size.height
-                         )
-                      )
+                     LoadingView(
+                        active: $isLoading,
+                        sceneSize: CGSize(
+                           width: geometry.size.width, 
+                           height: geometry.size.height
+                        )
+                     )
+                     .onDisappear(perform: {
+                        // isLoading = false
+                        print("Leaving loading view")
+                     })
                   }
                   LoadingTextView()
                       .onAppear(perform: {

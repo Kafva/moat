@@ -4,6 +4,9 @@ import SwiftUI;
 class SpriteScene: SKScene {
     var sprites: [SKSpriteNode] = [];
     var nodeCount: uint = 0;
+    
+    var spawnTimer: Timer?;
+    var spriteFrameTimer: Timer?;
 
     let sheet = SpriteSheet(
         sheetImage: SPRITE_SHEET, 
@@ -14,11 +17,10 @@ class SpriteScene: SKScene {
         spriteSize: SPRITE_SIZE
     );
     
-    var spawnTimer: Timer?;
-    var spriteFrameTimer: Timer?;
 
     private func setupTimers(){
        
+       // We need to move these up somehow
        self.spawnTimer = Timer.scheduledTimer(
            timeInterval: SPRITE_SPAWN_INTERVAL, 
            target: self, 
@@ -40,6 +42,7 @@ class SpriteScene: SKScene {
     /// sprite image.
     /// The @objc label is needed for functions that are ran using a timer
     @objc func cycleSprites() {
+            //print("Calling cycleSprites()")
             
             self.enumerateChildNodes(withName: "\(BASE_NODE_NAME)*") {
                 (node: SKNode, _) -> Void in 
@@ -55,6 +58,7 @@ class SpriteScene: SKScene {
 
     @objc func addSpriteAtRandomPos() {
 
+        // print("Calling addSpriteAtRandomPos()")
         let spawnX = CGFloat.random( in: 0...(self.size.width  / 1) );
 
         // Default spawn location calculation
@@ -89,9 +93,9 @@ class SpriteScene: SKScene {
     func addSprite(_ spawnPosition: CGPoint, _ targetPos: CGPoint) {
         
         guard nodeCount < MAX_SPRITE_COUNT else { 
-            //#if DEBUG
-            //    NSLog("Limit reached (\(nodeCount)/\(MAX_SPRITE_COUNT)) -- not adding a new sprite");
-            //#endif
+            #if DEBUG
+                NSLog("Limit reached (\(nodeCount)/\(MAX_SPRITE_COUNT)) -- not adding a new sprite");
+            #endif
             return; 
         }
 
@@ -104,15 +108,16 @@ class SpriteScene: SKScene {
             self.nodeCount+=1
 
             sprite.position = spawnPosition;
-            //NSLog("Placing new sprite at (\(round(sprite.position.x)),\(round(sprite.position.y)))"); 
+            
+            #if DEBUG
+                NSLog("Placing new sprite at (\(round(sprite.position.x)),\(round(sprite.position.y)))"); 
+            #endif
             
             self.sprites.append(sprite);
             self.addChild(sprite);
             
             let actions = SKAction.sequence([
-                //SKAction.fadeIn(withDuration: 1),
                 SKAction.move(to: targetPos, duration: 5),
-                //SKAction.fadeAlpha(to: 0, duration: 1),
             ])
 
             sprite.run(actions, completion: {
@@ -163,10 +168,5 @@ class SpriteScene: SKScene {
         )
         
         self.addSprite(location, targetPos);
-        
-        //#if DEBUG 
-        //    NSLog("Touched (\(round(location.x)),\(round(location.y)))");
-        //    NSLog("Node count: \(self.getNodeCount())");
-        //#endif
     }
 }
