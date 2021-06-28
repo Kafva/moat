@@ -38,12 +38,21 @@ pub fn unread(_key: Creds<'_>,  config: &State<Config>, data: ReadToggleData ) -
 pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
     // Newsboat has a built in command to reload all feeds in the background
     //      `newsboat -x reload`
-    let _ = std::process::Command::new(config.newsboat_path.as_str())
-    .arg("-x reload")
+    let output = std::process::Command::new(config.newsboat_path.as_str())
+    // The arguments need to be passed seperatly, otherwise we effectivly run
+    // `newsboat "-x reload"`
+    .arg("-x")
+    .arg("reload")
     .output()
     .expect("Failed to update cache.db");
-
-    "{ \"success\": true }"
+    
+    if output.stderr.len() == 0 && 
+        output.stdout.len() == 0 {
+        "{ \"success\": true }"
+    }
+    else {
+        "{ \"success\": false }"
+    }
 }
 
 #[get("/feeds")]

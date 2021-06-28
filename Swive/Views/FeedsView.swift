@@ -10,7 +10,10 @@ struct FeedsView: View {
 
    /// Computed property to determine if the current query yields no results
    var noMatches: Bool { 
-      !feeds.arr.contains(where: { feed in  feed.title.contains(searchString) } ) && searchString != ""
+      !feeds.arr.contains(where: { feed in  
+         feed.title.range(of: searchString, options: .caseInsensitive) != nil 
+      }) && 
+      searchString != ""
    }
    
    var apiWrapper       = ApiWrapper<RssFeed>()
@@ -85,7 +88,7 @@ struct FeedsView: View {
                         // We need the entry class to have an ID
                         // to iterate over it using ForEach()
                      
-                        if feed.title.contains(searchString) || searchString == "" {
+                        if feed.title.range(of: searchString, options: .caseInsensitive) != nil || searchString == "" {
                            RssFeedRowView(feed: feed, screenWidth: geometry.size.width) 
                         }
                      }
