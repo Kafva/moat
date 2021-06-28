@@ -6,13 +6,16 @@ struct ActionBarView: View {
    @EnvironmentObject var alertState: AlertState
    @Binding var searchString: String
    @Binding var isLoading: Bool
+   
+   @Binding var textFieldFocused: Bool;
+
    var searchBarWidth: CGFloat
    
    var apiWrapper = ApiWrapper<RssFeed>()
 
    var body: some View {
       HStack(alignment: .top) {
-         SearchView( barWidth: searchBarWidth, searchBinding: $searchString )
+         SearchView( barWidth: searchBarWidth, searchBinding: $searchString, textFieldFocused: $textFieldFocused)
             .padding(.bottom, 20)
          
         // Settings and reload buttons
@@ -22,6 +25,8 @@ struct ActionBarView: View {
             )
          }
          .padding(10)
+         .disabled(textFieldFocused)
+
 
          // Bruh... https://developer.apple.com/forums/thread/677333
          // this only seems to be a partial fix
@@ -42,6 +47,7 @@ struct ActionBarView: View {
             )
          }
          .padding(10)
+         .disabled(textFieldFocused)
       }
    }
 }

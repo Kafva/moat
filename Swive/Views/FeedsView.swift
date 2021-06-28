@@ -7,6 +7,18 @@ struct FeedsView: View {
    
    @State var isLoading: Bool = true;
    @State var searchString: String = "";
+   
+   // To prevent a bug which hides the navbar's back-button we need to prevent the user from clicking
+   // a `NavigationLink` while they are editing a text field. To do this we use this state variable
+   // which disables all views containing nav-links while the search bar is being interacted with  
+   // Solutions to hide the keyboard:
+   //    https://www.hackingwithswift.com/quick-start/swiftui/how-to-dismiss-the-keyboard-for-a-textfield
+   // were found to prevent the back-button from being hidden but the button would not be functional
+   // We do not need to worry about the textfields in the `SettingsView` since we don't need a back-button
+   // to be displayed when we leave it for the `FeedsView`
+   @State var textFieldFocused: Bool = false
+   
+   var apiWrapper = ApiWrapper<RssFeed>()
 
    /// Computed property to determine if the current query yields no results
    var noMatches: Bool { 
@@ -16,12 +28,10 @@ struct FeedsView: View {
       searchString != ""
    }
    
-   var apiWrapper       = ApiWrapper<RssFeed>()
-
-   init?() {
+   init() {
       setViewTransparency()
    }
-   
+
    var body: some View {
          GeometryReader { geometry in 
             // Gain access to the screen dimensions to perform proper sizing
@@ -64,6 +74,7 @@ struct FeedsView: View {
                      ActionBarView(
                         searchString: $searchString, 
                         isLoading: $isLoading,
+                        textFieldFocused: $textFieldFocused,
                         searchBarWidth: geometry.size.width * 0.6
                      )
                      // Its not possible to have a selection based on the feeds.arr length, all items
@@ -90,6 +101,7 @@ struct FeedsView: View {
                      
                         if feed.title.range(of: searchString, options: .caseInsensitive) != nil || searchString == "" {
                            RssFeedRowView(feed: feed, screenWidth: geometry.size.width) 
+                              .disabled(textFieldFocused)
                         }
                      }
                      
