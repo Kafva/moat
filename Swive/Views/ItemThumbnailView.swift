@@ -2,8 +2,14 @@ import SwiftUI
 
 struct ItemThumbnailView: View {
 
+   var rssurl: String;
    var item: RssItem;
    var screenWidth: CGFloat;
+   
+   var apiWrapper: ApiWrapper<ServerResponse>;
+   @Binding var unread: Bool;
+   @Binding var unread_count: Int;
+   @EnvironmentObject var alertState: AlertState;
    
    var body: some View {
        VStack (alignment: .leading, spacing: 5){
@@ -30,8 +36,17 @@ struct ItemThumbnailView: View {
           alignment: .leading
        )  
        .onTapGesture {
-          // Make the entire text field clickable to visit the link
-          UIApplication.shared.open(URL(string: item.url)!)
+         // Automatically toggle the 'unread' status to 'read' when clicking an item
+         if unread {
+            self.apiWrapper.setUnreadStatus(
+               unread_count: $unread_count,
+               unread_binding: $unread, 
+               rssurl: self.rssurl, 
+               video_id: self.item.id, 
+               alert: alertState
+            )
+         }
+         UIApplication.shared.open(URL(string: item.url)!)
        }   
    }
 }
