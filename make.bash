@@ -6,7 +6,6 @@ PROJECT=moat
 DEVICENAME=sheep
 SCHEME=Install
 
-
 while getopts ":h:d:" opt
 do
 	case $opt in
