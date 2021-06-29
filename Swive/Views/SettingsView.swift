@@ -32,17 +32,11 @@ struct SettingsView: View {
                ZStack {
                   if UserDefaults.standard.bool(forKey: "spritesOn") {
                      LoadingView(
-                        active: $isLoading,
                         sceneSize: CGSize(
                            width: geometry.size.width, 
                            height: geometry.size.height  
                         )
                      )
-                     .onDisappear(perform: {
-                        // isLoading = false
-                        print("Leaving loading view")
-                     })
-
                     .navigationBarTitle("")
                     .navigationBarHidden(true)
                   }
