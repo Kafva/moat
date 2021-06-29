@@ -5,9 +5,6 @@ class SpriteScene: SKScene {
     var sprites: [SKSpriteNode] = [];
     var nodeCount: uint = 0;
     
-    var spawnTimer: Timer?;
-    var spriteFrameTimer: Timer?;
-
     let sheet = SpriteSheet(
         sheetImage: SPRITE_SHEET, 
         rows: ROW_COUNT, 
@@ -17,33 +14,10 @@ class SpriteScene: SKScene {
         spriteSize: SPRITE_SIZE
     );
     
-
-    private func setupTimers(){
-       
-       // We need to move these up somehow
-       self.spawnTimer = Timer.scheduledTimer(
-           timeInterval: SPRITE_SPAWN_INTERVAL, 
-           target: self, 
-           selector: #selector(addSpriteAtRandomPos), 
-           userInfo: nil,
-           repeats: true
-        ); 
-       
-       self.spriteFrameTimer = Timer.scheduledTimer(
-           timeInterval: SPRITE_NEW_FRAME_INTERVAL, 
-           target: self, 
-           selector: #selector(cycleSprites), 
-           userInfo: nil,
-           repeats: true
-       ); 
-    }
-    
     /// Go through all SKSpriteNode objects in the scene and update their
     /// sprite image.
     /// The @objc label is needed for functions that are ran using a timer
     @objc func cycleSprites() {
-            //print("Calling cycleSprites()")
-            
             self.enumerateChildNodes(withName: "\(BASE_NODE_NAME)*") {
                 (node: SKNode, _) -> Void in 
                 do {
@@ -52,13 +26,11 @@ class SpriteScene: SKScene {
                         rowIndex: Int.random(in: 0...ROW_COUNT-1)
                     )
                 }
-                catch { NSLog("\(error)"); }
+                catch { print("\(error)"); }
             }
     }
 
     @objc func addSpriteAtRandomPos() {
-
-        // print("Calling addSpriteAtRandomPos()")
         let spawnX = CGFloat.random( in: 0...(self.size.width  / 1) );
 
         // Default spawn location calculation
@@ -94,7 +66,7 @@ class SpriteScene: SKScene {
         
         guard nodeCount < MAX_SPRITE_COUNT else { 
             #if DEBUG
-                //NSLog("Limit reached (\(nodeCount)/\(MAX_SPRITE_COUNT)) -- not adding a new sprite");
+                print("Limit reached (\(nodeCount)/\(MAX_SPRITE_COUNT)) -- not adding a new sprite");
             #endif
             return; 
         }
@@ -110,7 +82,7 @@ class SpriteScene: SKScene {
             sprite.position = spawnPosition;
             
             #if DEBUG
-                //NSLog("Placing new sprite at (\(round(sprite.position.x)),\(round(sprite.position.y)))"); 
+                print("Placing new sprite at (\(round(sprite.position.x)),\(round(sprite.position.y)))"); 
             #endif
             
             self.sprites.append(sprite);
@@ -127,7 +99,7 @@ class SpriteScene: SKScene {
                 }
             });
         }
-        catch { NSLog("\(error)"); }
+        catch { print("\(error)"); }
     }
 
     private func getNodeCount() -> Int{
@@ -144,9 +116,6 @@ class SpriteScene: SKScene {
         // Use a clear background to show the gradient behind the scene in the ZStack
         self.backgroundColor = .clear;
 
-        // Setup the global timer for sprite updates
-        self.setupTimers();
-        
         // Immediatelly add a few sprites
         for _ in 0...INITIAL_SPAWN_COUNT {
             self.addSpriteAtRandomPos();
