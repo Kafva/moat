@@ -1,7 +1,7 @@
 import SwiftUI
 
 // '@main' denotes the entrypoint for the application
-@main struct SwiveApp: App {
+@main struct moatApp: App {
     
     // @State should (just like in other UI frameworks) be kept as high
     // up as possible and passed downwards. Subviews which need to know the

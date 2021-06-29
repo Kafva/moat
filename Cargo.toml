@@ -1,5 +1,5 @@
 [package]
-name = "remoat_server"
+name = "moat_server"
 version = "0.1.0"
 authors = ["Kafva <https://github.com/Kafva>"]
 edition = "2018"
