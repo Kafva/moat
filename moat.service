@@ -6,8 +6,9 @@ After=network.target
 Type=simple
 User=jonas
 WorkingDirectory=/opt/moat
-ExecStart=/usr/bin/cargo run --release
+Environment="MOAT_KEY=test"
+ExecStart=/usr/bin/cargo run
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.targe
 
