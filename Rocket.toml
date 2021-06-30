@@ -2,24 +2,19 @@
 # Defaults for _all_ profiles
 [default]
 address = "0.0.0.0"
-port = 5000
+port = 7654
 limits = { forms = "64 kB", json = "1 MiB" }
 keep_alive = 5
 log_level = "normal"
 temp_dir = "/tmp"
 cli_colors = true
 
-# Set only when compiled in debug mode, i.e, `cargo build`
-[debug.tls]
-certs = "path/to/cert-chain.pem"
-key = "path/to/key.pem"
+[default.tls]
+# TLS requires an addition in the Cargo.toml configuration
+certs = "./ssl/moat_server.crt"
+key = "./ssl/moat_server.key"
 
-## set only when compiled in release mode, i.e, `cargo build --release`
 [release]
-secret_key = "Replace me"
-
-[release.tls]
-certs = "path/to/cert-chain.pem"
-key = "path/to/key.pem"
+cli_colors = false
 
 

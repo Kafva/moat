@@ -68,7 +68,7 @@ class ApiWrapper<T: Codable> {
          self.getServerConfig(alert: alert, isLoading: isLoading) 
       else { return }
 
-      guard let req = self.makeBaseRequest(api_url: "http://\(serverLocation)/reload", serverKey: serverKey) 
+      guard let req = self.makeBaseRequest(api_url: "https://\(serverLocation)/reload", serverKey: serverKey) 
       else { return }
 
       self.sendRequest(req: req, alert: alert, isLoading: isLoading, callback: { data in 
@@ -100,10 +100,10 @@ class ApiWrapper<T: Codable> {
          self.getServerConfig(alert: alert, isLoading: isLoading) 
       else { return }
 
-      var api_url = "http://\(serverLocation)/feeds"
+      var api_url = "https://\(serverLocation)/feeds"
       
       if T.self is RssItem.Type {
-         api_url = "http://\(serverLocation)/items/\(rssurl.toBase64())"
+         api_url = "https://\(serverLocation)/items/\(rssurl.toBase64())"
       }
 
       guard let req = self.makeBaseRequest(api_url: api_url, serverKey: serverKey) 
@@ -136,7 +136,7 @@ class ApiWrapper<T: Codable> {
       else { return }
       
       var req = self.makeBaseRequest(
-         api_url: "http://\(serverLocation)/unread", 
+         api_url: "https://\(serverLocation)/unread", 
          serverKey: serverKey
       )!
       
@@ -188,7 +188,7 @@ class ApiWrapper<T: Codable> {
       else { return }
       
       var req = self.makeBaseRequest(
-         api_url: "http://\(serverLocation)/unread", 
+         api_url: "https://\(serverLocation)/unread", 
          serverKey: serverKey
       )!
       
