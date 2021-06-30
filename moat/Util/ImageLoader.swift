@@ -18,7 +18,7 @@ class ImageLoader: ObservableObject {
             self.imageData = data
         } 
         else {
-            URLSession.shared.dataTask(with: req) { data, res, err in
+            URLSession.shared.dataTask(with: req) { data, res, _ in
                 
                 if let data = data , let res = res {
                     // Nil guard for both the response and data
@@ -35,4 +35,3 @@ class ImageLoader: ObservableObject {
         }
     }
 }
-

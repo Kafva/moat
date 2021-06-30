@@ -11,5 +11,3 @@ struct LoadingTextView: View {
       .animation(Animation.easeOut(duration: 1).repeatForever(autoreverses: true) )
   }
 }
-
-

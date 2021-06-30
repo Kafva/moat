@@ -62,7 +62,7 @@ class ApiWrapper<T: Codable> {
 
   /// Makes the server issue `newsboat -r` to update the cache.db and implicitly
   /// calls loadRows() afterwards
-  func reloadFeeds(rows: ObservableArray<T>, alert: AlertState, isLoading: Binding<Bool>, rssurl: String = "") -> Void {
+  func reloadFeeds(rows: ObservableArray<T>, alert: AlertState, isLoading: Binding<Bool>, rssurl: String = "") {
       
       guard let (serverLocation, serverKey) = 
          self.getServerConfig(alert: alert, isLoading: isLoading) 
@@ -94,7 +94,7 @@ class ApiWrapper<T: Codable> {
 
   /// Fetch a list of all feeds or all items for a perticular feed
   /// The arbitrary type needs to implemennt the codable protocol
-  func loadRows(rows: ObservableArray<T>, alert: AlertState, isLoading: Binding<Bool>, rssurl: String = "") -> Void {
+  func loadRows(rows: ObservableArray<T>, alert: AlertState, isLoading: Binding<Bool>, rssurl: String = "") {
      
       guard let (serverLocation, serverKey) = 
          self.getServerConfig(alert: alert, isLoading: isLoading) 
@@ -129,7 +129,7 @@ class ApiWrapper<T: Codable> {
       })
   }
   
-  func setAllItemsAsRead(unread_count: Binding<Int>, rssurl: String, alert: AlertState) -> Void {
+  func setAllItemsAsRead(unread_count: Binding<Int>, rssurl: String, alert: AlertState) {
       
       guard let (serverLocation, serverKey) = 
          self.getServerConfig(alert: alert, isLoading: nil) 
@@ -181,7 +181,7 @@ class ApiWrapper<T: Codable> {
       )
    }
   
-  func setUnreadStatus(unread_count: Binding<Int>, unread_binding: Binding<Bool>, rssurl: String, video_id: Int, alert: AlertState) -> Void {
+  func setUnreadStatus(unread_count: Binding<Int>, unread_binding: Binding<Bool>, rssurl: String, video_id: Int, alert: AlertState) {
      
       guard let (serverLocation, serverKey) = 
          self.getServerConfig(alert: alert, isLoading: nil) 
@@ -236,4 +236,3 @@ class ApiWrapper<T: Codable> {
       )
    }
 }
-

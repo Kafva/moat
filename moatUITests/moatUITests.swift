@@ -1,5 +1,6 @@
 import XCTest
 
+// swiftlint:disable type_name
 class moatUITests: XCTestCase {
 
     override func setUpWithError() throws {

@@ -106,7 +106,7 @@ struct FeedsView: View {
                            .background(Color.black.opacity(0.2))
                            .cornerRadius(5)
                            .foregroundColor(.white)
-                           .font(Font.system(size:18, weight: .bold))
+                           .font(Font.system(size: 18, weight: .bold))
                            .frame(
                               // The image leads with 5px of padding
                               width: geometry.size.width * 0.5  - (IMAGE_WIDTH+5), 
@@ -121,4 +121,3 @@ struct FeedsView: View {
          }
    }
 }
-

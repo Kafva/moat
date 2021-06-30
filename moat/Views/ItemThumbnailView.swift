@@ -12,23 +12,23 @@ struct ItemThumbnailView: View {
    @EnvironmentObject var alertState: AlertState;
    
    var body: some View {
-       VStack (alignment: .leading, spacing: 5){
+       VStack(alignment: .leading, spacing: 5){
           Text("\(item.title)")
            .foregroundColor(.white)
-           .font(.system(size:19,weight: .bold))
+           .font(.system(size: 19, weight: .bold))
            .lineLimit(2)
            
            HStack {
              item.DateText()
               .foregroundColor(.white)
-              .font(.system(size:16))
+              .font(.system(size: 16))
               .lineLimit(1)
            }
        }
        // This is required for the elements in the stack to actually
        // "float" to the left
        .frame(
-          width:  item.getVideoId() != nil ? 
+          width: item.getVideoId() != nil ? 
               self.screenWidth*(1-BUTTON_WIDTH_PERCENTAGE_OF_ROW) - THUMBNAIL_WIDTH - 23 :
               // Fill entire the entire row excluding 20px of padding on each side and the
               // width of the button

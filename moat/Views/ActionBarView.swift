@@ -40,9 +40,9 @@ struct ActionBarView: View {
                rows: feeds,
                alert: alertState,
                isLoading: $isLoading
-            )
-         }) {
-            Image(systemName: "arrow.clockwise").resizable().frame(
+            ) 
+         }) { 
+               Image(systemName: "arrow.clockwise").resizable().frame(
                width: 25, height: 25, alignment: .center
             )
          }
@@ -51,4 +51,3 @@ struct ActionBarView: View {
       }
    }
 }
-

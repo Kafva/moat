@@ -14,7 +14,8 @@
 //          -Xswiftc -target \
 //          -Xswiftc x86_64-aple-ios14.5-simulator
 
-// The flags to `swift build` are the same ones needed for the `sourcekit-lsp.serverArguments` key settings.json in VScode
+// The flags to `swift build` are the same ones needed for 
+// the `sourcekit-lsp.serverArguments` key settings.json in VScode
 
 // Note that it should not matter what method is used to fetch the dependency in question for the actual project, i.e. it should work to use both CocoaPods and the built in SPM in Xcode from `File > Swift Packages > Add Package Dependency...`
 
