@@ -1,5 +1,6 @@
 # moat
 ![](./moat/Assets.xcassets/AppIcon.appiconset/114.png)
+
 The project consists of an iOS client which interacts with an installation of [newsboat](https://github.com/newsboat/newsboat) through an intermediary server application, providing a view similar to the default newsboat CLI on iOS. By sharing the information in `~/.newsboat/cache.db` between the iOS client and newsboat itself, the 'read' status for items is kept synchronized. 
 
 ## Client setup
