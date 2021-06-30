@@ -25,7 +25,7 @@ Assuming that you do not have domain name and a corresponding certificate signed
 One can then create a self-signed root certificate for the server and install the CA's certificate on the client by serving up the `.crt` file and opening it in Safari on the iOS device. To trust the certificate as a root authority go to *Settings > General > About > Certificate Trust Settings*, and toggle *Enable Full Trust for Root Certificates* on for the certificate as described [here](https://apple.stackexchange.com/a/371757/290763).
 
 ### Run as a service
-A template for a systemd `.service` file is provided which can be copied to `~/.config/systemd/user` to interact with moat as any other service.
+A template for a systemd `.service` file is provided which can be copied to `/usr/lib/systemd/system/` to interact with moat as any other service.
 
 ## Development
 
