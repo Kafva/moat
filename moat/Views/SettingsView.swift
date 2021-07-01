@@ -7,6 +7,7 @@ struct SettingsView: View {
    @State var isLoading: Bool = false;
    @State var infiniteLoad: Bool = false;
    
+   @State var logosOn: Bool = UserDefaults.standard.bool(forKey: "logosOn") ;
    @State var spritesOn: Bool = UserDefaults.standard.bool(forKey: "spritesOn") ;
    @State var serverLocation: String = UserDefaults.standard.string(forKey: "serverLocation") ?? ""
    @State var serverKey: String = "" 
@@ -54,6 +55,10 @@ struct SettingsView: View {
             else {
                VStack(alignment: .leading, spacing: 10) {
                    
+                  Toggle("Show YouTube logo for feeds", isOn: $logosOn) 
+                     .onChange(of: logosOn) { _ in
+                        UserDefaults.standard.setValue(logosOn, forKey: "logosOn")
+                     }
                   Toggle("Spawn sprites on loading screen", isOn: $spritesOn) 
                      .onChange(of: spritesOn) { _ in
                         UserDefaults.standard.setValue(spritesOn, forKey: "spritesOn")
