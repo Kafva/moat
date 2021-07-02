@@ -1,5 +1,14 @@
 # moat
 ![](./moat/Assets.xcassets/AppIcon.appiconset/114.png)
+* [Client setup](#client-setup)
+* [Server setup](#server-setup)
+	* [HTTPS](#https)
+	* [Run as a service](#run-as-a-service)
+* [Development](#development)
+	* [Import new images](#import-new-images)
+	* [Linting](#linting)
+	* [Using `sourcekit-lsp` for linting in VScode](#using-sourcekit-lsp-for-linting-in-vscode)
+* [Notes](#notes)
 
 The project consists of an iOS client which interacts with an installation of [newsboat](https://github.com/newsboat/newsboat) through an intermediary server application, providing a view similar to the default newsboat CLI on iOS. By sharing the information in `~/.newsboat/cache.db` between the iOS client and newsboat itself, the 'read' status for items is kept synchronized. 
 
@@ -13,9 +22,9 @@ and open the `moat.xcworkspace` file with Xcode. Connect your device and install
 ## Server setup
 The server is configured through the `Rocket.toml` file and an application specific configuration file (example in `./conf/server.conf`). All endpoints on the server require a secret key (passed in the HTTP header `x-creds`) which needs to be set in the environment on startup
 ```bash
-MOAT_KEY="secret value" cargo run
+MOAT_KEY="secret value" cargo run --release
 ```
-Issuing `cargo run` will implicitly build the project.
+Issuing `cargo run --release` will implicitly build the project.
 
 ### HTTPS
 It is integral for the application to use HTTPS since the contents of the `x-creds` field need to be kept confidential. To setup HTTPS the server needs two files to be present at the root of the project: 
