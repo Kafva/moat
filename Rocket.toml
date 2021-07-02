@@ -11,5 +11,5 @@ cli_colors = true
 
 [default.tls]
 # TLS requires an addition in the Cargo.toml configuration
-certs = "./ssl/moat_server.crt"
-key = "./ssl/moat_server.key"
+certs = "./ssl/server.crt"
+key = "./ssl/server.key"

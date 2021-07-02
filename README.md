@@ -18,11 +18,18 @@ MOAT_KEY="secret value" cargo run
 Issuing `cargo run` will implicitly build the project.
 
 ### HTTPS
-It is integral for the application to use HTTPS since the contents of the `x-creds` field need to be kept confidential. To setup HTTPS the server needs two files to be present at the root of the project: `./ssl/moat_server.crt` and `./ssl/moat_server.key`. The certificate needs to be signed by an entity that the iOS client trusts. 
+It is integral for the application to use HTTPS since the contents of the `x-creds` field need to be kept confidential. To setup HTTPS the server needs two files to be present at the root of the project: 
 
-Assuming that you do not have domain name and a corresponding certificate signed by a known CA, a private DNS server (e.g. [pihole](https://pi-hole.net/)) which the iOS device can use to resolve the domain name of the moat server can be used. 
+* `./ssl/server.crt`
+* `./ssl/server.key` 
 
-One can then create a self-signed root certificate for the server and install the CA's certificate on the client by serving up the `.crt` file and opening it in Safari on the iOS device. To trust the certificate as a root authority go to *Settings > General > About > Certificate Trust Settings*, and toggle *Enable Full Trust for Root Certificates* on for the certificate as described [here](https://apple.stackexchange.com/a/371757/290763).
+The certificate needs to be signed by an entity that the iOS client trusts.
+
+Assuming that you do not have domain name and a corresponding certificate signed by a known CA, a private DNS server (e.g. [pihole](https://pi-hole.net/)) and CA can also be used. To install your own CA as a trusted root authoritty on iOS: 
+
+1. Serve up the `.crt` from a machine and download it through Safari on the iOS device
+2. This should give a prompt to install a profile for your CA
+3. To trust the certificate as a root authority go to *Settings > General > About > Certificate Trust Settings*, and toggle *Enable Full Trust for Root Certificates* for the certificate as described [here](https://apple.stackexchange.com/a/371757/290763).
 
 ### Run as a service
 A template for a systemd `.service` file is provided which can be copied to `/usr/lib/systemd/system/` to interact with moat as any other service.
