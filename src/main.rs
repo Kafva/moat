@@ -13,6 +13,7 @@ mod config_parser;
 mod db_parser;
 use models::Config;
 use config_parser::get_config;
+use rocket::shield::{Shield, Hsts};
 
 #[derive(Clap)]
 #[clap(version = "1.0", author = "Kafva <https://github.com/Kafva>")]
@@ -27,6 +28,8 @@ struct Opts {
     config: String,
 }
 
+
+
 // The launch attribute generates a main() function 
 #[launch]
 fn rocket() -> Rocket<Build> {
@@ -35,6 +38,10 @@ fn rocket() -> Rocket<Build> {
     
     let config: Config = 
         get_config(&opts.config.to_string()).unwrap();
+    
+    // HTTP headers that should be included in all responses
+    // are configured through 'Shields', here we add 'Strict-Transport-Security'
+    let shield = Shield::default().enable(Hsts::default());
     
     // Pass the config into the global state of rocket and
     // start the server with each route mounted at '/'
@@ -52,4 +59,5 @@ fn rocket() -> Rocket<Build> {
         routes::reload,
         routes::unread
     ])
+    .attach(shield)
 }
