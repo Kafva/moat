@@ -1,5 +1,7 @@
-# moat
-![](./moat/Assets.xcassets/AppIcon.appiconset/114.png)
+<h1>
+	<img src="./moat/Assets.xcassets/AppIcon.appiconset/57.png">&nbsp;&nbsp;moat
+</h1>
+
 * [Client setup](#client-setup)
 * [Server setup](#server-setup)
 	* [HTTPS](#https)
