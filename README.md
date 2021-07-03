@@ -5,7 +5,6 @@
 * [Client setup](#client-setup)
 * [Server setup](#server-setup)
 	* [HTTPS](#https)
-	* [Run as a service](#run-as-a-service)
 * [Development](#development)
 	* [Import new images](#import-new-images)
 	* [Linting](#linting)
@@ -41,9 +40,6 @@ Assuming that you do not have domain name and a corresponding certificate signed
 1. Serve up the `.crt` from a machine and download it through Safari on the iOS device
 2. This should give a prompt to install a profile for your CA
 3. To trust the certificate as a root authority go to *Settings > General > About > Certificate Trust Settings*, and toggle *Enable Full Trust for Root Certificates* for the certificate as described [here](https://apple.stackexchange.com/a/371757/290763).
-
-### Run as a service
-A template for a systemd `.service` file is provided which can be copied to `/usr/lib/systemd/system/` to interact with moat as systemd service.
 
 ## Development
 
@@ -130,3 +126,5 @@ function newsmoat() {
 This solution does **not** work if one were to use several 'newsboat clients' in parallel. Newsboat was not modelled as a [client/server application](https://github.com/newsboat/newsboat/issues/471) and pursuing a more robust synchronization framework was therefore not deemed preferable.
 
 The project was mainly modelled with YouTube feeds in mind and therefore supports fetching YouTube thumbnails and YouTube channel icons. 
+
+A template for a systemd `.service` file is provided which can be copied to `/usr/lib/systemd/system/` to interact with moat as systemd service.

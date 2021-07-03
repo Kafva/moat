@@ -69,35 +69,66 @@ pub fn toggle_read_status(cache_path: &str, rssurl: Option<String>, id: Option<u
     }
 }
 
-pub fn get_feed_list(cache_path: &str) -> Result<Vec<RssFeed>,rusqlite::Error> {
+pub fn get_feed_list(cache_path: &str, muted_list: Vec<String>) -> Result<Vec<RssFeed>,rusqlite::Error> {
     
     let conn = rusqlite::Connection::open(cache_path)?;
+    
+    let sql_muted_list = get_muted_as_sql_stmt(&muted_list);
+    
     let mut stmt = 
         // The rss_item and rss_feed tables share several common fields, in this
         // statement we use the rssurl/feedurl as a unique identifer to determine
         // how many unread articles each feed has
-        conn.prepare("
+        conn.prepare(&format!("
         SELECT feedurl, rss_feed.url, author, SUM(unread) AS unread_count, COUNT(*) 
         FROM rss_item JOIN rss_feed ON rss_feed.rssurl = feedurl GROUP BY feedurl
-        ORDER BY unread_count DESC;"
+        ORDER BY {} unread_count DESC;", sql_muted_list)
+        
     )?;
     
     // Use a lambda statement on each row to create an iterator
     // over all feed objects from the query
     let feeds_iter = stmt.query_map([], |row| {
         
+        let rssurl = row.get(0)?;
+        let muted = muted_list.contains(&rssurl); 
+
         Ok(RssFeed::new(
-            row.get(0)?,
-            row.get(1)?,
-            row.get(2)?,
-            row.get(3)?,
-            row.get(4)?,
-            false //TODO determine if muted
+            rssurl, 
+            row.get(1)?, // url
+            row.get(2)?, // author
+            row.get(3)?, // unread_count
+            row.get(4)?, // total_count
+            muted // muted flag
         ))
     })?;
 
     // Collect all the items into a vector
     feeds_iter.collect()
+}
+
+fn get_muted_as_sql_stmt(muted_list: &Vec<String>) -> String {
+    
+    if muted_list.len() == 0 {
+        return String::from("")
+    }
+    
+    let mut sql_list = String::from("(");
+
+    for rssurl in muted_list.into_iter() {
+        sql_list.push('\'');
+        sql_list.push_str(rssurl.as_str());
+        sql_list.push('\'');
+        sql_list.push(',');
+    }
+    
+    // Remove trailing ','
+    sql_list.truncate(sql_list.len() - 1);
+    sql_list.push(')');
+
+    // Meant to be used within
+    //      ORDER BY <...> unread_count DESC;
+    format!("rss_feed.rssurl IN {},", sql_list)
 }
 
 pub fn get_items_from_feed(cache_path: &str, rssurl: &str) -> Result<Vec<RssItem>, rusqlite::Error> {
@@ -142,7 +173,8 @@ mod tests {
         let feeds = get_feed_list(
             &format!("{}/.newsboat/cache.db", 
                 std::env::var("HOME").unwrap()
-            ).as_str()
+            ).as_str(),
+            Vec::new()
         ).unwrap();
 
 

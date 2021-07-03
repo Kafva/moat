@@ -74,8 +74,8 @@ struct FeedsView: View {
                      )
                      // Its not possible to have a selection based on the feeds.arr length, all items
                      // are always loaded after the loadRows call
-                     .padding(.leading, noMatches ? 15+10 : 15)
-                     .padding(.trailing, noMatches ? 0 : 15)
+                     .padding(.leading, noMatches ? ACTIONBAR_MARGIN+(X_AXIS_MARGIN_FOR_ROWS*2) : ACTIONBAR_MARGIN)
+                     .padding(.trailing, noMatches ? 0 : ACTIONBAR_MARGIN)
                      .frame(alignment: .center)
                      .environmentObject(feeds) // Passed onward to SettingsView
                      .environmentObject(alertState)

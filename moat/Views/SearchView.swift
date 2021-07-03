@@ -18,6 +18,7 @@ struct SearchView: View {
             }
          })
          .customStyle(width: self.barWidth)
+         .autocapitalization(.none)
       }
    }
 }

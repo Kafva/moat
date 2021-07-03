@@ -77,6 +77,7 @@ struct SettingsView: View {
                            }
                         })
                         .customStyle(width: geometry.size.width * 0.5)
+                        .autocapitalization(.none)
                      }
                      HStack {
                         Text("Server key")

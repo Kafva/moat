@@ -46,6 +46,12 @@ pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
     .output()
     .expect("Failed to update cache.db");
     
+    //let output = std::process::Command::new("sleep")
+    //// The arguments need to be passed seperatly, otherwise we effectivly run
+    //// `newsboat "-x reload"`
+    //.arg("20")
+    //.output().unwrap();
+    
     if output.stderr.len() == 0 && 
         output.stdout.len() == 0 {
         "{ \"success\": true }"
@@ -59,13 +65,18 @@ pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
 #[get("/feeds")]
 pub fn feeds(_key: Creds<'_>, config: &State<Config>) -> Json<Vec<RssFeed>> {
     
-    //use std::{thread, time}; 
-    //thread::sleep(time::Duration::from_millis(10_000));
-
-    Json( 
-        get_feed_list( config.cache_path.as_str() )
-            .unwrap() 
-    )
+    match &config.muted_list {
+        Some(m) => {
+            Json( 
+                get_feed_list( config.cache_path.as_str(), m.to_vec()).unwrap() 
+            )
+        }
+        None => {
+            Json( 
+                get_feed_list( config.cache_path.as_str(), Vec::new()).unwrap() 
+            )
+        }
+    }
 }
 
 // We would like an API akin to 'GET /items/<feed-id>' but Newsboat

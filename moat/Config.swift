@@ -2,7 +2,7 @@ import SwiftUI
 
 let BUNDLE_IDENTIFIER = "com..moat"
 
-let SERVER_REQUEST_TIMEOUT = 10.0
+let SERVER_REQUEST_TIMEOUT = 15.0
 
 /***** UI dimensions *****/
 let IMAGE_WIDTH = CGFloat(50);
@@ -15,6 +15,8 @@ let BUTTON_HEIGHT = CGFloat(25);
 
 let INITIAL_X_POS = THUMBNAIL_WIDTH + 35
 let BUTTON_WIDTH_PERCENTAGE_OF_ROW = CGFloat(0.1)
+
+let ACTIONBAR_MARGIN = CGFloat(15) 
 
 let Y_AXIS_SPACING_FOR_ITEMS = CGFloat(5)
 let X_AXIS_MARGIN_FOR_ROWS = CGFloat(5)
