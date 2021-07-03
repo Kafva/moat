@@ -4,9 +4,8 @@ After=network.target
 
 [Service]
 Type=simple
-User=CHANGE_THIS
 WorkingDirectory=CHANGE_THIS
-Environment="MOAT_KEY=test"
+Environment="MOAT_KEY=CHANGE_THIS"
 ExecStart=/usr/bin/cargo run --release
 
 [Install]
