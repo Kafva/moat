@@ -1,15 +1,6 @@
 extern crate base64;
 use super::models::{RssItem, RssFeed};
 
-// We can't have the cache.db from our laptop served constantly
-// so we use a hook to automatically push it to the 'moat' server
-// everytime newsboat is launched.
-// To sync which articles have been read through the iOS client
-// with the local machine we begin by always copying the cache.db 
-// from the server to our main machine when launching newsboat
-// We can thus write to the cache.db through moat and have
-// changes persist 
-
 // For YT, video thumbnails can be determined from the entries in the rssurl,
 // if these are to be included we will perform this fetch client side (XML
 // parsing is probably easier from there)

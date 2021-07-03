@@ -47,7 +47,7 @@ struct ItemsView: View {
                             isLoading: $isLoading,
                             rssurl: self.feedurl                  
                          ) 
-                      })
+                     })
                }
             }
             else {

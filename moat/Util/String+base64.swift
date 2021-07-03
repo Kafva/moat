@@ -1,6 +1,7 @@
 import Foundation
 
 extension String {
+    /// https://stackoverflow.com/a/35360697/9033629
     func fromBase64() -> String? {
        guard let data = Data(base64Encoded: self) else {
            return nil
@@ -12,7 +13,4 @@ extension String {
     func toBase64() -> String {
        return Data(self.utf8).base64EncodedString()
     }
-
 }
-
-/* [Darkngs] [so/q/29365145] [cc by-sa 3.0] */

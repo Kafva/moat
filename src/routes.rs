@@ -4,17 +4,11 @@ use super::models::{Config, RssItem, RssFeed};
 use super::dataguards::{ReadToggleData, Creds};
 use super::db_parser::{get_feed_list, get_items_from_feed, toggle_read_status};
 
-// The client will need an API to:
-//  1. Fetch a list of all feeds
-//  2. Fetch all items from a feed
-//  3. Update the 'unread' status of a perticular item or all items in a feed
-//  4. Reload all feeds
-
 /// curl -X POST -H "x-creds: test" https://moat:5000/unread -d "id=5384&unread=0" 
 /// curl -X POST -H "x-creds: test" https://moat:5000/unread/ -d "rssurl=$(printf 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64 )"
 /// If the <id> parameter does not conform to the u32 type rocket
 /// will try other potentially matching routes (based on `rank`) until
-/// no matching alternatives remain, at which point 404 is given
+/// no matching alternatives remain, at which point 404 is returned
 #[post("/unread", data = "<data>")]
 pub fn unread(_key: Creds<'_>,  config: &State<Config>, data: ReadToggleData ) -> &'static str {
 
@@ -36,7 +30,7 @@ pub fn unread(_key: Creds<'_>,  config: &State<Config>, data: ReadToggleData ) -
 /// curl -H "x-creds: test" -X GET https://moat:5000/reload 
 #[get("/reload")]
 pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
-    // Newsboat has a built in command to reload all feeds in the background
+    // Newsboat has a built-in command to reload all feeds in the background
     //      `newsboat -x reload`
     let output = std::process::Command::new(config.newsboat_path.as_str())
     // The arguments need to be passed seperatly, otherwise we effectivly run
@@ -44,7 +38,7 @@ pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
     .arg("-x")
     .arg("reload")
     .output()
-    .expect("Failed to update cache.db");
+    .expect("Failed to update cache.db"); // (panic!)
     
     if output.stderr.len() == 0 && 
         output.stdout.len() == 0 {

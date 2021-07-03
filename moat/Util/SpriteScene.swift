@@ -15,8 +15,7 @@ class SpriteScene: SKScene {
     );
     
     
-    /// Go through all SKSpriteNode objects in the scene and update their
-    /// sprite image.
+    /// Go through all SKSpriteNode objects in the scene and update their sprite image.
     /// The @objc label is needed for functions that are ran using NSTimer (which we don't rely on)
     func cycleSprites() {
         
