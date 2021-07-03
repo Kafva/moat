@@ -11,6 +11,15 @@ class ApiWrapper<T: Codable> {
          ) 
          return nil
       }
+      
+      guard let serverPort = UserDefaults.standard.string(forKey: "serverPort") else {
+         alert.makeAlert(
+            title: "Incomplete configuration", 
+            err: ServerConnectionError.noServerLocation, 
+            isLoading: isLoading
+         ) 
+         return nil
+      }
       let serverKey = getCreds() 
 
       if serverKey == "" {
@@ -22,8 +31,7 @@ class ApiWrapper<T: Codable> {
          return nil
       }
       
-      return (serverLocation, serverKey)
-  
+      return ("\(serverLocation):\(serverPort)", serverKey)
   }
   
   private func makeBaseRequest(api_url: String, serverKey: String) -> URLRequest? {
@@ -38,7 +46,6 @@ class ApiWrapper<T: Codable> {
       
       URLSession.shared.dataTask(with: req) { data, res, err in
         // Create a background task to fetch data from the server
-
         if (res as? HTTPURLResponse)?.statusCode == 401 {
            alert.makeAlert(
               title: "Unauthorized", 
@@ -60,9 +67,9 @@ class ApiWrapper<T: Codable> {
       .resume(); // Execute the task immediatelly
   }
 
-  /// Makes the server issue `newsboat -r` to update the cache.db and implicitly
-  /// calls loadRows() afterwards
-  func reloadFeeds(rows: ObservableArray<T>, alert: AlertState, isLoading: Binding<Bool>, rssurl: String = "") {
+  /// Makes the server issue `newsboat -r` to update the cache.db and
+  /// invokes a request to `/feeds` afterwards
+  func reloadFeeds(rows: ObservableArray<T>, alert: AlertState, isLoading: Binding<Bool>, isReloading: Binding<Bool>) {
       
       guard let (serverLocation, serverKey) = 
          self.getServerConfig(alert: alert, isLoading: isLoading) 
@@ -75,6 +82,9 @@ class ApiWrapper<T: Codable> {
          do { 
            let decoded = try JSONDecoder().decode(ServerResponse.self, from: data); 
            if decoded.success {
+              // The `FeedsView` implicitly calls `loadRows` .onAppear but since the view will
+              // already have presented itself when we reach this block we need to manuallly invoke it
+              isReloading.wrappedValue = false
               self.loadRows(rows: rows, alert: alert, isLoading: isLoading)
            }
            else {
@@ -89,7 +99,6 @@ class ApiWrapper<T: Codable> {
            ); 
          }
       })
-     
   }
 
   /// Fetch a list of all feeds or all items for a perticular feed

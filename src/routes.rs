@@ -46,12 +46,6 @@ pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
     .output()
     .expect("Failed to update cache.db");
     
-    //let output = std::process::Command::new("sleep")
-    //// The arguments need to be passed seperatly, otherwise we effectivly run
-    //// `newsboat "-x reload"`
-    //.arg("20")
-    //.output().unwrap();
-    
     if output.stderr.len() == 0 && 
         output.stdout.len() == 0 {
         "{ \"success\": true }"

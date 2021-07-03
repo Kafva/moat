@@ -5,6 +5,7 @@ struct FeedsView: View {
    @StateObject var feeds: ObservableArray<RssFeed> = ObservableArray();
    @StateObject var alertState: AlertState = AlertState();
    
+   @State var isReloading: Bool = false;
    @State var isLoading: Bool = true;
    @State var searchString: String = "";
    
@@ -33,8 +34,9 @@ struct FeedsView: View {
    }
 
    var body: some View {
+         // Gain access to the screen dimensions to perform proper sizing
          GeometryReader { geometry in 
-            // Gain access to the screen dimensions to perform proper sizing
+
             if self.isLoading {
                   if UserDefaults.standard.bool(forKey: "spritesOn") {
                      LoadingView(
@@ -47,11 +49,15 @@ struct FeedsView: View {
 
                   LoadingTextView()
                      .onAppear(perform: {
-                        self.apiWrapper.loadRows(
-                           rows: feeds, 
-                           alert: alertState, 
-                           isLoading: $isLoading
-                        )} 
+                        if !self.isReloading {
+                           // The `ActionBarView` changes a binding to isLoading when reloading feeds
+                           // at which point we do not want to automatically make a request to `/feeds` 
+                           self.apiWrapper.loadRows(
+                              rows: feeds, 
+                              alert: alertState, 
+                              isLoading: $isLoading
+                           )} 
+                        }
                   )
                   // Neccessary for correct positioning when
                   // the LoadingView isn't active
@@ -69,6 +75,7 @@ struct FeedsView: View {
                      ActionBarView(
                         searchString: $searchString, 
                         isLoading: $isLoading,
+                        isReloading: $isReloading,
                         textFieldFocused: $textFieldFocused,
                         searchBarWidth: geometry.size.width * 0.6
                      )

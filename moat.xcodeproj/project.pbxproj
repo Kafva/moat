@@ -24,6 +24,7 @@
 		DD80E6E0267CA6C7003B686A /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD80E6DF267CA6C7003B686A /* Util.swift */; };
 		DD85F22C267D29FD00561D97 /* ObservableArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD85F22B267D29FD00561D97 /* ObservableArray.swift */; };
 		DD85F230267D370F00561D97 /* AlertState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD85F22F267D370F00561D97 /* AlertState.swift */; };
+		DD879A5F269093BC0058D01C /* SettingsTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD879A5E269093BC0058D01C /* SettingsTextField.swift */; };
 		DD88D79D267CED0800BA6E91 /* RssFeedRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88D79B267CED0800BA6E91 /* RssFeedRowView.swift */; };
 		DD88D79E267CED0800BA6E91 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88D79C267CED0800BA6E91 /* SearchView.swift */; };
 		DD88D7A0267CEE8F00BA6E91 /* ItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD88D79F267CEE8F00BA6E91 /* ItemsView.swift */; };
@@ -81,6 +82,7 @@
 		DD80E6DF267CA6C7003B686A /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		DD85F22B267D29FD00561D97 /* ObservableArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableArray.swift; sourceTree = "<group>"; };
 		DD85F22F267D370F00561D97 /* AlertState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertState.swift; sourceTree = "<group>"; };
+		DD879A5E269093BC0058D01C /* SettingsTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTextField.swift; sourceTree = "<group>"; };
 		DD88D79B267CED0800BA6E91 /* RssFeedRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssFeedRowView.swift; sourceTree = "<group>"; };
 		DD88D79C267CED0800BA6E91 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		DD88D79F267CEE8F00BA6E91 /* ItemsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsView.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 		DD45CC05267B4A28000B0A99 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DD879A5E269093BC0058D01C /* SettingsTextField.swift */,
 				DD7139A226887E0B0042F9AE /* ItemThumbnailView.swift */,
 				DD6F23F126872BF40008D549 /* ItemButtonView.swift */,
 				DDD1585F267F526D007B7D1E /* LoadingTextView.swift */,
@@ -438,6 +441,7 @@
 				DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */,
 				DDFB1314267C89B10033528E /* SettingsView.swift in Sources */,
 				DD7139A326887E0B0042F9AE /* ItemThumbnailView.swift in Sources */,
+				DD879A5F269093BC0058D01C /* SettingsTextField.swift in Sources */,
 				DD88D79D267CED0800BA6E91 /* RssFeedRowView.swift in Sources */,
 				DD80E6E0267CA6C7003B686A /* Util.swift in Sources */,
 				DD88D79E267CED0800BA6E91 /* SearchView.swift in Sources */,
