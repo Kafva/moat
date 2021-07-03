@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 WorkingDirectory=CHANGE_THIS
 Environment="MOAT_KEY=CHANGE_THIS"
-ExecStart=/usr/bin/cargo run --release
+ExecStart=/usr/bin/cargo run --release -- --config ~/.newsboat/moat.conf
 
 [Install]
 WantedBy=multi-user.target
