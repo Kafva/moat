@@ -35,7 +35,7 @@ It is integral for the application to use HTTPS since the contents of the `x-cre
 
 The certificate needs to be signed by an entity that the iOS client trusts.
 
-Assuming that you do not have domain name and a corresponding certificate signed by a known CA, a private DNS server (e.g. [pihole](https://pi-hole.net/)) and CA can also be used. To install your own CA as a trusted root authoritty on iOS: 
+Assuming that you do not have domain name and a corresponding certificate signed by a known CA, a private DNS server (e.g. [pihole](https://pi-hole.net/)) and CA can also be used. To install your own CA as a trusted root authority on iOS: 
 
 1. Serve up the `.crt` from a machine and download it through Safari on the iOS device
 2. This should give a prompt to install a profile for your CA
