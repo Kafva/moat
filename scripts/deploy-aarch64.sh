@@ -23,9 +23,9 @@ remote=$1
 rustup target add aarch64-unknown-linux-gnu
 
 # Install the corresponding C compiler
+# apt install gcc-aarch64-linux-gnu -y
 pacman -Qi aarch64-linux-gnu-gcc &> /dev/null || 
 	pacman -S aarch64-linux-gnu-gcc
-
 
 if ! [ -f  "/usr/aarch64-linux-gnu/lib/libsqlite3.so.0.8.6" ]; then
 	# C libraries for the architechture are found under  /usr/aarch64-linux-gnu/lib/
@@ -39,19 +39,33 @@ if ! [ -f  "/usr/aarch64-linux-gnu/lib/libsqlite3.so.0.8.6" ]; then
 	sudo cp /tmp/usr/lib/libsqlite3.so.0.8.6 /usr/aarch64-linux-gnu/lib
 	sudo ln -s /usr/aarch64-linux-gnu/lib/libsqlite3.so.0.8.6 /usr/aarch64-linux-gnu/lib/libsqlite3.so
 	sudo ln -s /usr/aarch64-linux-gnu/lib/libsqlite3.so.0.8.6 /usr/aarch64-linux-gnu/lib/libsqlite3.so.0
-
 fi
 
 
-# Set the linker for the target to the the cross compiler and build the project
-RUSTFLAGS="-C linker=/usr/bin/aarch64-linux-gnu-gcc-11.1.0" cargo build --release --target=aarch64-unknown-linux-gnu
+sed "s@SET WORK DIR@${PWD%%/scripts}@; s/CHANGE THIS/$(pass moat)/" ./conf/moat.service > /tmp/moat_$remote.service
 
-# Copy over the binary and configuration files
-sed "s@/home/jonas/.cargo/bin/cargo run --release --@/home/jonas/bin/moat_server@; s/CHANGE THIS/$(pass moat)/" ./conf/moat.service > /tmp/moat_$remote.service
+[ -d ssl ] && $(ssh $remote '[ -d ~/Repos/moat ]') && 
+	rsync -r ssl 	$remote:~/Repos/moat/ ||
+	echo "Server .crt and .key still need to be added on the server"
 
-rsync ./target/aarch64-unknown-linux-gnu/release/moat_server $remote:~/bin/moat_server
-rsync ./conf/server.conf 				     $remote:~/.newsboat/moat.conf
-rsync /tmp/moat_$remote.service 		             $remote:~/.config/systemd/user/moat.service
+# The glibc version on the target must match the machine compiling the project
+glibc_local=$(ldd --version | head -n1)
+glibc_remote=$(ssh $remote ldd --version | head -n1)
 
-# On deployment target
-ssh $remote yay -Qi aarch64-glibc || echo 'The AUR build of glibc is required on the target: `yay -S aarch64-glibc`'
+if [ "$glibc_remote" != "$glibc_local" ]; then
+	echo "--------------------------------------" >&2
+	printf "Version mismatch for glibc!\nremote:\t$glibc_remote\nlocal:\t$glibc_local\n" >&2
+	printf "Compile directly on the target machine.\n" >&2
+	echo "--------------------------------------" >&2
+else
+	# Only create a cross compiled binary if the glibc versions matched
+	RUSTFLAGS="-C linker=/usr/bin/aarch64-linux-gnu-gcc" \
+		cargo build --release --target=aarch64-unknown-linux-gnu &&
+
+	sed -i "s@/home/jonas/.cargo/bin/cargo run --release --@/home/jonas/bin/moat_server@;" \
+		/tmp/moat_$remote.service
+	rsync ./target/aarch64-unknown-linux-gnu/release/moat_server $remote:~/bin/moat_server
+fi
+rsync /tmp/moat_$remote.service $remote:~/.config/systemd/user/moat.service
+rsync ./conf/server.conf 	$remote:~/.newsboat/moat.conf
+
