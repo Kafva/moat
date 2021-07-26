@@ -4,9 +4,9 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=CHANGE_THIS
-Environment="MOAT_KEY=CHANGE_THIS"
-ExecStart=/usr/bin/cargo run --release -- --config ~/.newsboat/moat.conf
+WorkingDirectory=/home/jonas/
+Environment="MOAT_KEY=CHANGE THIS"
+ExecStart=/home/jonas/.cargo/bin/cargo run --release -- --config ~/.newsboat/moat.conf
 
 [Install]
 WantedBy=multi-user.target
