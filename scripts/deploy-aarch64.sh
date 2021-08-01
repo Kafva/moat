@@ -1,19 +1,20 @@
 #!/bin/sh
-exitErr(){ echo -e "$1" >&2 ; exit 1; }
+die(){ printf "$1\n" >&2 ; exit 1; }
 usage="usage: $(basename $0) <host>"
 helpStr="Build and deploy the server to a machine running aarch64 Arch Linux"
 
 while getopts ":h" opt
 do
 	case $opt in
-		h) exitErr "$usage\n-----------\n$helpStr" ;;
-		*) exitErr "$usage" ;;
+		h) die "$usage\n-----------\n$helpStr" ;;
+		*) die "$usage" ;;
 	esac
 done
 
 shift $(($OPTIND - 1))
 
-[ -z "$1" ] && exitErr "$usage"
+[ -z "$1" ] && die "$usage"
+[ $(uname) != Linux ] && die "Run on Linux"
 
 remote=$1
 
@@ -62,7 +63,7 @@ else
 	RUSTFLAGS="-C linker=/usr/bin/aarch64-linux-gnu-gcc" \
 		cargo build --release --target=aarch64-unknown-linux-gnu &&
 
-	sed -i "s@/home/jonas/.cargo/bin/cargo run --release --@/home/jonas/bin/moat_server@;" \
+	sed -i "s@/home/jonas/Repos/moat/target/release/moat_server@/home/jonas/bin/moat_server@;" \
 		/tmp/moat_$remote.service
 	rsync ./target/aarch64-unknown-linux-gnu/release/moat_server $remote:~/bin/moat_server
 fi
