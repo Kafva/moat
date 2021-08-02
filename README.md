@@ -129,5 +129,5 @@ The project was mainly modelled with YouTube feeds in mind and therefore support
 
 A template for a systemd `.service` file is provided which can be copied to `/etc/systemd/system` to interact with moat as systemd service.
 ```bash
-systemctl --user status moat
+systemctl status moat
 ```
