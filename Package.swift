@@ -1,31 +1,16 @@
 // swift-tools-version:5.4.0
-// Dummy file for sourcekit-lsp linting in an iOS project
-//  https://medium.com/swlh/ios-development-on-vscode-27be37293fe1
+// ---> Dummy file for sourcekit-lsp linting <---
+// (do not include into Xcode)
+// SPM does not seem to be super well integrated into Xcode: https://stackoverflow.com/a/39796012/9033629
+// so we will stick with Pods for now. E.g. This command does not read Packages.swift: 
+//  xcodebuild -resolvePackageDependencies
 
-// For linting to work with external packages we need to add them into this file as well, the LSP does not
-// know about anything outside this file. It may be necessary to compile the project using the `swift`
-// executable if dependencies are not resolved
-//  https://forums.swift.org/t/sourcekitd-no-such-module-error/18321/14
-
-//  swift package update && \
-//  swift build \
-//          -Xswiftc -sdk \
-//          -Xswiftc /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk \
-//          -Xswiftc -target \
-//          -Xswiftc x86_64-aple-ios14.5-simulator
-
-// The flags to `swift build` are the same ones needed for 
-// the `sourcekit-lsp.serverArguments` key settings.json in VScode
-
-// Note that it should not matter what method is used to fetch the dependency in question for the actual project, i.e. it should work to use both CocoaPods and the built in SPM in Xcode from `File > Swift Packages > Add Package Dependency...`
-
-// TODO migrate away from Pods, we have switched to `sswg.swift-lang` which also depends on this file
 import PackageDescription
 let packageName = "moat"
 let package = Package(
   name: "moat",
   defaultLocalization: "en",
-  platforms: [.iOS("14.5") ],
+  platforms: [.iOS("14.0") ],
   products: [
     .library(name: packageName, targets: [packageName])
   ],
