@@ -53,7 +53,6 @@ Maintaining a synchronized state when using `newsboat` on another machine than t
 ```bash
 function newsmoat() {
 	MOAT_SERVER="..."
-	port="..."
 
 	# Update the local cache with the cache from the moat server in
 	# case articles were read through the iOS client
@@ -61,8 +60,10 @@ function newsmoat() {
 
 	newsboat -r
 
-	# Copy the cache back to the server on exit to commit any new changes
-	scp -q ~/.newsboat/cache.db $MOAT_SERVER:~/.newsboat/cache.db	
+	# Copy the cache and potential changes to other files back to the server on exit 
+	scp -q ~/.newsboat/cache.db 	$MOAT_SERVER:~/.newsboat/cache.db
+	scp -q ~/.newsboat/urls 	$MOAT_SERVER:~/.newsboat/urls
+	scp -q ~/.newsboat/muted_list   $MOAT_SERVER:~/.newsboat/muted_list
 }
 ```
 This solution does **not** work if one were to use several 'newsboat clients' in parallel. Newsboat was not modelled as a [client/server application](https://github.com/newsboat/newsboat/issues/471) and pursuing a more robust synchronization framework was therefore not deemed preferable.
@@ -71,5 +72,5 @@ The project was mainly modelled with YouTube feeds in mind and therefore support
 
 A template for a systemd `.service` file is provided which can be copied to `/etc/systemd/system` to interact with moat as systemd service.
 ```bash
-systemctl status moat
+sudo systemctl status moat
 ```
