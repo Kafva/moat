@@ -1,7 +1,6 @@
 import SwiftUI
 
 func getLogoUrl(channelId: String, name: String,  completion: @escaping (String) -> Void ) {
-
   let channel_url = URL(string: "https://www.youtube.com/channel/\(channelId)/about")!
 
   // To bypass the consent screen we need to inject a cookie into the request
@@ -27,16 +26,20 @@ func getLogoUrl(channelId: String, name: String,  completion: @escaping (String)
   }.resume()
 }
 
-/// Pattern:
+/// Patterns:
 ///   https://yt3.ggpht.com/ytc/AAUvwniD_RGcy5bq8EqWUnk8wHzafZo4w8ZJfNU-QWLUzg=s300-c-k-c0x00ffffff-no-rj
+///   https://yt3.ggpht.com/B3TFzvwt8Abuk3xweJvBLcL5Xt3Y7TatvDyWDtsEoR3A4oZkTA4ajbz_yRo2QF70WYDpb9k=s88-c-k-c0x00ffffff-no-rj
 func extractLogoUrl(_ htmlBody: String, name: String ) -> String? {
-
   if htmlBody.matches("Before you continue to YouTube").first != nil {
     print("Failed to fetch YouTube logo for \(name): Blocked by consent screen")
     return ""
   }
-
-  return htmlBody.matches("https://yt3.ggpht.com/ytc/[-=+_A-Za-z0-9]{10,100}-no-rj").first
+  if let logo = htmlBody.matches("https://yt3.ggpht.com(/ytc)?/[-=+_A-Za-z0-9]{10,255}-no-rj").first {
+    return logo
+  }  else {
+    print("Failed to fetch YouTube logo for \(name)")
+    return ""
+  }
 }
 
 /// Channel logos do not have a fully predictable format but we can save them by
@@ -45,7 +48,6 @@ func extractLogoUrl(_ htmlBody: String, name: String ) -> String? {
 /// We will store these urls in a dict inside UserDefaults à la
 /// [ "channelId": <logo url>, ...]
 func setLogosInUserDefaults(feeds: [RssFeed], finishedCount: Binding<Int>, completion: @escaping ([String: String]) -> Void ) {
-  
   // Always start from an empty dict instead of fetching any potential previous version
   var logos =  [String: String]()
 
