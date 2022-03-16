@@ -76,3 +76,5 @@ A template for a systemd `.service` file is provided which can be copied to `/et
 ```bash
 sudo systemctl status moat
 ```
+
+Updating the set of muted feeds requires restarting the server process.
