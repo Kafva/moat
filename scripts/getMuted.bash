@@ -28,4 +28,4 @@ fi
 #	<rss url> <alt url> [tag] <name>
 # and the name is expected to always start with '!' or '~'
 
-$sedExec -nE 's/^(https?:\/\/[-._?=/a-zA-Z0-9]+)\s+.*"!(.*)"\s?$/\1/p' $urls
+$sedExec -nE 's/^(https?:\/\/[-.$@_?=/:a-zA-Z0-9]+)\s+.*"!(.*)"\s?$/\1/p' $urls
