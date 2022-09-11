@@ -30,7 +30,7 @@ struct ActionBarView: View {
          }
 
          Button(action: {
-             print("yep")
+            isLoading = true
             self.apiWrapper.loadRows(
                rows: feeds, 
                alert: alertState, 
