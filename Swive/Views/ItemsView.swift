@@ -11,6 +11,7 @@ struct ItemsView: View {
    var apiWrapper = ApiWrapper<RssItem>()
 
    init?(_ feedurl: String) {
+      setViewTransparency()
       self.feedurl = feedurl;
    }
    

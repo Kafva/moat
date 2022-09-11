@@ -19,4 +19,7 @@ func setViewTransparency() {
   // https://stackoverflow.com/a/58974331/9033629 
   UINavigationBar.appearance().barTintColor = .clear
   UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+  
+  // https://stackoverflow.com/a/26390278/9033629
+  UINavigationBar.appearance().shadowImage = UIImage()
 }

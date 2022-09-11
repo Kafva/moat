@@ -6,6 +6,10 @@ struct SettingsView: View {
    @State var finishedCount: Int = 0; 
    @State var isLoading: Bool = false;
    
+   @State var spritesOn: Bool = true;
+   @State var serverLocation: String = "10.0.1.30:5000"
+   @State var serverKey: String = "test"
+   
    var body: some View {
 
       GeometryReader { geometry in 
@@ -39,7 +43,30 @@ struct SettingsView: View {
                }
             }
             else {
-               VStack {
+               VStack(alignment: .leading, spacing: 10) {
+                  Toggle("Spawn sprites on loading screen", isOn: $spritesOn) 
+                     .onChange(of: spritesOn) { value in
+                        print("THIS",value) 
+                     }
+                  HStack {
+                     Text("Server location")
+                        .lineLimit(1)
+                        .frame(width: geometry.size.width*0.3, alignment: .leading)
+                     
+                     TextField("IP or domain name", text: $serverLocation, onCommit: {
+                        print("CHANNGE IP")
+                     })
+                     .customStyle(width: geometry.size.width * 0.5)
+                  }
+                  HStack {
+                     Text("Server key")
+                        .frame(width: geometry.size.width*0.3, alignment: .leading)
+                     SecureField("", text: $serverKey, onCommit: {
+                        print("Wow")
+                     })
+                     .customStyle(width: geometry.size.width * 0.5)
+                  }
+
                   Button(action: {
                     self.isLoading = true
                     setLogosInUserDefaults(feeds: feeds, finishedCount: $finishedCount, completion: { logos in
@@ -49,12 +76,11 @@ struct SettingsView: View {
                         self.isLoading = false
                     })
                   }) {
-                     Image(systemName: "arrow.clockwise").resizable().frame(
-                        width: 25, height: 25, alignment: .center
-                     )
+                     Label("Reload YouTube feed logos", systemImage: "arrow.clockwise")
                   }
                   .padding(10)
                }
+               .frame(width: geometry.size.width * 0.8, alignment: .leading)
             }
         }
       }
