@@ -4,6 +4,7 @@ struct RssFeedRowView: View {
 
    var feed: RssFeed;
    var screenWidth: CGFloat;
+   @EnvironmentObject var alertState: AlertState
 
    var body: some View {
       HStack {
@@ -43,9 +44,14 @@ struct RssFeedRowView: View {
                alignment: Alignment.center
             )
             .lineLimit(1) 
+            .onTapGesture {
+               self.alertState.title = "Mark all entries for \(self.feed.title) as read?" 
+               self.alertState.message = ""
+               self.alertState.alertWithTwoButtons = true
+               self.alertState.show.toggle() 
+            }
       }
       .padding(.bottom, 5)
-
    }
 }
 

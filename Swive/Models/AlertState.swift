@@ -7,11 +7,14 @@ class AlertState: ObservableObject {
    @Published var show: Bool = false;
    var title: String = "";
    var message: String = "";
+   var alertWithTwoButtons: Bool = false
    
    /// Unhides an alert and sets the loading state to false
-   func makeAlert(title: String, err: Error?, isLoading: Binding<Bool> ) {
+   func makeAlert(title: String, err: Error?, isLoading: Binding<Bool>, alertWithTwoButtons: Bool = false ) {
+      
       self.title = title; 
       self.message = "\(err?.localizedDescription ?? "No description available")";
+      self.alertWithTwoButtons = alertWithTwoButtons
       
       DispatchQueue.main.async {
          // UI changes need to be performed on the main thread
