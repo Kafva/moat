@@ -1,6 +1,18 @@
 # Swive
+* [Installation](#installation)
+* [Development](#development)
+	* [Import new images](#import-new-images)
+	* [Linting](#linting)
+	* [Using `sourcekit-lsp` for linting in VScode](#using-sourcekit-lsp-for-linting-in-vscode)
 
 
+## Installation
+Begin by installing all dependecies for the client and server
+```bash
+pod install
+cargo build
+```
+To install the iOS application, open the `Swive.xcworkspace` file with Xcode, connect your device and run with `CMD+R`.
 
 ## Development
 
