@@ -127,4 +127,7 @@ This solution does **not** work if one were to use several 'newsboat clients' in
 
 The project was mainly modelled with YouTube feeds in mind and therefore supports fetching YouTube thumbnails and YouTube channel icons. 
 
-A template for a systemd `.service` file is provided which can be copied to `/usr/lib/systemd/system/` to interact with moat as systemd service.
+A template for a systemd `.service` file is provided which can be copied to `~/.config/systemd/user/` to interact with moat as systemd service.
+```bash
+systemctl --user status moat
+```
