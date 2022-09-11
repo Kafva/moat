@@ -6,11 +6,12 @@ use clap::{AppSettings, Clap};
 // The `mod` keyword will expand to the contents of the file
 // with the corresponding name
 mod routes;
-mod global;
+mod models;
+mod dataguards;
 mod errors;
 mod config_parser;
 mod db_parser;
-use global::Config;
+use models::Config;
 use config_parser::get_config;
 
 /// Server 
@@ -32,19 +33,19 @@ fn rocket() -> Rocket<Build> {
     let config: Config = 
         get_config(&opts.config.to_string()).unwrap();
     
-    // Pass the config into the global state of rocket and
+    // Pass the config into the models state of rocket and
     // start the server with each route mounted at '/'
     rocket::build()
         .manage(Config::from(config))
         .register("/", catchers![
             errors::internal_error,
+            errors::unauthorized,
             errors::not_found,
             errors::default
         ])
         .mount("/", routes![
         routes::feeds, 
         routes::items, 
-        routes::read,
-        routes::index
+        routes::read
     ])
 }

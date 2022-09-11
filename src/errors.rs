@@ -6,9 +6,14 @@ pub fn internal_error() -> &'static str {
     "{ \"success\": false }"
 }
 
+#[catch(401)]
+pub fn unauthorized(_req: &Request) -> &'static str {
+    "{ \"success\": false, \"message\": \"Unauthorized\" }"
+}
+
 #[catch(404)]
 pub fn not_found(_req: &Request) -> &'static str {
-    "{ \"success\": false }"
+    "{ \"success\": false, \"message\": \"Not found\" }"
 }
 
 #[catch(default)]

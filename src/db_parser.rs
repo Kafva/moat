@@ -1,5 +1,5 @@
 extern crate base64;
-use super::global::{RssItem, RssFeed};
+use super::models::{RssItem, RssFeed};
 
 // We can't have the cache.db from our laptop served constantly
 // so we use a hook to automatically push it to the 'remoat' server
