@@ -1,3 +1,4 @@
+extern crate base64;
 use super::global::{RssItem, RssFeed};
 
 // We can't have the cache.db from our laptop served constantly
@@ -9,33 +10,79 @@ use super::global::{RssItem, RssFeed};
 // We can thus write to the cache.db through remoat and have
 // changes persist 
 
+// For YT, video thumbnails can be determined from the entries in the rssurl,
+// if these are to be included we will perform this fetch client side (XML
+// parsing is probably easier from there)
+
+/// Returns the number of changed rows on success
+pub fn toggle_read_status(cache_path: &str, item_id: u32, read: bool) -> Result<usize,rusqlite::Error> {
+    let conn = rusqlite::Connection::open(cache_path)?;
+        // The rss_item and rss_feed tables share several common fields, in this
+        // statement we use the rssurl/feedurl as a unique identifer to determine
+        // how many unread articles each feed has
+    conn.execute("
+        UPDATE rss_item
+            SET unread = ?1
+        WHERE id = ?2 ;", rusqlite::params![ read, item_id.to_string() ]
+    )
+}
+
 pub fn get_feed_list(cache_path: &str) -> Result<Vec<RssFeed>,rusqlite::Error> {
     
     let conn = rusqlite::Connection::open(cache_path)?;
     let mut stmt = 
-        conn.prepare("SELECT 
-            rssurl, url, title, lastmodified 
-        FROM rss_feed ORDER BY lastmodified ASC;")?;
+        // The rss_item and rss_feed tables share several common fields, in this
+        // statement we use the rssurl/feedurl as a unique identifer to determine
+        // how many unread articles each feed has
+        conn.prepare("
+        SELECT feedurl, rss_feed.url, author, SUM(unread) 
+        FROM rss_item JOIN rss_feed ON rss_feed.rssurl = feedurl GROUP BY feedurl;"
+    )?;
     
     // Use a lambda statement on each row to create an iterator
     // over all feed objects from the query
-    let feed_iter = stmt.query_map([], |row| {
+    let feeds_iter = stmt.query_map([], |row| {
         
         Ok(RssFeed::new(
             row.get(0)?,
             row.get(1)?,
             row.get(2)?,
-            row.get(3)? 
+            row.get(3)?,
         ))
     })?;
 
     // Collect all the items into a vector
-    feed_iter.collect()
+    feeds_iter.collect()
 }
 
-//pub fn get_items_from_feed(b64_rss_url: &str) -> Result<Vec<RssItem>,rusqlite::Error> {
-//
-//}
+pub fn get_items_from_feed(cache_path: &str, rssurl: &str) -> Result<Vec<RssItem>, rusqlite::Error> {
+    
+    let conn = rusqlite::Connection::open(cache_path)?;
+    let mut stmt = 
+        conn.prepare( &format!("
+            SELECT id, title, author, url, pubdate, unread FROM rss_item
+            WHERE feedurl = '{}';", rssurl 
+        ).as_str()
+    )?;
+    
+    // Use a lambda statement on each row to create an iterator
+    // over all items returned from the query
+    let items_iter = stmt.query_map([], |row| {
+        
+        Ok(RssItem::new(
+            row.get(0)?,
+            row.get(1)?,
+            row.get(2)?,
+            row.get(3)?,
+            row.get(4)?,
+            row.get(5)?,
+        ))
+    })?;
+
+    
+    // Collect all the items into a vector
+    items_iter.collect()
+}
 
 /******* Tests **********/
 // The convention is to include unit tests for functions inside a 
@@ -63,6 +110,24 @@ mod tests {
         //  https://doc.rust-lang.org/rust-by-example/trait/iter.html
         assert!( feeds.into_iter().count() > 0 );
     }
+    
+    #[test]
+    fn test_get_items() {
+        
+        let items = get_items_from_feed(
+            &format!("{}/.newsboat/cache.db", 
+                std::env::var("HOME").unwrap()
+            ).as_str(),
+            "https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA"
+        ).unwrap();
+
+
+        // NOTE that we can use the .into_iter() method instead of manually
+        // defining an `impl` for next() for the class in question
+        //  https://doc.rust-lang.org/rust-by-example/trait/iter.html
+        assert!( items.into_iter().count() > 0 );
+    }
+
 }
 
 
