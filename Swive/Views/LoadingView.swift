@@ -30,7 +30,6 @@ struct LoadingView: View {
         )
         .onDisappear(perform: {
             // Clean up when the SpriteView is left
-            NSLog("DISSAPPEARING!!");
             // TODO doesn't work
 
             // Remove all sprites

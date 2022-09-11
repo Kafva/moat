@@ -15,7 +15,6 @@ struct ItemsView: View {
       self.feedurl = feedurl;
    }
    
-   
    var body: some View {
       GeometryReader { geometry in 
          ZStack {
@@ -48,6 +47,7 @@ struct ItemsView: View {
                }
             }
             else {
+
                ScrollView(.vertical) { 
                   // The alignment parameter for a VStack concerns horizontal alignment
                   VStack(alignment: .center, spacing: 0) {

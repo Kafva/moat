@@ -1,5 +1,8 @@
 import SwiftUI
 
+let SERVER_REQUEST_TIMEOUT = 3.0
+
+
 /***** UI dimensions *****/
 let IMAGE_WIDTH = CGFloat(50);
 let ROW_HEIGHT = CGFloat(50);
@@ -8,6 +11,9 @@ let THUMBNAIL_WIDTH = CGFloat(320/2);
 let THUMBNAIL_HEIGHT = CGFloat(180/2);
 let BUTTON_WIDTH = CGFloat(25);
 let BUTTON_HEIGHT = CGFloat(25);
+
+
+let INITIAL_X_POS = THUMBNAIL_WIDTH + 35
 
 /***** Colors *******/
 let BKG_GRADIENT_LINEAR = LinearGradient(
