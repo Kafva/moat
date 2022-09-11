@@ -3,7 +3,6 @@ import SwiftUI;
 
 class SpriteScene: SKScene {
     
-    @State var spawn: Bool = true;
 
     var sprites: [SKSpriteNode] = [];
     var nodeCount: uint = 0;
@@ -18,6 +17,7 @@ class SpriteScene: SKScene {
     );
     
     var spawnTimer: Timer?;
+    var spriteFrameTimer: Timer?;
 
     private func setupTimers(){
        
@@ -29,7 +29,7 @@ class SpriteScene: SKScene {
            repeats: true
         ); 
        
-       Timer.scheduledTimer(
+       self.spriteFrameTimer = Timer.scheduledTimer(
            timeInterval: SPRITE_NEW_FRAME_INTERVAL, 
            target: self, 
            selector: #selector(cycleSprites), 
