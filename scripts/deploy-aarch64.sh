@@ -22,7 +22,7 @@ sed "s@SET WORK DIR@/home/jonas/Repos/moat@; s/CHANGE THIS/$(pass moat)/" ./conf
 	rsync -r ssl 	$remote:~/Repos/moat/ ||
 	echo "=> Server .crt and .key still need to be added on the server"
 
-if [ $(uname) = Linux ]; then 
+if $(grep -q 'ID=arch' /etc/os-release 2> /dev/null ); then 
 	# Install and setup toolchain for aarch64 cross compiling
 	rustup target add aarch64-unknown-linux-gnu
 
