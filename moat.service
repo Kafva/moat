@@ -1,0 +1,13 @@
+[Unit]
+Description=RSS feed server
+After=network.target
+
+[Service]
+Type=simple
+User=jonas
+WorkingDirectory=/opt/moat
+ExecStart=/usr/bin/cargo run --release
+
+[Install]
+WantedBy=multi-user.target
+

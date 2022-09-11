@@ -5,7 +5,7 @@ authors = ["Kafva <https://github.com/Kafva>"]
 edition = "2018"
 
 [dependencies]
-rocket = { version = "0.5.0-rc.1", features = ["json"] }
+rocket = { version = "0.5.0-rc.1", features = ["json", "tls"] }
 rusqlite = "0.25.3"
 base64 = "0.13.0"
 regex = "1.5.4"
