@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,7 @@
 		DD45CC07267B4A28000B0A99 /* FeedsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC06267B4A28000B0A99 /* FeedsView.swift */; };
 		DD45CC0B267B4AAC000B0A99 /* RssItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC09267B4AAC000B0A99 /* RssItem.swift */; };
 		DD45CC0C267B4AAC000B0A99 /* RssFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC0A267B4AAC000B0A99 /* RssFeed.swift */; };
+		DD80E6E0267CA6C7003B686A /* Creds.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD80E6DF267CA6C7003B686A /* Creds.swift */; };
 		DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A1F2671FF970010BF19 /* SpriteSheet.swift */; };
 		DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A2326727D920010BF19 /* SpriteScene.swift */; };
 		DD939A262672A9370010BF19 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A252672A9370010BF19 /* Config.swift */; };
@@ -47,6 +48,7 @@
 		DD45CC06267B4A28000B0A99 /* FeedsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedsView.swift; sourceTree = "<group>"; };
 		DD45CC09267B4AAC000B0A99 /* RssItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssItem.swift; sourceTree = "<group>"; };
 		DD45CC0A267B4AAC000B0A99 /* RssFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssFeed.swift; sourceTree = "<group>"; };
+		DD80E6DF267CA6C7003B686A /* Creds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Creds.swift; sourceTree = "<group>"; };
 		DD939A1F2671FF970010BF19 /* SpriteSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteSheet.swift; sourceTree = "<group>"; };
 		DD939A2326727D920010BF19 /* SpriteScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteScene.swift; sourceTree = "<group>"; };
 		DD939A252672A9370010BF19 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -97,13 +99,13 @@
 				15185687BD2F227C1D12036F /* Pods-Swive.debug.xcconfig */,
 				C6E7383BB54A7FFCADA5D88D /* Pods-Swive.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
 		DD45CC05267B4A28000B0A99 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DDA951F72670F139003D760D /* LoadingView.swift */,
 				DDFB1313267C89B10033528E /* SettingsView.swift */,
 				DD45CC06267B4A28000B0A99 /* FeedsView.swift */,
 			);
@@ -117,6 +119,17 @@
 				DD45CC0A267B4AAC000B0A99 /* RssFeed.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		DD80E6DE267CA6C7003B686A /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				DDD6E182267361CD0039A899 /* Color+hex.swift */,
+				DD80E6DF267CA6C7003B686A /* Creds.swift */,
+				DD939A2326727D920010BF19 /* SpriteScene.swift */,
+				DD939A1F2671FF970010BF19 /* SpriteSheet.swift */,
+			);
+			path = Util;
 			sourceTree = "<group>";
 		};
 		DDA951E92670F139003D760D = {
@@ -144,14 +157,11 @@
 		DDA951F42670F139003D760D /* Swive */ = {
 			isa = PBXGroup;
 			children = (
+				DD80E6DE267CA6C7003B686A /* Util */,
 				DD45CC08267B4AAC000B0A99 /* Models */,
 				DD45CC05267B4A28000B0A99 /* Views */,
-				DDD6E182267361CD0039A899 /* Color+hex.swift */,
 				DD939A252672A9370010BF19 /* Config.swift */,
-				DD939A2326727D920010BF19 /* SpriteScene.swift */,
-				DD939A1F2671FF970010BF19 /* SpriteSheet.swift */,
 				DDA951F52670F139003D760D /* SwiveApp.swift */,
-				DDA951F72670F139003D760D /* LoadingView.swift */,
 				DDA951F92670F13B003D760D /* Assets.xcassets */,
 				DDA951FE2670F13B003D760D /* Info.plist */,
 			);
@@ -362,6 +372,7 @@
 				DD939A262672A9370010BF19 /* Config.swift in Sources */,
 				DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */,
 				DDFB1314267C89B10033528E /* SettingsView.swift in Sources */,
+				DD80E6E0267CA6C7003B686A /* Creds.swift in Sources */,
 				DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */,
 				DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */,
 				DD45CC07267B4A28000B0A99 /* FeedsView.swift in Sources */,
