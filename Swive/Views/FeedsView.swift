@@ -51,6 +51,8 @@ struct FeedsView: View {
                         searchString: $searchString, 
                         searchBarWidth: geometry.size.width * 0.6
                      )
+                     // When the rows are not loaded we need to add additional padding for the items in the bar 
+                     .padding(.leading,  feeds.arr.count == 0 ? 15 : 0 )
 
                      ForEach(feeds.arr, id: \.id ) { feed in
                         // We need the entry class to have an ID
@@ -62,15 +64,15 @@ struct FeedsView: View {
                      }
                   }
                   .listRowBackground(Color.clear)
-                  .alert(isPresented: $alertState.show ) {
-                     Alert(
-                     title: Text(alertState.title), 
-                     message: Text(alertState.message), 
-                     dismissButton: .default(Text("OK"))
-                  )
                }
             }
          }
+         .alert(isPresented: $alertState.show ) {
+            Alert(
+               title: Text(alertState.title), 
+               message: Text(alertState.message), 
+               dismissButton: .default(Text("OK"))
+         )
       }
    }
 }

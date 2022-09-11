@@ -1,16 +1,28 @@
 PODS:
   - KeychainAccess (4.2.2)
+  - SwiftyXMLParser (5.3.0)
 
 DEPENDENCIES:
   - KeychainAccess
+  - SwiftyXMLParser (from `https://github.com/yahoojapan/SwiftyXMLParser.git`)
 
 SPEC REPOS:
   trunk:
     - KeychainAccess
 
+EXTERNAL SOURCES:
+  SwiftyXMLParser:
+    :git: https://github.com/yahoojapan/SwiftyXMLParser.git
+
+CHECKOUT OPTIONS:
+  SwiftyXMLParser:
+    :commit: b7beef45ecba2df71ac831245f71141ec0efb1fb
+    :git: https://github.com/yahoojapan/SwiftyXMLParser.git
+
 SPEC CHECKSUMS:
   KeychainAccess: c0c4f7f38f6fc7bbe58f5702e25f7bd2f65abf51
+  SwiftyXMLParser: 0985085180f1ee01916cd9b5c1a4f0a8f493c084
 
-PODFILE CHECKSUM: d8deca66d717c820d084e1700f109cca2c7247e9
+PODFILE CHECKSUM: a84a783b47a819d31d71a12419a3b17828f1a1f5
 
 COCOAPODS: 1.10.1

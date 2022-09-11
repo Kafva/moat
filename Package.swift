@@ -29,11 +29,12 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/kishikawakatsumi/KeychainAccess.git", from: "3.0.0"),
+    .package(url: "https://github.com/yahoojapan/SwiftyXMLParser.git", from: "5.3.0")
   ],
   targets: [
     .target(
       name: packageName,
-      dependencies: ["KeychainAccess"],
+      dependencies: ["KeychainAccess", "SwiftyXMLParser"],
       path: packageName,
       exclude: ["Info.plist"]
     ),
