@@ -80,7 +80,7 @@ class ApiWrapper<T: Codable> {
            }
            else {
               alert.makeAlert(
-                 title: "Error reloading feeds", err: ServerConnectionError.unexpected(code: 400), isLoading: isLoading
+                 title: "Server error", err: ServerConnectionError.feedReloadFailure, isLoading: isLoading
               ); 
            }
          }
