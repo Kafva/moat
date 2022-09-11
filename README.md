@@ -46,7 +46,8 @@ Assuming that you do not have domain name and a corresponding certificate signed
 Instead of using the drag-and-drop functionality to import images through Xcode one can use the provided `getAsset.bash` script which takes an image as input and produces a `<image name>.imageset` resource under `Assets.xcassets`.
 
 ### Linting
-For linting in VScode use the `sswg.swift-lang` extension.
+* VScode: Use the `sswg.swift-lang` extension
+* Neovim: refer to [this](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#sourcekit) configuration
 
 ## Notes
 Maintaining a synchronized state when using `newsboat` on another machine than the `moat` server requires a wrapper function similar to the one below 
