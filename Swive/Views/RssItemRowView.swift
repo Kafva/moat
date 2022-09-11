@@ -24,6 +24,11 @@ struct RssItemRowView: View {
                   alignment: .center
            )
            .padding(.leading, 5)
+           .onTapGesture {
+              // Make the thumbnail clickable to visit the link
+              UIApplication.shared.open(URL(string: item.url)!)
+           }   
+
         } 
         else {
            Spacer().frame(width: X_AXIS_MARGIN_FOR_ROWS)
