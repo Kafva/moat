@@ -19,7 +19,7 @@ func getLogoUrl(channelId: String, name: String,  completion: @escaping (String)
   
   let req = URLRequest(url: channel_url)
   
-  URLSession.shared.dataTask(with: req) { data, res, err in
+  URLSession.shared.dataTask(with: req) { data, _, _ in
       if let data = data {
         completion(
           extractLogoUrl( String(decoding: data, as: UTF8.self), name: name ) ?? "" 
@@ -45,7 +45,7 @@ func extractLogoUrl(_ htmlBody: String, name: String ) -> String? {
 ///   https://yt3.ggpht.com/ytc/AAUvwniD_RGcy5bq8EqWUnk8wHzafZo4w8ZJfNU-QWLUzg=s300-c-k-c0x00ffffff-no-rj
 /// We will store these urls in a dict inside UserDefaults à la
 /// [ "channelId": <logo url>, ...]
-func setLogosInUserDefaults(feeds: [RssFeed], finishedCount: Binding<Int>, completion: @escaping ([String:String]) -> Void ) -> Void {
+func setLogosInUserDefaults(feeds: [RssFeed], finishedCount: Binding<Int>, completion: @escaping ([String: String]) -> Void ) {
   
   // Always start from an empty dict instead of fetching any potential previous version
   var logos =  [String: String]()
@@ -65,7 +65,7 @@ func setLogosInUserDefaults(feeds: [RssFeed], finishedCount: Binding<Int>, compl
       continue 
     }
 
-    getLogoUrl(channelId: channelId, name: feed.title, completion:  { logoUrl in
+    getLogoUrl(channelId: channelId, name: feed.title, completion: { logoUrl in
       logos[channelId] = logoUrl
       
       finishedCount.wrappedValue+=1;
@@ -84,4 +84,3 @@ func getLogoUrlFromUserDefaults(channelId: String) -> String? {
   // print("logos[\(channelId)]:=\(logos[channelId] ?? "")")
   return logos[channelId]
 }
-

@@ -20,8 +20,7 @@ class SpriteScene: SKScene {
     /// The @objc label is needed for functions that are ran using NSTimer (which we don't rely on)
     func cycleSprites() {
         
-        self.enumerateChildNodes(withName: "\(BASE_NODE_NAME)*") {
-            (node: SKNode, _) -> Void in 
+        self.enumerateChildNodes(withName: "\(BASE_NODE_NAME)*") { (node: SKNode, _) -> Void in 
             do {
                 (node as! SKSpriteNode).texture = try self.sheet.getTexture(
                     columnIndex: Int.random(in: 0...COLUMN_COUNT-1), 
@@ -106,8 +105,7 @@ class SpriteScene: SKScene {
 
     private func getNodeCount() -> Int{
         var nodeCount=0;
-        self.enumerateChildNodes(withName: "\(BASE_NODE_NAME)*") {
-            (node: SKNode, _) -> Void in 
+        self.enumerateChildNodes(withName: "\(BASE_NODE_NAME)*") { (_: SKNode, _) -> Void in 
                 nodeCount+=1;
         }
         return nodeCount;

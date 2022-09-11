@@ -20,24 +20,22 @@ struct RssFeedRowView: View {
    
    var body: some View {
       HStack {
-         NavigationLink(destination: 
-            ItemsView(feedurl: feed.rssurl, unread_count: $unread_count)
+         NavigationLink(destination: ItemsView(feedurl: feed.rssurl, unread_count: $unread_count)
          ) {
             FeedLogoView(channelId: feed.getChannelId() ?? "")
          }
 
-         VStack (alignment: .leading, spacing: 5){
-            NavigationLink(destination: 
-               ItemsView(feedurl: feed.rssurl, unread_count: $unread_count) 
+         VStack(alignment: .leading, spacing: 5){
+            NavigationLink(destination: ItemsView(feedurl: feed.rssurl, unread_count: $unread_count) 
             ){
                 Text("\(feed.title)")
                   .foregroundColor(.white)
-                  .font(.system(size:22,weight: .bold))
+                  .font(.system(size: 22,weight: .bold))
                   .lineLimit(1)
             }
             Link("\(URL(string: feed.url)?.host ?? "???")", destination: URL(string: feed.url)! )
                .foregroundColor(.blue)
-               .font(.system(size:18))
+               .font(.system(size: 18))
                .lineLimit(1)
          }
          // This is required for the elements in the stack to actually
@@ -52,7 +50,7 @@ struct RssFeedRowView: View {
             .background(Color.black.opacity(0.2))
             .cornerRadius(5)
             .foregroundColor(.white)
-            .font(Font.system(size:18, weight: .bold))
+            .font(Font.system(size: 18, weight: .bold))
             .frame(
                // The image leads with 5px of padding
                width: self.screenWidth * 0.5  - (IMAGE_WIDTH+5), 
@@ -102,4 +100,3 @@ struct RssFeedRowView: View {
 
    }
 }
-

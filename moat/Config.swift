@@ -40,11 +40,10 @@ let INITIAL_SPAWN_COUNT = 3;
 /// Configure in accordance with the sprite sheet being used 
 let COLUMN_COUNT = 6;
 let ROW_COUNT = 1;
-let SPRITE_SIZE = CGSize(width:37*2, height:47*2);
+let SPRITE_SIZE = CGSize(width: 37*2, height: 47*2);
 let SPRITE_SHEET = "pika-h.png";
 
 
 /// The interval (in seconds) to cycle frames in a sprite object
 let SPRITE_NEW_FRAME_INTERVAL = 0.5;
 let SPRITE_SPAWN_INTERVAL: Double = 1;
-

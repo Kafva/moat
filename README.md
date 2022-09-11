@@ -1,23 +1,6 @@
 # moat
-The project consists of an iOS client which interacts with an installation of [newsboat](https://github.com/newsboat/newsboat) through an intermediary server application, providing a view similar to the default newsboat CLI on iOS. By sharing the information in `~/.newsboat/cache.db` between the iOS client and newsboat itself, the 'read' status for items is kept synchronized. Maintaining a synchronized state when using `newsboat` on another machine than the `moat` server requires a wrapper function similar to the one below 
-```bash
-function newsmoat() {
-	MOAT_SERVER="..."
-	port="..."
-
-	# Update the local cache with the cache from the moat server in
-	# case articles were read through the iOS client
-	scp -q $MOAT_SERVER:~/.newsboat/cache.db ~/.newsboat/cache.db 
-
-	newsboat -r
-
-	# Copy the cache back to the server on exit to commit any new changes
-	scp -q ~/.newsboat/cache.db $MOAT_SERVER:~/.newsboat/cache.db	
-}
-```
-This solution does **not** work if one were to use several 'newsboat clients' in parallel. Newsboat was not modelled as a [client/server application](https://github.com/newsboat/newsboat/issues/471) and pursuing a more robust synchronization framework was therefore not deemed preferable.
-
-The project was mainly modelled with YouTube feeds in mind and therefore supports fetching YouTube thumbnails and YouTube channel icons. 
+![](./moat/Assets.xcassets/AppIcon.appiconset/114.png)
+The project consists of an iOS client which interacts with an installation of [newsboat](https://github.com/newsboat/newsboat) through an intermediary server application, providing a view similar to the default newsboat CLI on iOS. By sharing the information in `~/.newsboat/cache.db` between the iOS client and newsboat itself, the 'read' status for items is kept synchronized. 
 
 ## Client setup
 Install all dependencies
@@ -26,9 +9,8 @@ pod install
 ```
 and open the `moat.xcworkspace` file with Xcode. Connect your device and install with `CMD+R`.
 
-
 ## Server setup
-The server is configured through the `Rocket.toml` file and an application specific configuration file (example in `./conf/server.conf`). All endpoints on the server require a secret key (passed in the HTTP header `x-creds`) which is set in the environment on startup
+The server is configured through the `Rocket.toml` file and an application specific configuration file (example in `./conf/server.conf`). All endpoints on the server require a secret key (passed in the HTTP header `x-creds`) which needs to be set in the environment on startup
 ```bash
 MOAT_KEY="secret value" cargo run
 ```
@@ -109,4 +91,23 @@ swift build \
         -Xswiftc x86_64-apple-ios14.5-simulator
 ```
 
+## Notes
+Maintaining a synchronized state when using `newsboat` on another machine than the `moat` server requires a wrapper function similar to the one below 
+```bash
+function newsmoat() {
+	MOAT_SERVER="..."
+	port="..."
 
+	# Update the local cache with the cache from the moat server in
+	# case articles were read through the iOS client
+	scp -q $MOAT_SERVER:~/.newsboat/cache.db ~/.newsboat/cache.db 
+
+	newsboat -r
+
+	# Copy the cache back to the server on exit to commit any new changes
+	scp -q ~/.newsboat/cache.db $MOAT_SERVER:~/.newsboat/cache.db	
+}
+```
+This solution does **not** work if one were to use several 'newsboat clients' in parallel. Newsboat was not modelled as a [client/server application](https://github.com/newsboat/newsboat/issues/471) and pursuing a more robust synchronization framework was therefore not deemed preferable.
+
+The project was mainly modelled with YouTube feeds in mind and therefore supports fetching YouTube thumbnails and YouTube channel icons. 

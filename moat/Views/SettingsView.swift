@@ -43,8 +43,7 @@ struct SettingsView: View {
                  
                  // To prevent the loadingView from being redrawn whenever
                  // the loading text changes we keep them seperate from each other
-                 LoadingTextView( loadingText: 
-                    self.infiniteLoad ? 
+                 LoadingTextView(loadingText: self.infiniteLoad ? 
                     "Loading..." : 
                     String(format: "Fetching icons\n%.0f %%", 
                        (Double(self.finishedCount)/Double(self.feeds.count)) * 100
@@ -56,7 +55,7 @@ struct SettingsView: View {
                VStack(alignment: .leading, spacing: 10) {
                    
                   Toggle("Spawn sprites on loading screen", isOn: $spritesOn) 
-                     .onChange(of: spritesOn) { value in
+                     .onChange(of: spritesOn) { _ in
                         UserDefaults.standard.setValue(spritesOn, forKey: "spritesOn")
                      }
                   
@@ -124,5 +123,3 @@ struct SettingsView: View {
       }
    }
 }
-
-

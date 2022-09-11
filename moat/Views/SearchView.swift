@@ -7,7 +7,7 @@ struct SearchView: View {
    @Binding var textFieldFocused: Bool;
 
    var body: some View {
-      HStack (alignment: .center, spacing: 5){
+      HStack(alignment: .center, spacing: 5){
          Image(systemName: "magnifyingglass")
          TextField("Search...", text: $searchBinding, onEditingChanged: { started in 
             if started {
@@ -21,4 +21,3 @@ struct SearchView: View {
       }
    }
 }
-

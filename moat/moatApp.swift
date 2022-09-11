@@ -1,6 +1,7 @@
 import SwiftUI
 
 // '@main' denotes the entrypoint for the application
+// swiftlint:disable type_name
 @main struct moatApp: App {
     
     // @State should (just like in other UI frameworks) be kept as high
