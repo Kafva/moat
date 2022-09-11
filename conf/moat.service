@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 WorkingDirectory=SET WORK DIR
 Environment="MOAT_KEY=CHANGE THIS"
-ExecStart=/home/jonas/.cargo/bin/cargo run --release -- --config /home/jonas/.newsboat/moat.conf
+ExecStart=/home/jonas/Repos/moat/target/release/moat_server --config /home/jonas/.newsboat/moat.conf
 
 [Install]
 WantedBy=multi-user.target
