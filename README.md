@@ -27,7 +27,7 @@ and add the following options to `setttings.json`
 ```
 
 ### Using `sourcekit-lsp` for linting in VScode
-With [sourcekit-lsp](https://github.com/apple/sourcekit-lsp/) the autocomplete language features of Xcode are become accessible to arbitrary text editors. To integrate it with VScode download the sourcekit-lsp repository and build a `.vsix` manually
+With [sourcekit-lsp](https://github.com/apple/sourcekit-lsp/) the autocomplete language features of Xcode become accessible to arbitrary text editors. To integrate it with VScode download the sourcekit-lsp repository and build a `.vsix` manually
 
 ```bash
 git clone https://github.com/apple/sourcekit-lsp.git
