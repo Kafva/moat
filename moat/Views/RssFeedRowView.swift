@@ -5,6 +5,7 @@ struct RssFeedRowView: View {
    var feed: RssFeed;
    var screenWidth: CGFloat;
    @StateObject var alertState: AlertState = AlertState()
+   var showLogos = UserDefaults.standard.bool(forKey: "logosOn") 
    
    // This state is passed onwards to the  ItemsView for each feed so
    // that the unread_count is upated in the feeds view when changes are made
@@ -20,9 +21,12 @@ struct RssFeedRowView: View {
    
    var body: some View {
       HStack {
-         NavigationLink(destination: ItemsView(feedurl: feed.rssurl, unread_count: $unread_count)
-         ) {
-            FeedLogoView(channelId: feed.getChannelId() ?? "")
+          
+         if self.showLogos {
+            NavigationLink(destination: ItemsView(feedurl: feed.rssurl, unread_count: $unread_count)
+            ) {
+               FeedLogoView(channelId: feed.getChannelId() ?? "")
+            }
          }
 
          VStack(alignment: .leading, spacing: 5){
@@ -41,9 +45,10 @@ struct RssFeedRowView: View {
          // This is required for the elements in the stack to actually
          // "float" to the left
          .frame(
-            width: self.screenWidth * 0.5, 
+            width: self.showLogos ? self.screenWidth * 0.5 : self.screenWidth * 0.6, 
             alignment: .leading
          )
+         .padding( self.showLogos ? 0 : 15)
          
          Text( "\(self.unread_count)/\(feed.item_count)" )
             .padding(7)
@@ -53,7 +58,7 @@ struct RssFeedRowView: View {
             .font(Font.system(size: 18, weight: .bold))
             .frame(
                // The image leads with 5px of padding
-               width: self.screenWidth * 0.5  - (IMAGE_WIDTH+5), 
+               width: (self.showLogos ? self.screenWidth * 0.5 : self.screenWidth * 0.4)  - (IMAGE_WIDTH+5), 
                alignment: Alignment.center
             )
             .lineLimit(1) 
