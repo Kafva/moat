@@ -19,7 +19,6 @@ use rocket::shield::{Shield, Hsts};
 #[clap(version = "1.0", author = "Kafva <https://github.com/Kafva>")]
 #[clap(setting = AppSettings::ColoredHelp)]
 struct Opts {
-    
     /// A custom config file.
     /// The following options are recognized:
     ///     `newsboat_path`: Path to the newsboat executable on the system 

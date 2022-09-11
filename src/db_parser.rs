@@ -91,7 +91,8 @@ pub fn get_feed_list(cache_path: &str) -> Result<Vec<RssFeed>,rusqlite::Error> {
             row.get(1)?,
             row.get(2)?,
             row.get(3)?,
-            row.get(4)?
+            row.get(4)?,
+            false //TODO determine if muted
         ))
     })?;
 

@@ -7,19 +7,22 @@ pub struct RssFeed {
     title: String,
     // Computed attributes, not present in cache.db
     unread_count: u32, 
-    total_count: u32  
+    total_count: u32, 
+    // Muted attribute, determined from the optional ~/.newsboat/muted_list file
+    muted: bool
 }
 
 impl RssFeed {
     // There is an attribute named 'lastmodified' in cache.db but it seems
     // to always be set to zero
-    pub fn new(rssurl: String, url: String, title: String, unread_count: u32, total_count: u32) -> RssFeed {
+    pub fn new(rssurl: String, url: String, title: String, unread_count: u32, total_count: u32, muted: bool) -> RssFeed {
         RssFeed {
             rssurl,
             url,
             title,
             unread_count,
-            total_count
+            total_count,
+            muted
         }
     }
 }
@@ -60,14 +63,14 @@ fn default_cache_path() -> String {
 pub struct Config {
     pub cache_path: String,
     pub newsboat_path: String,
-    pub verbose: bool
+    pub muted_list_path: String
 }
 
 impl Config {
     pub fn new() -> Config {
         Config {
             cache_path: default_cache_path(),
-            verbose: false,
+            muted_list_path: String::from(""),
 
             #[cfg(target_os = "macos")]
             newsboat_path: "/usr/local/bin/newsboat".to_string(),

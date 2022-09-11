@@ -44,8 +44,8 @@ pub fn get_config(config_path: &str) -> Result<Config, std::io::Error> {
                     "newsboat_path" => {
                         config.newsboat_path = expand_tilde(value) 
                     }
-                    "verbose" => {
-                        config.verbose = value == "true" || value == "1";
+                    "muted_list_path" => {
+                        config.muted_list_path = expand_tilde(value) 
                     }
                     _ => {
                         panic!("Invalid configuration: Unrecognized key at {}:{}", config_path, i+1);
@@ -80,7 +80,6 @@ mod tests {
         assert_eq!(config.cache_path, 
             format!("{}/.newsboat/cache.db", std::env::var("HOME").unwrap())
         );
-        assert!(!config.verbose);
     }
     
     #[test]
