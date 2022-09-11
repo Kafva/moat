@@ -1,0 +1,23 @@
+{
+	"images" : [
+	{
+	"filename" : "moat-trans.png",
+	"idiom" : "universal",
+	"scale" : "1x"
+	},
+	{
+	"filename" : "moat-trans@2x.png",
+	"idiom" : "universal",
+	"scale" : "2x"
+	},
+	{
+	"filename" : "moat-trans@3x.png",
+	"idiom" : "universal",
+	"scale" : "3x"
+	}
+	],
+	"info" : {
+	"author" : "xcode",
+	"version" : 1
+	}
+	}
