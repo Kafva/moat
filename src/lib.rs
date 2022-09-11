@@ -3,6 +3,5 @@
 // the functions that are to be tested
 //  https://stackoverflow.com/a/59916651/9033629
 
-#![cfg(test)]
 pub mod config_parser;
 pub mod global;

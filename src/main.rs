@@ -1,18 +1,18 @@
 #[macro_use] extern crate rocket;
 extern crate clap;
-use rocket::Rocket;
-use rocket::Build;
+use rocket::{Rocket, Build};
 use clap::{AppSettings, Clap};
-
-//mod db_parser;
 
 // The `mod` keyword will expand to the contents of the file
 // with the corresponding name
-mod routes; 
+mod routes;
+mod global;
+mod config_parser;
+mod db_parser;
+use global::Config;
+use config_parser::get_config;
 
-/*** Testing ***/
-
-/// More information? 
+/// Server 
 #[derive(Clap)]
 #[clap(version = "1.0", author = "Kafva <https://github.com/Kafva>")]
 #[clap(setting = AppSettings::ColoredHelp)]
@@ -27,10 +27,18 @@ struct Opts {
 fn rocket() -> Rocket<Build> {
     
     let opts: Opts = Opts::parse();
-
-    // Gets a value for config if supplied by user, or defaults to "./conf/server.conf"
-    println!("Value for config: {}", opts.config);
-
-    // Start the server
-    rocket::build().mount("/", routes![routes::index])
+    
+    let config: Config = 
+        get_config(&opts.config.to_string()).unwrap();
+    
+    // Pass the config into the global state of rocket and
+    // start the server with each route mounted at '/'
+    rocket::build()
+        .manage(Config::from(config))
+        .mount("/", routes![
+        routes::feeds, 
+        routes::items, 
+        routes::read,
+        routes::index
+    ])
 }
