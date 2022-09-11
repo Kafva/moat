@@ -1,10 +1,3 @@
-//
-//  LoadingView.swift
-//  Swive
-//
-//  Created by Jonas Mårtensson on 2021-06-09.
-//
-
 import SwiftUI
 import SpriteKit
 

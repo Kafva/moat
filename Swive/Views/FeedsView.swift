@@ -18,7 +18,6 @@ struct FeedsView: View {
    
    @State var isLoading: Bool = true;
    @State var searchString: String = "";
-   //@State var loadingText: String = "Loading..."
 
    var apiWrapper = ApiWrapper<RssFeed>()
 
@@ -30,24 +29,30 @@ struct FeedsView: View {
          GeometryReader { geometry in 
             // Gain access to the screen dimensions to perform proper sizing
             if self.isLoading {
-               ZStack {
-                   LoadingView(
-                      //loadingText: $loadingText, 
-                      sceneSize: CGSize(
-                         width: geometry.size.width, 
-                         height: geometry.size.height
-                      )
-                   )
-                   .onAppear(perform: {
-                      self.apiWrapper.loadRows(
-                         rows: feeds, 
-                         alert: alertState, 
-                         isLoading: $isLoading
-                      )} 
-                   )
-                   
-                   LoadingTextView()
-               }
+                  if UserDefaults.standard.bool(forKey: "spritesOn") {
+                     LoadingView(
+                        sceneSize: CGSize(
+                           width: geometry.size.width, 
+                           height: geometry.size.height
+                        )
+                     )
+                  }
+
+                  LoadingTextView()
+                     .onAppear(perform: {
+                        self.apiWrapper.loadRows(
+                           rows: feeds, 
+                           alert: alertState, 
+                           isLoading: $isLoading
+                        )} 
+                  )
+                  // Neccessary for correct positioning when
+                  // the LoadingView isn't active
+                  .frame(
+                     width: geometry.size.width, 
+                     height: geometry.size.height, 
+                     alignment: .center
+                  )
             }
             else {
                ScrollView(.vertical) { 
@@ -56,11 +61,13 @@ struct FeedsView: View {
                      
                      ActionBarView(
                         searchString: $searchString, 
+                        isLoading: $isLoading,
                         searchBarWidth: geometry.size.width * 0.6
                      )
                      // When the rows are not loaded we need to add additional padding for the items in the bar 
                      .padding(.leading,  feeds.arr.count == 0 ? 15 : 0 )
                      .environmentObject(feeds) // Passed onward to SettingsView
+                     .environmentObject(alertState)
 
                      ForEach(feeds.arr, id: \.id ) { feed in
                         // We need the entry class to have an ID
@@ -73,15 +80,15 @@ struct FeedsView: View {
                   }
                   .listRowBackground(Color.clear)
                }
+               .alert(isPresented: $alertState.show ) {
+                     Alert(
+                        title: Text(alertState.title), 
+                        message: Text(alertState.message), 
+                        dismissButton: .default(Text("OK"))
+                  )
+               }
             }
          }
-         .alert(isPresented: $alertState.show ) {
-            Alert(
-               title: Text(alertState.title), 
-               message: Text(alertState.message), 
-               dismissButton: .default(Text("OK"))
-         )
-      }
    }
 }
 

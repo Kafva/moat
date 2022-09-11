@@ -6,9 +6,14 @@ struct SettingsView: View {
    @State var finishedCount: Int = 0; 
    @State var isLoading: Bool = false;
    
-   @State var spritesOn: Bool = true;
-   @State var serverLocation: String = "10.0.1.30:5000"
-   @State var serverKey: String = "test"
+   @State var spritesOn: Bool = UserDefaults.standard.bool(forKey: "spritesOn") ;
+   @State var serverLocation: String = UserDefaults.standard.string(forKey: "serverLocation") ?? ""
+   @State var serverKey: String = UserDefaults.standard.string(forKey: "serverKey") ?? ""
+   
+   init(feeds: [RssFeed]){
+      self.feeds = feeds;
+      setViewTransparency();
+   }
    
    var body: some View {
 
@@ -24,14 +29,16 @@ struct SettingsView: View {
             
             if self.isLoading {
                ZStack {
-                  LoadingView(
-                     sceneSize: CGSize(
-                        width: geometry.size.width, 
-                        height: geometry.size.height  
+                  if UserDefaults.standard.bool(forKey: "spritesOn") {
+                     LoadingView(
+                        sceneSize: CGSize(
+                           width: geometry.size.width, 
+                           height: geometry.size.height  
+                        )
                      )
-                  )
-                 .navigationBarTitle("")
-                 .navigationBarHidden(true)
+                    .navigationBarTitle("")
+                    .navigationBarHidden(true)
+                  }
                  
                  // To prevent the loadingView from being redrawn whenever
                  // the loading text changes we keep them seperate from each other
@@ -44,43 +51,61 @@ struct SettingsView: View {
             }
             else {
                VStack(alignment: .leading, spacing: 10) {
+                   
                   Toggle("Spawn sprites on loading screen", isOn: $spritesOn) 
                      .onChange(of: spritesOn) { value in
-                        print("THIS",value) 
+                        UserDefaults.standard.setValue(spritesOn, forKey: "spritesOn")
                      }
-                  HStack {
-                     Text("Server location")
-                        .lineLimit(1)
-                        .frame(width: geometry.size.width*0.3, alignment: .leading)
+                  
+                     HStack {
+                        Text("Server location")
+                           .lineLimit(1)
+                           .frame(width: geometry.size.width*0.3, alignment: .leading)
+                        
+                        TextField("IP or domain name", text: $serverLocation, onEditingChanged: { started in 
+                           if !started {
+                              // `onEditingChanged` is triggered upon entering and leaving a textfield
+                              // using `onCommit` misses changes that are made without hiting <ENTER> 
+                              UserDefaults.standard.setValue(serverLocation, forKey: "serverLocation")
+                           }
+                        })
+                        .customStyle(width: geometry.size.width * 0.5)
+                     }
+                     HStack {
+                        Text("Server key")
+                           .frame(width: geometry.size.width*0.3, alignment: .leading)
+                        SecureField("", text: $serverKey)
+                        .customStyle(width: geometry.size.width * 0.5)
+                        // `onEditingChanged` doesn't exist for SecureFields, to have all changes
+                        // automatically commited we therefore need to use `onChange`
+                        .onChange(of: serverKey, perform: { value in
+                           UserDefaults.standard.setValue(value, forKey: "serverKey")
+                        })
+                     }
                      
-                     TextField("IP or domain name", text: $serverLocation, onCommit: {
-                        print("CHANNGE IP")
-                     })
-                     .customStyle(width: geometry.size.width * 0.5)
-                  }
-                  HStack {
-                     Text("Server key")
-                        .frame(width: geometry.size.width*0.3, alignment: .leading)
-                     SecureField("", text: $serverKey, onCommit: {
-                        print("Wow")
-                     })
-                     .customStyle(width: geometry.size.width * 0.5)
-                  }
-
-                  Button(action: {
-                    self.isLoading = true
-                    setLogosInUserDefaults(feeds: feeds, finishedCount: $finishedCount, completion: { logos in
-                        // Apply the changes to the logos array
-                        // Note that we use `UserDefaults.standard` and not just `UserDefaults`
-                        UserDefaults.standard.setValue(logos, forKey: "logos")
-                        self.isLoading = false
-                    })
-                  }) {
-                     Label("Reload YouTube feed logos", systemImage: "arrow.clockwise")
-                  }
-                  .padding(10)
+                     Button(action: {
+                       self.isLoading = true
+                       setLogosInUserDefaults(feeds: feeds, finishedCount: $finishedCount, completion: { logos in
+                           // Apply the changes to the logos array
+                           // Note that we use `UserDefaults.standard` and not just `UserDefaults`
+                           UserDefaults.standard.setValue(logos, forKey: "logos")
+                           self.isLoading = false
+                       })
+                     }) {
+                        Label("Reload YouTube feed logos", systemImage: "arrow.clockwise")
+                     }
+                     .padding(10)
                }
                .frame(width: geometry.size.width * 0.8, alignment: .leading)
+               .onAppear(perform: {
+                  // For some reason the state isn't recorded properly in the UI if we
+                  // navigate back to the feed and then back to the settings so we
+                  // use this hack to set the values correctly
+                  spritesOn = UserDefaults.standard.bool(forKey: "spritesOn") 
+                  serverLocation = UserDefaults.standard.string(forKey: "serverLocation") ?? ""
+                  serverKey = UserDefaults.standard.string(forKey: "serverKey") ?? ""
+               })
+
             }
         }
       }
