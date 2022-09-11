@@ -68,7 +68,7 @@ class RssFeed: ObservableObject, Codable, Equatable {
    
    func getChannelId() -> String? {
       // If the feed is a YouTube channel on the form
-      //  https://www.youtube.com/feeds/videos.xml?channel_id=UC2PA-AKmVpU6NKCGtZq_rKQ 
+      //  https://www.youtube.com/feeds/videos.xml?channel_id=<...> 
       // return the video ID
       guard let url_params = URL(string: self.rssurl)?.query else {
          return nil 

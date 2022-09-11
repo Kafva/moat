@@ -2,6 +2,7 @@ import Foundation
 
 extension String {
 
+  /// https://stackoverflow.com/a/27880748/9033629
   func matches(_ regex: String) -> [String] {
     do {
         let regex = try NSRegularExpression(pattern: regex)

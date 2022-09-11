@@ -15,7 +15,7 @@ class ApiWrapper<T: Codable> {
       guard let serverPort = UserDefaults.standard.string(forKey: "serverPort") else {
          alert.makeAlert(
             title: "Incomplete configuration", 
-            err: ServerConnectionError.noServerLocation, 
+            err: ServerConnectionError.noServerPort, 
             isLoading: isLoading
          ) 
          return nil
@@ -217,9 +217,6 @@ class ApiWrapper<T: Codable> {
             do { 
               let decoded = try JSONDecoder().decode(ServerResponse.self, from: data); 
 
-              // If the response data was successfully decoded dispatch an update in the
-              // main thread (all UI updates should be done in the main thread)
-              // to update the state in the view
               DispatchQueue.main.async {
                  if !decoded.success {
                     alert.makeAlert(

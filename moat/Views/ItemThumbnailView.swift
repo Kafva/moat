@@ -25,12 +25,11 @@ struct ItemThumbnailView: View {
               .lineLimit(1)
            }
        }
-       // This is required for the elements in the stack to actually
-       // "float" to the left
+       // This is required for the elements in the stack to actually "float" to the left
        .frame(
           width: item.getVideoId() != nil ? 
               self.screenWidth*(1-BUTTON_WIDTH_PERCENTAGE_OF_ROW) - THUMBNAIL_WIDTH - 23 :
-              // Fill entire the entire row excluding 20px of padding on each side and the
+              // Fill the entire row excluding 20px of padding on each side and the
               // width of the button
               self.screenWidth*(1-BUTTON_WIDTH_PERCENTAGE_OF_ROW) - X_AXIS_MARGIN_FOR_ROWS*2, 
           alignment: .leading

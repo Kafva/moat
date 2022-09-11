@@ -14,7 +14,6 @@ func getLogoUrl(channelId: String, name: String,  completion: @escaping (String)
   ]) {
     // Note that we use both the 'shared' session and cookie storage
     HTTPCookieStorage.shared.setCookie(cookie)
-    // print("Cookie inserted: \(cookie)")
   } 
   
   let req = URLRequest(url: channel_url)
@@ -32,7 +31,7 @@ func getLogoUrl(channelId: String, name: String,  completion: @escaping (String)
 ///   https://yt3.ggpht.com/ytc/AAUvwniD_RGcy5bq8EqWUnk8wHzafZo4w8ZJfNU-QWLUzg=s300-c-k-c0x00ffffff-no-rj
 func extractLogoUrl(_ htmlBody: String, name: String ) -> String? {
 
-  if htmlBody.matches("Before you").first != nil {
+  if htmlBody.matches("Before you continue to YouTube").first != nil {
     print("Failed to fetch YouTube logo for \(name): Blocked by consent screen")
     return ""
   }
@@ -81,6 +80,5 @@ func getLogoUrlFromUserDefaults(channelId: String) -> String? {
   let logos = UserDefaults.standard.object(forKey: "logos") 
     as? [String: String] ?? [String: String]()
 
-  // print("logos[\(channelId)]:=\(logos[channelId] ?? "")")
   return logos[channelId]
 }

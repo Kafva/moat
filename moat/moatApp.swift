@@ -32,7 +32,7 @@ import SwiftUI
                     BKG_GRADIENT_LINEAR
                         .edgesIgnoringSafeArea(.vertical) // Fill entire screen 
                     FeedsView() 
-                    // https://stackoverflow.com/questions/57517803/how-to-remove-the-default-navigation-bar-space-in-swiftui-navigationview 
+                    // https://stackoverflow.com/a/57518324/9033629 
                     .navigationBarTitle("")
                     .navigationBarHidden(true)
                 }

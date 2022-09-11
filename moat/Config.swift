@@ -32,6 +32,7 @@ let BKG_GRADIENT_LINEAR = LinearGradient(
 );
 
 /***** Sprites *******/
+let DEFAULT_LOGO_IMAGE_NAME = "umbreon";
 let BASE_NODE_NAME = "node";
 
 /// No new sprites will be spawned when the total number

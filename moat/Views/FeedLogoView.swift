@@ -25,7 +25,7 @@ struct FeedLogoView: View {
             .padding(.leading, 5)
         } 
         else {
-            Image("umbreon")
+            Image(DEFAULT_LOGO_IMAGE_NAME)
               .resizable() // Must be applied before modifying the frame size
               .clipped()
             .clipShape(Circle())
