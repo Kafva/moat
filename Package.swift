@@ -19,6 +19,7 @@
 
 // Note that it should not matter what method is used to fetch the dependency in question for the actual project, i.e. it should work to use both CocoaPods and the built in SPM in Xcode from `File > Swift Packages > Add Package Dependency...`
 
+// TODO migrate away from Pods, we have switched to `sswg.swift-lang` which also depends on this file
 import PackageDescription
 let packageName = "moat"
 let package = Package(
