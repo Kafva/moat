@@ -4,8 +4,8 @@ use super::models::{Config, RssItem, RssFeed};
 use super::dataguards::{ReadToggleData, Creds};
 use super::db_parser::{get_feed_list, get_items_from_feed, toggle_read_status};
 
-/// curl -X POST -H "x-creds: test" https://moat:5000/unread -d "id=5384&unread=0" 
-/// curl -X POST -H "x-creds: test" https://moat:5000/unread/ -d "rssurl=$(printf 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64 )"
+/// curl -X POST -H "x-creds: test" https://moat:7654/unread -d "id=5384&unread=0" 
+/// curl -X POST -H "x-creds: test" https://moat:7654/unread/ -d "rssurl=$(printf 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64 )"
 /// If the <id> parameter does not conform to the u32 type rocket
 /// will try other potentially matching routes (based on `rank`) until
 /// no matching alternatives remain, at which point 404 is returned
@@ -27,7 +27,7 @@ pub fn unread(_key: Creds<'_>,  config: &State<Config>, data: ReadToggleData ) -
     } 
 }
 
-/// curl -H "x-creds: test" -X GET https://moat:5000/reload 
+/// curl -H "x-creds: test" -X GET https://moat:7654/reload 
 #[get("/reload")]
 pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
     // Newsboat has a built-in command to reload all feeds in the background
@@ -49,7 +49,7 @@ pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
     }
 }
 
-// curl -X GET -H "x-creds: test" https://moat:5000/feeds
+// curl -X GET -H "x-creds: test" https://moat:7654/feeds
 #[get("/feeds")]
 pub fn feeds(_key: Creds<'_>, config: &State<Config>) -> Json<Vec<RssFeed>> {
     
@@ -74,7 +74,7 @@ pub fn feeds(_key: Creds<'_>, config: &State<Config>) -> Json<Vec<RssFeed>> {
 // `.newsboat/urls` file changes and the client has an old value
 // for which feed corresponds to which ID.
 // The API was therefore constructed to use 'GET /items/< rssurl | base64url >' instead
-//      curl -X GET -H "x-creds: test" https://moat:5000/items/$(printf 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64 )
+//      curl -X GET -H "x-creds: test" https://moat:7654/items/$(printf 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64 )
 #[get("/items/<b64_rssurl>")] 
 pub fn items(_key: Creds<'_>, config: &State<Config>, b64_rssurl: &str) -> Json<Vec<RssItem>> {
 

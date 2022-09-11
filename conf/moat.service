@@ -4,6 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
+User=jonas
 WorkingDirectory=SET WORK DIR
 Environment="MOAT_KEY=CHANGE THIS"
 ExecStart=/home/jonas/Repos/moat/target/release/moat_server --config /home/jonas/.newsboat/moat.conf

@@ -67,6 +67,8 @@ else
 		/tmp/moat_$remote.service
 	rsync ./target/aarch64-unknown-linux-gnu/release/moat_server $remote:~/bin/moat_server
 fi
-rsync /tmp/moat_$remote.service $remote:~/.config/systemd/user/moat.service
+
+rsync /tmp/moat_$remote.service $remote:/tmp/moat.service
 rsync ./conf/server.conf 	$remote:~/.newsboat/moat.conf
 
+ssh $remote 'sudo mv /tmp/moat.service /etc/systemd/system'
