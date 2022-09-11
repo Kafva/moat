@@ -14,6 +14,7 @@ struct ItemsView: View {
       self.feedurl = feedurl;
    }
    
+   
    var body: some View {
       GeometryReader { geometry in 
          ZStack {
@@ -45,7 +46,7 @@ struct ItemsView: View {
                   VStack(alignment: .center, spacing: 0) {
 
                      ForEach(self.items.arr, id: \.id ) { item in
-                        RssItemRowView(item: item, screenWidth: geometry.size.width, thumbnailUrl: "")
+                        RssItemRowView(item: item, screenWidth: geometry.size.width)
                      }
                      .listRowBackground(Color.clear)
                      .frame(width: geometry.size.width, alignment: .center)

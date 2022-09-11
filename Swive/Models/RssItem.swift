@@ -57,4 +57,20 @@ class RssItem: ObservableObject, Codable {
          formatter: fmt 
       )
    }
+   
+   func getVideoId() -> String? {
+      // If the item is a YouTube video on the form
+      //   https://www.youtube.com/watch?v=GGGGGGGGGGG
+      // return the video ID
+      guard let url_params = URL(string: self.url)?.query else {
+         return nil 
+      }
+      
+      let components = url_params.components(separatedBy: "=");
+
+      if components.first == "v" && components.count == 2  {
+         return components[1] 
+      }
+      else { return nil }
+   }
 }
