@@ -14,23 +14,25 @@ class SpriteScene: SKScene {
         spriteSize: SPRITE_SIZE
     );
     
+    
     /// Go through all SKSpriteNode objects in the scene and update their
     /// sprite image.
-    /// The @objc label is needed for functions that are ran using a timer
-    @objc func cycleSprites() {
-            self.enumerateChildNodes(withName: "\(BASE_NODE_NAME)*") {
-                (node: SKNode, _) -> Void in 
-                do {
-                    (node as! SKSpriteNode).texture = try self.sheet.getTexture(
-                        columnIndex: Int.random(in: 0...COLUMN_COUNT-1), 
-                        rowIndex: Int.random(in: 0...ROW_COUNT-1)
-                    )
-                }
-                catch { print("\(error)"); }
+    /// The @objc label is needed for functions that are ran using NSTimer (which we don't rely on)
+    func cycleSprites() {
+        
+        self.enumerateChildNodes(withName: "\(BASE_NODE_NAME)*") {
+            (node: SKNode, _) -> Void in 
+            do {
+                (node as! SKSpriteNode).texture = try self.sheet.getTexture(
+                    columnIndex: Int.random(in: 0...COLUMN_COUNT-1), 
+                    rowIndex: Int.random(in: 0...ROW_COUNT-1)
+                )
             }
+            catch { print("\(error)"); }
+        }
     }
 
-    @objc func addSpriteAtRandomPos() {
+    func addSpriteAtRandomPos() {
         let spawnX = CGFloat.random( in: 0...(self.size.width  / 1) );
 
         // Default spawn location calculation
@@ -120,6 +122,20 @@ class SpriteScene: SKScene {
         for _ in 0...INITIAL_SPAWN_COUNT {
             self.addSpriteAtRandomPos();
         } 
+        
+        // Setup the repeated actions to switch frames for all sprites and
+        // to spawn new sprites
+        run( SKAction.repeatForever( SKAction.sequence([ 
+                SKAction.run( { self.cycleSprites() }), 
+                SKAction.wait(forDuration: SPRITE_NEW_FRAME_INTERVAL) 
+            ])
+        ))
+        
+        run( SKAction.repeatForever( SKAction.sequence([ 
+                SKAction.run( { self.addSpriteAtRandomPos() }), 
+                SKAction.wait(forDuration: SPRITE_SPAWN_INTERVAL) 
+            ])
+        ))
     }
 
     /// The code to run when a touch event reaches the scene

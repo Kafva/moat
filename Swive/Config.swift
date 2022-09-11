@@ -2,7 +2,7 @@ import SwiftUI
 
 let BUNDLE_IDENTIFIER = "com..Swive"
 
-let SERVER_REQUEST_TIMEOUT = 5.0
+let SERVER_REQUEST_TIMEOUT = 10.0
 
 /***** UI dimensions *****/
 let IMAGE_WIDTH = CGFloat(50);
