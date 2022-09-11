@@ -84,32 +84,32 @@ mod tests {
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: Missing value for key at ./mocks/missing_value.conf:1")]
+    #[should_panic(expected = "Invalid configuration: Missing value for key at ./conf/missing_value.conf:1")]
     fn test_missing_value(){
-        super::get_config("./mocks/missing_value.conf").unwrap();
+        super::get_config("./conf/missing_value.conf").unwrap();
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: Missing key for value at ./mocks/missing_key.conf:1")]
+    #[should_panic(expected = "Invalid configuration: Missing key for value at ./conf/missing_key.conf:1")]
     fn test_missing_key(){
-        super::get_config("./mocks/missing_key.conf").unwrap();
+        super::get_config("./conf/missing_key.conf").unwrap();
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: Unrecognized key at ./mocks/invalid_key.conf:1")]
+    #[should_panic(expected = "Invalid configuration: Unrecognized key at ./conf/invalid_key.conf:1")]
     fn test_invalid_key(){
-        super::get_config("./mocks/invalid_key.conf").unwrap();
+        super::get_config("./conf/invalid_key.conf").unwrap();
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: Missing '=' at ./mocks/missing_equals.conf:1")]
+    #[should_panic(expected = "Invalid configuration: Missing '=' at ./conf/missing_equals.conf:1")]
     fn test_missing_equals(){
-        super::get_config("./mocks/missing_equals.conf").unwrap();
+        super::get_config("./conf/missing_equals.conf").unwrap();
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: More than one '=' found at ./mocks/too_many_equals.conf:1")]
+    #[should_panic(expected = "Invalid configuration: More than one '=' found at ./conf/too_many_equals.conf:1")]
     fn test_too_many_equals(){
-        super::get_config("./mocks/too_many_equals.conf").unwrap();
+        super::get_config("./conf/too_many_equals.conf").unwrap();
     }
 }
