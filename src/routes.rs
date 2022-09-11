@@ -30,7 +30,6 @@ pub fn read(_key: Creds<'_>,  config: &State<Config>, data: ReadToggleData ) -> 
     } 
 }
 
-/// '/feeds' and '/' give the same response
 #[get("/feeds")]
 pub fn feeds(_key: Creds<'_>, config: &State<Config>) -> Json<Vec<RssFeed>> {
     Json( 
