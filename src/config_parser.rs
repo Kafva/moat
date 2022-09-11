@@ -36,7 +36,9 @@ pub fn get_config(config_path: &str) -> Result<Config, std::io::Error> {
                 
                 match key {
                     "cache_path" => { 
-                        config.cache_path = String::from(value); 
+                        config.cache_path = String::from(value) // Expand '~' 
+                            .replace("~", std::env::var("HOME").unwrap().as_str()
+                        );
                     }
                     "verbose" => {
                         config.verbose = value == "true" || value == "1";
@@ -71,7 +73,9 @@ mod tests {
     fn test_get_config(){
         let config = super::get_config("./conf/server.conf").unwrap();
 
-        assert_eq!(config.cache_path, "~/.newsboat/cache.db");
+        assert_eq!(config.cache_path, 
+            format!("{}/.newsboat/cache.db", std::env::var("HOME").unwrap())
+        );
         assert!(!config.verbose);
     }
     

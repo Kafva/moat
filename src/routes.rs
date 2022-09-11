@@ -1,5 +1,6 @@
 use rocket::State;
-use super::global::Config;
+use rocket::serde::{Serialize, json::Json};
+use super::global::{Config, RssItem, RssFeed};
 use super::db_parser::get_feed_list;
 
 // The client will need an API to:
@@ -18,9 +19,12 @@ pub fn read(id: u32, read: &str) -> String {
 }
 
 #[get("/feeds")]
-pub fn feeds(config: &State<Config>) -> String {
-    let feed_list = get_feed_list( config.cache_path.as_str() );
-    format!("This: {}", config.cache_path )
+pub fn feeds(config: &State<Config>) -> Json<Vec<RssFeed>> {
+    
+    Json( 
+        get_feed_list( config.cache_path.as_str() )
+            .unwrap() 
+    )
 }
 
 #[get("/")]

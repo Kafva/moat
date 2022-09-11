@@ -1,8 +1,10 @@
+use rocket::serde::{Serialize};
+
 fn default_cache_path() -> String {
     format!("{}/.newsboat/cache.db", std::env::var("HOME").unwrap())
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Debug)]
 pub struct RssFeed {
     // We want an API akin to 'GET /items/<feed-id>' but Newsboat
     // only has the rss_url as a unique identifer
@@ -29,7 +31,7 @@ impl RssFeed {
 }
 
 /// Uses the same sizes for attributes as defined in the schema for cache.db
-#[derive(Debug)]
+#[derive(Serialize,Debug)]
 pub struct RssItem {
     id: u32, 
     //guid: String // str[64] 

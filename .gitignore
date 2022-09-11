@@ -10,7 +10,6 @@ DerivedData/
 *.wsp
 *.nupkg
 .suo
-.vscode/
 target/
 .scannerwork/
 sonar-project.properties
