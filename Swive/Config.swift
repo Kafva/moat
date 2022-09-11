@@ -34,7 +34,7 @@ let BASE_NODE_NAME = "node";
 
 /// No new sprites will be spawned when the total number
 /// reaches this value
-let MAX_SPRITE_COUNT = 14;
+let MAX_SPRITE_COUNT = 20;
 let INITIAL_SPAWN_COUNT = 3;
 
 /// Configure in accordance with the sprite sheet being used 
