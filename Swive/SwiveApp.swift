@@ -24,8 +24,14 @@ import SwiftUI
     // to be accessible from *any SUBview*, this is useful when we have chains
     // of views were we don't want to pass a state a value around just to use
     // it one place 
-    @EnvironmentObject var root: Entry 
+    //@EnvironmentObject var root: Entry 
     //@EnvironmentObject var serverUrl:  = "http://localhost:8080";
+
+    // TODO List of RssFeeds, each containing a list of RssItems
+    // (fetched seperatly but saved -- only fetch from '/items' when
+    // the list is empty or has a diverging number of unread articles compared
+    // to the 'unread' atttrbute on the RssFeed)
+    //@EnvironmentObject 
 
     @State private var spawnSprites: Bool = true;
     @State private var isLoading: Bool = false;
@@ -37,13 +43,12 @@ import SwiftUI
         // protocol)
         WindowGroup {    
             if isLoading {
-               
                ProgressView() 
             }
             else {
 
                 NavigationView {
-                    ListingView("/root/")    
+                   FeedsView() 
                 }
                 //  https://stackoverflow.com/a/64752414/9033629
                 .navigationViewStyle(StackNavigationViewStyle())

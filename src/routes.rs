@@ -44,6 +44,7 @@ pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
     "{ \"success\": true }"
 }
 
+/// TODO matching ?author
 #[get("/feeds")]
 pub fn feeds(_key: Creds<'_>, config: &State<Config>) -> Json<Vec<RssFeed>> {
     Json( 
