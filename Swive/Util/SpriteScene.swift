@@ -2,8 +2,6 @@ import SpriteKit
 import SwiftUI;
 
 class SpriteScene: SKScene {
-    
-
     var sprites: [SKSpriteNode] = [];
     var nodeCount: uint = 0;
 

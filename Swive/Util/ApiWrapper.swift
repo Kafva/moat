@@ -72,27 +72,5 @@ class ApiWrapper<T: Codable> {
       }
       .resume(); // Execute the task immediatelly
   }
-  
-  /// Thumbnails for YouTube videos are served from the endpoint:
-  ///      https://img.youtube.com/vi/<video id>/default.jpg
-  func loadThumbnail(videoId: String, image: Binding<UIImage>, alert: AlertState, isLoading: Binding<Bool>) -> Void {
-     
-      guard let url = URL(string:"https://img.youtube.com/vi/\(videoId)/default.jpg" ) 
-      else { return } 
-      
-      URLSession.shared.dataTask(with: URLRequest(url: url)) { data, response, err in
-        // Create a background task to fetch data from the server
-        if data != nil {
-           image.wrappedValue = UIImage(data: data! ) ?? UIImage();
-        }
-        else { 
-           alert.makeAlert(
-              title: "Connection error", err: err, isLoading: isLoading
-           ); 
-        }
-      }
-      .resume(); // Execute the task immediatelly
-  }
-
 }
 
