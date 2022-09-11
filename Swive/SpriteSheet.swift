@@ -30,8 +30,7 @@ public class SpriteSheet {
     /// rectangle. This should not infer bad performance since the same
     /// object inn memory is used for the returned texture and the `in` texture
     ///  https://developer.apple.com/documentation/spritekit/sktexture/1520425-init
-    func getSprite(columnIndex: Int, rowIndex: Int) throws -> SKSpriteNode  {
-
+    func getTexture(columnIndex: Int, rowIndex: Int) throws -> SKTexture {
         if columnIndex < columns && rowIndex < rows {
             // Note that both the (x,y) coords and the height/width is given as
             // a percentage value [0,1]
@@ -49,24 +48,29 @@ public class SpriteSheet {
                 height: spriteHeight
             )
         
-            NSLog("rect: \(rect)");
-
-            let sprite = SKSpriteNode(
-                texture: SKTexture(rect: rect, in: self.sheet),
-                size: self.spriteSize
-            );
-            
-            self.id+=1
-            sprite.name = "node\(self.id)";
-            sprite.scale(to: self.spriteSize)
-            sprite.physicsBody = SKPhysicsBody( rectangleOf: self.spriteSize );
-            
-            return sprite;
+            return SKTexture(rect: rect, in: self.sheet);
         }
         else {
             throw CustomError.indexOutOfRange(
                 "Index outside bounds of sprite sheet: (\(columnIndex-1),\(rowIndex-1)) -- (\(self.columns-1),\(self.rows-1))"
             );
         }
+        
+    }
+
+    /// Create a new sprite using the texture from the given column and
+    /// row in the spritesheet. The sprite is scaled to the size passed
+    /// during init() of the sprite sheet
+    func getSprite(columnIndex: Int, rowIndex: Int, name: String) throws -> SKSpriteNode  {
+
+        let sprite = SKSpriteNode(
+            texture: try self.getTexture(columnIndex: columnIndex, rowIndex: rowIndex),
+            size: self.spriteSize
+        );
+        
+        sprite.name = name;
+        sprite.scale(to: self.spriteSize)
+        
+        return sprite;
     }
 }

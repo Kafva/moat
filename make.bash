@@ -60,6 +60,7 @@ elif [ "$1" = install ]; then
 	# application (and can be done over pure WiFi), it is therefore
 	# preferable to have scheme with stub tests which exits immediatelly
 	xcodebuild test \
+		GCC_PREPROCESSOR_DEFINITIONS="DEBUG=1" \
 		-scheme $STUB_SCHEME \
 		-allowProvisioningUpdates \
 		-configuration "Debug" \
