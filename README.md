@@ -17,7 +17,7 @@ Install all dependencies
 ```bash
 pod install
 ```
-and open the `moat.xcworkspace` file with Xcode. Connect your device and install with `CMD+R`.
+and open `moat.xcworkspace` with Xcode. Connect your device and install with <kbd>CMD</kbd> <kbd>R</kbd>.
 
 ## Server setup
 The server is configured through the `Rocket.toml` file and an application specific configuration file (example in `./conf/server.conf`). All endpoints on the server require a secret key (passed in the HTTP header `x-creds`) which needs to be set in the environment on startup
