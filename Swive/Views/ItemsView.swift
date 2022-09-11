@@ -26,19 +26,24 @@ struct ItemsView: View {
             
             // Gain access to the screen dimensions to perform proper sizing
             if self.isLoading {
-               LoadingView(
-                  width: geometry.size.width, 
-                  height: geometry.size.height,  
-                  loadingText:"Loading..."
-               )
-               .onAppear(perform: {
-                  self.apiWrapper.loadRows(
-                     rows: items, 
-                     alert: alertState, 
-                     isLoading: $isLoading,
-                     rssurl: self.feedurl                  
-                  ) 
-               })
+               ZStack {
+                  LoadingView(
+                     sceneSize: CGSize(
+                        width: geometry.size.width, 
+                        height: geometry.size.height
+                     )
+                  )
+                  .onAppear(perform: {
+                     self.apiWrapper.loadRows(
+                        rows: items, 
+                        alert: alertState, 
+                        isLoading: $isLoading,
+                        rssurl: self.feedurl                  
+                     ) 
+                  })
+                  
+                  LoadingTextView()
+               }
             }
             else {
                ScrollView(.vertical) { 

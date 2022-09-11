@@ -62,4 +62,20 @@ class RssFeed: ObservableObject, Codable, Equatable {
       self.item_count = item_count;
       self.items = items;
    }
+   
+   func getChannelId() -> String? {
+      // If the feed is a YouTube channel on the form
+      //  https://www.youtube.com/feeds/videos.xml?channel_id=UC2PA-AKmVpU6NKCGtZq_rKQ 
+      // return the video ID
+      guard let url_params = URL(string: self.rssurl)?.query else {
+         return nil 
+      }
+      
+      let components = url_params.components(separatedBy: "=");
+
+      if components.first == "channel_id" && components.count == 2  {
+         return components[1] 
+      }
+      else { return nil }
+   }
 }

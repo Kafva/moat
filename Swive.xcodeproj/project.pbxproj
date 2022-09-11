@@ -12,6 +12,9 @@
 		DD45CC07267B4A28000B0A99 /* FeedsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC06267B4A28000B0A99 /* FeedsView.swift */; };
 		DD45CC0B267B4AAC000B0A99 /* RssItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC09267B4AAC000B0A99 /* RssItem.swift */; };
 		DD45CC0C267B4AAC000B0A99 /* RssFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC0A267B4AAC000B0A99 /* RssFeed.swift */; };
+		DD6A3E0F267F273E005CD6DB /* String+matches.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6A3E0E267F273E005CD6DB /* String+matches.swift */; };
+		DD6A3E11267F3EF0005CD6DB /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6A3E10267F3EF0005CD6DB /* ImageLoader.swift */; };
+		DD6A3E13267F4037005CD6DB /* FeedLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD6A3E12267F4037005CD6DB /* FeedLogoView.swift */; };
 		DD7C3070267DCB1500D88DD1 /* ActionBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7C306F267DCB1400D88DD1 /* ActionBarView.swift */; };
 		DD7C3072267DCD9F00D88DD1 /* ApiWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7C3071267DCD9F00D88DD1 /* ApiWrapper.swift */; };
 		DD7C3074267DD40800D88DD1 /* RssItemRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD7C3073267DD40800D88DD1 /* RssItemRowView.swift */; };
@@ -30,6 +33,8 @@
 		DDA951FA2670F13B003D760D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDA951F92670F13B003D760D /* Assets.xcassets */; };
 		DDA952082670F13B003D760D /* SwiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952072670F13B003D760D /* SwiveTests.swift */; };
 		DDA952132670F13B003D760D /* SwiveUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952122670F13B003D760D /* SwiveUITests.swift */; };
+		DDD1585E267F4A60007B7D1E /* Logos.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1585D267F4A60007B7D1E /* Logos.swift */; };
+		DDD15860267F526D007B7D1E /* LoadingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1585F267F526D007B7D1E /* LoadingTextView.swift */; };
 		DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6E182267361CD0039A899 /* Color+hex.swift */; };
 		DDFB1314267C89B10033528E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFB1313267C89B10033528E /* SettingsView.swift */; };
 /* End PBXBuildFile section */
@@ -59,6 +64,9 @@
 		DD45CC06267B4A28000B0A99 /* FeedsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedsView.swift; sourceTree = "<group>"; };
 		DD45CC09267B4AAC000B0A99 /* RssItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssItem.swift; sourceTree = "<group>"; };
 		DD45CC0A267B4AAC000B0A99 /* RssFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssFeed.swift; sourceTree = "<group>"; };
+		DD6A3E0E267F273E005CD6DB /* String+matches.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+matches.swift"; sourceTree = "<group>"; };
+		DD6A3E10267F3EF0005CD6DB /* ImageLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		DD6A3E12267F4037005CD6DB /* FeedLogoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedLogoView.swift; sourceTree = "<group>"; };
 		DD7C306F267DCB1400D88DD1 /* ActionBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionBarView.swift; sourceTree = "<group>"; };
 		DD7C3071267DCD9F00D88DD1 /* ApiWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiWrapper.swift; sourceTree = "<group>"; };
 		DD7C3073267DD40800D88DD1 /* RssItemRowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssItemRowView.swift; sourceTree = "<group>"; };
@@ -83,6 +91,8 @@
 		DDA9520E2670F13B003D760D /* SwiveUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiveUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDA952122670F13B003D760D /* SwiveUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiveUITests.swift; sourceTree = "<group>"; };
 		DDA952142670F13B003D760D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDD1585D267F4A60007B7D1E /* Logos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logos.swift; sourceTree = "<group>"; };
+		DDD1585F267F526D007B7D1E /* LoadingTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingTextView.swift; sourceTree = "<group>"; };
 		DDD6E182267361CD0039A899 /* Color+hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+hex.swift"; sourceTree = "<group>"; };
 		DDFB1313267C89B10033528E /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -125,6 +135,8 @@
 		DD45CC05267B4A28000B0A99 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DDD1585F267F526D007B7D1E /* LoadingTextView.swift */,
+				DD6A3E12267F4037005CD6DB /* FeedLogoView.swift */,
 				DD0D6284267E7BB60021B988 /* UrlImageView.swift */,
 				DD7C3073267DD40800D88DD1 /* RssItemRowView.swift */,
 				DD7C306F267DCB1400D88DD1 /* ActionBarView.swift */,
@@ -152,6 +164,9 @@
 		DD80E6DE267CA6C7003B686A /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				DDD1585D267F4A60007B7D1E /* Logos.swift */,
+				DD6A3E10267F3EF0005CD6DB /* ImageLoader.swift */,
+				DD6A3E0E267F273E005CD6DB /* String+matches.swift */,
 				DD7C3071267DCD9F00D88DD1 /* ApiWrapper.swift */,
 				DD88D7A1267CF38000BA6E91 /* String+base64.swift */,
 				DDD6E182267361CD0039A899 /* Color+hex.swift */,
@@ -400,6 +415,7 @@
 				DDA951F62670F139003D760D /* SwiveApp.swift in Sources */,
 				DD45CC0C267B4AAC000B0A99 /* RssFeed.swift in Sources */,
 				DD939A262672A9370010BF19 /* Config.swift in Sources */,
+				DD6A3E0F267F273E005CD6DB /* String+matches.swift in Sources */,
 				DD85F230267D370F00561D97 /* AlertState.swift in Sources */,
 				DD85F22C267D29FD00561D97 /* ObservableArray.swift in Sources */,
 				DD7C3072267DCD9F00D88DD1 /* ApiWrapper.swift in Sources */,
@@ -410,11 +426,15 @@
 				DD88D79E267CED0800BA6E91 /* SearchView.swift in Sources */,
 				DD88D7A2267CF38000BA6E91 /* String+base64.swift in Sources */,
 				DD88D7A0267CEE8F00BA6E91 /* ItemsView.swift in Sources */,
+				DD6A3E11267F3EF0005CD6DB /* ImageLoader.swift in Sources */,
 				DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */,
 				DD7C3070267DCB1500D88DD1 /* ActionBarView.swift in Sources */,
 				DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */,
 				DD7C3074267DD40800D88DD1 /* RssItemRowView.swift in Sources */,
+				DDD1585E267F4A60007B7D1E /* Logos.swift in Sources */,
 				DD45CC07267B4A28000B0A99 /* FeedsView.swift in Sources */,
+				DD6A3E13267F4037005CD6DB /* FeedLogoView.swift in Sources */,
+				DDD15860267F526D007B7D1E /* LoadingTextView.swift in Sources */,
 				DD45CC0B267B4AAC000B0A99 /* RssItem.swift in Sources */,
 				DD0D6285267E7BB60021B988 /* UrlImageView.swift in Sources */,
 			);

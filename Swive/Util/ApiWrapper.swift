@@ -3,14 +3,10 @@ import SwiftyXMLParser
 
 class ApiWrapper<T: Codable> {
   
+
   /// Fetch a list of all feeds or all items for a perticular feed
   /// The arbitrary type needs to implemennt the codable protocol
-  func loadRows(
-    rows: ObservableArray<T>,  
-    alert: AlertState,
-    isLoading: Binding<Bool>,
-    rssurl: String = ""
-   ) -> Void {
+  func loadRows(rows: ObservableArray<T>, alert: AlertState, isLoading: Binding<Bool>, rssurl: String = "") -> Void {
      
       var api_url = "http://10.0.1.30:5000/feeds"
       
@@ -53,12 +49,7 @@ class ApiWrapper<T: Codable> {
   
   /// Thumbnails for YouTube videos are served from the endpoint:
   ///      https://img.youtube.com/vi/<video id>/default.jpg
-  func loadThumbnail(
-    videoId: String,
-    image: Binding<UIImage>,  
-    alert: AlertState,
-    isLoading: Binding<Bool>
-   ) -> Void {
+  func loadThumbnail(videoId: String, image: Binding<UIImage>, alert: AlertState, isLoading: Binding<Bool>) -> Void {
      
       guard let url = URL(string:"https://img.youtube.com/vi/\(videoId)/default.jpg" ) 
       else { return } 
