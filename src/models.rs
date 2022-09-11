@@ -16,7 +16,8 @@ impl RssFeed {
             rssurl,
             url,
             title,
-            unread_count
+            unread_count,
+            //total_count TODO
         }
     }
 }
