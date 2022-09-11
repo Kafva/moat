@@ -1,9 +1,9 @@
 import SwiftUI
 
 /**** API ****/
-// 1. Fetch list of entries
-// 2. Get file content
-// 3. Write file content (maybe)
+//  1. Fetch a list of all feeds
+//  2. Fetch all items from a feed
+//  3. Update the 'unread' status of a perticular item or all items in a feed
 
 
 

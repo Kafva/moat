@@ -31,14 +31,18 @@ pub fn get_config(config_path: &str) -> Result<Config, std::io::Error> {
                     panic!("Invalid configuration: Missing key for value at {}:{}", config_path, i+1);
                 }
 
-                #[cfg(test)]
-                println!("{}={}", key, value );
+                fn expand_tilde(value: &str) -> String {
+                    String::from(value) 
+                        .replace("~", std::env::var("HOME").unwrap().as_str()
+                    )
+                }
                 
                 match key {
                     "cache_path" => { 
-                        config.cache_path = String::from(value) // Expand '~' 
-                            .replace("~", std::env::var("HOME").unwrap().as_str()
-                        );
+                        config.cache_path = expand_tilde(value)
+                    }
+                    "newsboat_path" => {
+                        config.newsboat_path = expand_tilde(value) 
                     }
                     "verbose" => {
                         config.verbose = value == "true" || value == "1";
