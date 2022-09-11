@@ -47,7 +47,7 @@ fi
 RUSTFLAGS="-C linker=/usr/bin/aarch64-linux-gnu-gcc-11.1.0" cargo build --release --target=aarch64-unknown-linux-gnu
 
 # Copy over the binary and configuration files
-sed "s@/home/jonas/.cargo/bin/cargo run --release --@/home/jonas/bin/moat_server@; s/CHANGE THIS/$(pass moat)/" ./moat.service > /tmp/moat_$remote.service
+sed "s@/home/jonas/.cargo/bin/cargo run --release --@/home/jonas/bin/moat_server@; s/CHANGE THIS/$(pass moat)/" ./conf/moat.service > /tmp/moat_$remote.service
 
 rsync ./target/aarch64-unknown-linux-gnu/release/moat_server $remote:~/bin/moat_server
 rsync ./conf/server.conf 				     $remote:~/.newsboat/moat.conf
