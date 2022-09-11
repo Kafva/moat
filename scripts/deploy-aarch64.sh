@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 exitErr(){ echo -e "$1" >&2 ; exit 1; }
 usage="usage: $(basename $0) <host>"
 helpStr="Build and deploy the server to a machine running aarch64 Arch Linux"
