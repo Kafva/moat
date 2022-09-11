@@ -13,8 +13,3 @@ cli_colors = true
 # TLS requires an addition in the Cargo.toml configuration
 certs = "./ssl/moat_server.crt"
 key = "./ssl/moat_server.key"
-
-[release]
-cli_colors = false
-
-
