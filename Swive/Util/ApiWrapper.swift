@@ -11,7 +11,9 @@ class ApiWrapper<T: Codable> {
          ) 
          return nil
       }
-      guard let serverKey = UserDefaults.standard.string(forKey: "serverKey") else {
+      let serverKey = getCreds() 
+
+      if serverKey == "" {
          alert.makeAlert(
             title: "Incomplete configuration", 
             err: ServerConnectionError.noServerKey, 

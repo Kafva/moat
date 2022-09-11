@@ -8,7 +8,7 @@ struct SettingsView: View {
    
    @State var spritesOn: Bool = UserDefaults.standard.bool(forKey: "spritesOn") ;
    @State var serverLocation: String = UserDefaults.standard.string(forKey: "serverLocation") ?? ""
-   @State var serverKey: String = UserDefaults.standard.string(forKey: "serverKey") ?? ""
+   @State var serverKey: String = "" 
    
    init(feeds: [RssFeed]){
       self.feeds = feeds;
@@ -74,12 +74,13 @@ struct SettingsView: View {
                      HStack {
                         Text("Server key")
                            .frame(width: geometry.size.width*0.3, alignment: .leading)
-                        SecureField("", text: $serverKey)
+                        SecureField("(Hidden)", text: $serverKey)
                         .customStyle(width: geometry.size.width * 0.5)
                         // `onEditingChanged` doesn't exist for SecureFields, to have all changes
                         // automatically commited we therefore need to use `onChange`
                         .onChange(of: serverKey, perform: { value in
-                           UserDefaults.standard.setValue(value, forKey: "serverKey")
+                           // Set the creds value in KeyChainStorage
+                           setCreds(value)
                         })
                      }
                      
@@ -101,9 +102,10 @@ struct SettingsView: View {
                   // For some reason the state isn't recorded properly in the UI if we
                   // navigate back to the feed and then back to the settings so we
                   // use this hack to set the values correctly
+                  // Note that the server key field isn't included since
+                  // we don't want to supply the current key in plain text to the user
                   spritesOn = UserDefaults.standard.bool(forKey: "spritesOn") 
                   serverLocation = UserDefaults.standard.string(forKey: "serverLocation") ?? ""
-                  serverKey = UserDefaults.standard.string(forKey: "serverKey") ?? ""
                })
 
             }
