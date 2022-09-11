@@ -55,7 +55,6 @@ class ApiWrapper<T: Codable> {
                  title: "Connection error", err: err, isLoading: isLoading
               ); 
            }
-
         }
       }
       .resume(); // Execute the task immediatelly

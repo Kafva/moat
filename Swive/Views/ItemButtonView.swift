@@ -6,17 +6,17 @@ struct ItemButtonView: View {
    var video_id: Int;
    var screenWidth: CGFloat;
    var apiWrapper: ApiWrapper<ServerResponse>;
-   @State var unread: Bool;
+   @Binding var unread: Bool;
    @Binding var unread_count: Int;
    @EnvironmentObject var alertState: AlertState;
 
-   init(unread_count: Binding<Int>, unread: Bool, video_id: Int, rssurl: String, screenWidth: CGFloat, apiWrapper: ApiWrapper<ServerResponse>){
+   init(unread_count: Binding<Int>, unread: Binding<Bool>, video_id: Int, rssurl: String, screenWidth: CGFloat, apiWrapper: ApiWrapper<ServerResponse>){
       self.apiWrapper = apiWrapper
       self.video_id = video_id
       self.rssurl = rssurl
       self.screenWidth = screenWidth
       self._unread_count = unread_count
-      self.unread = unread
+      self._unread = unread
    }
    
    var body: some View {

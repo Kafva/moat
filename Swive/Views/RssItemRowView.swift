@@ -8,8 +8,17 @@ struct RssItemRowView: View {
    var apiWrapper = ApiWrapper<ServerResponse>()
    let location = CGPoint(x: INITIAL_X_POS, y: 0);
    
+   @State var unread: Bool;
    @Binding var unread_count: Int;
    @EnvironmentObject var alertState: AlertState;
+   
+   init(rssurl: String, item: RssItem, screenWidth: CGFloat, unread_count: Binding<Int>){
+      self.rssurl = rssurl
+      self.item = item
+      self.screenWidth = screenWidth
+      self.unread = self.item.unread
+      self._unread_count = unread_count
+   }
 
    var body: some View {
       HStack {
@@ -25,7 +34,16 @@ struct RssItemRowView: View {
            )
            .padding(.leading, 5)
            .onTapGesture {
-              // Make the thumbnail clickable to visit the link
+              // Automatically toggle the 'unread' status to 'read' when clicking an item
+              if unread {
+                 self.apiWrapper.setUnreadStatus(
+                    unread_count: $unread_count,
+                    unread_binding: $unread, 
+                    rssurl: self.rssurl, 
+                    video_id: self.item.id, 
+                    alert: alertState
+                  )
+              }
               UIApplication.shared.open(URL(string: item.url)!)
            }   
 
@@ -37,11 +55,18 @@ struct RssItemRowView: View {
         // Both of these subviews require access to the `unread_count` since
         // they may update the `unread` value in which case the `unread_count`
         // also needs to be modified 
-        ItemThumbnailView(item: self.item, screenWidth: self.screenWidth)
+        ItemThumbnailView(
+           rssurl: self.rssurl,
+           item: self.item, 
+           screenWidth: self.screenWidth, 
+           apiWrapper: apiWrapper,
+           unread: self.$unread,
+           unread_count: self.$unread_count
+        )
         
         ItemButtonView(
            unread_count: self.$unread_count,
-           unread: self.item.unread, 
+           unread: self.$unread, 
            video_id: self.item.id,
            rssurl: self.rssurl,
            screenWidth: self.screenWidth, 
