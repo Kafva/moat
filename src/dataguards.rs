@@ -5,8 +5,10 @@ use rocket::request;
 use rocket::tokio::io::AsyncReadExt;
 
 /// Custom type for the data of POST requests to the /read endpoint
+/// The target is either a u32 video_id or rssurl (decoded from base64) 
 pub struct ReadToggleData {
-    pub id: u32,
+    pub id: Option<u32>,
+    pub rssurl: Option<String>,
     pub unread: bool
 }
 
@@ -15,7 +17,8 @@ pub enum KeyErr <'a> {
     InvalidKey(&'a str),
     RegexCaptureFailure(&'a str),
     MissingKey(&'a str),
-    UnparsableValueForKey(&'a str)
+    UnparsableValueForKey(&'a str),
+    InvalidBase64Value
 }
 
 impl std::fmt::Display for KeyErr <'_> {
@@ -29,6 +32,8 @@ impl std::fmt::Display for KeyErr <'_> {
                 write!(f, "Unable to parse vaue for key '{}'", key),
             KeyErr::RegexCaptureFailure(key) =>
                 write!(f, "Unable to capture value for key: '{}'", key),
+            KeyErr::InvalidBase64Value =>
+                write!(f, "Unable to decode provided value as base64"),
         }
     }
 }
@@ -74,25 +79,47 @@ impl<'r> FromData<'r> for ReadToggleData {
 
         // We expect the input to be on the format
         //  id=<u32>&unread=<1|0>
-        let id_regex      = Regex::new(r"id=(\d{1,15})").unwrap();
-        let unread_regex  = Regex::new(r"unread=(true|false)").unwrap();
+        let id_regex          = Regex::new(r"id=(\d{1,15})").unwrap();
+        let b64_rssurl_regex  = Regex::new(r"rssurl=([=+/a-zA-Z0-9]{3,128})").unwrap();
+        let unread_regex      = Regex::new(r"unread=(true|false)").unwrap();
 
         let body_as_string = std::str::from_utf8(&buf)
             .expect("Failed to decode request body");
 
         match get_value_for_key::<u32>("id", body_as_string, id_regex) {
-
+            /***** `id` in params *******/
             Ok(id) => match get_value_for_key::<bool>("unread", body_as_string, unread_regex) {
 
                 Ok(unread) => data::Outcome::Success(
                     ReadToggleData {
-                        id: id,
+                        id: Some(id),
+                        rssurl: None,
                         unread: unread
                     }
                 ),
                 Err(e) => data::Outcome::Failure( (Status::BadRequest, e) ) 
             },
-            Err(e) => data::Outcome::Failure( (Status::BadRequest, e) )
+            /***** `rssurl` in params *******/
+            Err(_) => match get_value_for_key::<String>("rssurl", body_as_string, b64_rssurl_regex) {
+                    
+                Ok(b64_rssurl) => {
+                        match base64::decode(b64_rssurl) {
+                            Ok(decoded) => {
+                                let rssurl = String::from_utf8(decoded).unwrap();
+                                
+                                data::Outcome::Success(
+                                    ReadToggleData {
+                                        rssurl: Some(rssurl),
+                                        id: None,
+                                        unread: false // Always set to false
+                                    }
+                                )
+                            } 
+                            Err(_) => data::Outcome::Failure( (Status::BadRequest, KeyErr::InvalidBase64Value ) ) 
+                        }
+                    },
+                    Err(e) => data::Outcome::Failure( (Status::BadRequest, e) ) 
+            }
         }
     }
 }
