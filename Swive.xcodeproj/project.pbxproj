@@ -15,6 +15,7 @@
 		DDA951FA2670F13B003D760D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDA951F92670F13B003D760D /* Assets.xcassets */; };
 		DDA952082670F13B003D760D /* SwiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952072670F13B003D760D /* SwiveTests.swift */; };
 		DDA952132670F13B003D760D /* SwiveUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952122670F13B003D760D /* SwiveUITests.swift */; };
+		DDA9A41B267502900092536F /* Entry.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA9A41A2675028F0092536F /* Entry.swift */; };
 		DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6E182267361CD0039A899 /* Color+hex.swift */; };
 		DDD6E1852673841E0039A899 /* ListingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6E1842673841E0039A899 /* ListingView.swift */; };
 /* End PBXBuildFile section */
@@ -51,6 +52,7 @@
 		DDA9520E2670F13B003D760D /* SwiveUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiveUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDA952122670F13B003D760D /* SwiveUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiveUITests.swift; sourceTree = "<group>"; };
 		DDA952142670F13B003D760D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DDA9A41A2675028F0092536F /* Entry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Entry.swift; sourceTree = "<group>"; };
 		DDD6E182267361CD0039A899 /* Color+hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+hex.swift"; sourceTree = "<group>"; };
 		DDD6E1842673841E0039A899 /* ListingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,6 +105,7 @@
 		DDA951F42670F139003D760D /* Swive */ = {
 			isa = PBXGroup;
 			children = (
+				DDA9A41A2675028F0092536F /* Entry.swift */,
 				DDD6E1842673841E0039A899 /* ListingView.swift */,
 				DDD6E182267361CD0039A899 /* Color+hex.swift */,
 				DD939A252672A9370010BF19 /* Config.swift */,
@@ -262,6 +265,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDA9A41B267502900092536F /* Entry.swift in Sources */,
 				DDA951F82670F139003D760D /* LoadingView.swift in Sources */,
 				DDA951F62670F139003D760D /* SwiveApp.swift in Sources */,
 				DD939A262672A9370010BF19 /* Config.swift in Sources */,
