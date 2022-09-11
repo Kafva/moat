@@ -4,11 +4,10 @@ After=network.target
 
 [Service]
 Type=simple
-User=user
-WorkingDirectory=/home/user/Repos/moat
+User=CHANGE_THIS
+WorkingDirectory=CHANGE_THIS
 Environment="MOAT_KEY=test"
 ExecStart=/usr/bin/cargo run --release
 
 [Install]
-WantedBy=multi-user.targe
-
+WantedBy=multi-user.target

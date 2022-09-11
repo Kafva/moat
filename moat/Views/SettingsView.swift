@@ -10,6 +10,7 @@ struct SettingsView: View {
    @State var logosOn: Bool = UserDefaults.standard.bool(forKey: "logosOn") ;
    @State var spritesOn: Bool = UserDefaults.standard.bool(forKey: "spritesOn") ;
    @State var serverLocation: String = UserDefaults.standard.string(forKey: "serverLocation") ?? ""
+   @State var serverPort: String = UserDefaults.standard.string(forKey: "serverPort") ?? ""
    @State var serverKey: String = "" 
    
    init(feeds: [RssFeed]){
@@ -64,21 +65,21 @@ struct SettingsView: View {
                         UserDefaults.standard.setValue(spritesOn, forKey: "spritesOn")
                      }
                   
-                     HStack {
-                        Text("Server location")
-                           .lineLimit(1)
-                           .frame(width: geometry.size.width*0.3, alignment: .leading)
-                        
-                        TextField("IP or domain name", text: $serverLocation, onEditingChanged: { started in 
-                           if !started {
-                              // `onEditingChanged` is triggered upon entering and leaving a textfield
-                              // using `onCommit` misses changes that are made without hiting <ENTER> 
-                              UserDefaults.standard.setValue(serverLocation, forKey: "serverLocation")
-                           }
-                        })
-                        .customStyle(width: geometry.size.width * 0.5)
-                        .autocapitalization(.none)
-                     }
+                     SettingsTextView(
+                        screenWidth: geometry.size.width, 
+                        text: "Server location", 
+                        default_text: "IP or domain name",
+                        setting_key: "serverLocation", 
+                        setting_value: $serverLocation
+                     )
+                     SettingsTextView(
+                        screenWidth: geometry.size.width, 
+                        text: "Server port", 
+                        default_text: "",
+                        setting_key: "serverPort", 
+                        setting_value: $serverPort
+                     )
+
                      HStack {
                         Text("Server key")
                            .frame(width: geometry.size.width*0.3, alignment: .leading)

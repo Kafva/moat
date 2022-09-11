@@ -6,6 +6,7 @@ struct ActionBarView: View {
    @EnvironmentObject var alertState: AlertState
    @Binding var searchString: String
    @Binding var isLoading: Bool
+   @Binding var isReloading: Bool
    
    @Binding var textFieldFocused: Bool;
 
@@ -36,10 +37,12 @@ struct ActionBarView: View {
 
          Button(action: {
             isLoading = true
+            isReloading = true
             self.apiWrapper.reloadFeeds(
                rows: feeds,
                alert: alertState,
-               isLoading: $isLoading
+               isLoading: $isLoading,
+               isReloading: $isReloading
             ) 
          }) { 
                Image(systemName: "arrow.clockwise").resizable().frame(

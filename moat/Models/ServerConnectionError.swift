@@ -2,6 +2,7 @@ import SwiftUI
 
 enum ServerConnectionError: Error, LocalizedError {
     case noServerLocation
+    case noServerPort
     case invalidKey
     case noServerKey
     case feedReloadFailure
@@ -13,6 +14,8 @@ enum ServerConnectionError: Error, LocalizedError {
         switch self {
         case .noServerLocation:
             return NSLocalizedString("No server location has been configured", comment: "")
+        case .noServerPort:
+            return NSLocalizedString("No server port has been configured", comment: "")
         case .noServerKey:
             return NSLocalizedString("No server key has been configured", comment: "")
         case .invalidKey:
