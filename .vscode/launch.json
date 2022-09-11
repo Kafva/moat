@@ -24,7 +24,6 @@
             "environment": [],
             "externalConsole": false,
             "MIMode": "lldb",
-            "preLaunchTask": "cargo build"
         }
 
     ]
