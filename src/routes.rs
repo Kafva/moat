@@ -11,17 +11,17 @@ use super::db_parser::{get_feed_list, get_items_from_feed, toggle_read_status};
 //  4. Reload all feeds
 
 /// TODO supprt rssurl argument
-/// curl -X POST -H "x-creds: test" http://localhost:8000/read -d "<id=5384|rssurl=...>&read=0" 
+/// curl -X POST -H "x-creds: test" http://localhost:5000/unread -d "id=5384&unread=0" 
 /// If the <id> parameter does not conform to the u32 type rocket
 /// will try other potentially matching routes (based on `rank`) until
 /// no matching alternatives remain, at which point 404 is given
-#[post("/read", data = "<data>")]
-pub fn read(_key: Creds<'_>,  config: &State<Config>, data: ReadToggleData ) -> &'static str {
+#[post("/unread", data = "<data>")]
+pub fn unread(_key: Creds<'_>,  config: &State<Config>, data: ReadToggleData ) -> &'static str {
 
     let success = toggle_read_status(
         &config.cache_path.as_str(), 
         data.id, 
-        data.read
+        data.unread
     ).unwrap(); 
     
     if success > 0 { 

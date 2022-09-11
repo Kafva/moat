@@ -50,10 +50,11 @@ struct ItemsView: View {
 
                ScrollView(.vertical) { 
                   // The alignment parameter for a VStack concerns horizontal alignment
-                  VStack(alignment: .center, spacing: 0) {
+                  VStack(alignment: .center, spacing: Y_AXIS_SPACING_FOR_ITEMS) {
 
                      ForEach(self.items.arr, id: \.id ) { item in
                         RssItemRowView(item: item, screenWidth: geometry.size.width)
+                           .environmentObject(alertState)
                      }
                      .listRowBackground(Color.clear)
                      .frame(width: geometry.size.width, alignment: .center)

@@ -15,15 +15,17 @@ use super::models::{RssItem, RssFeed};
 // parsing is probably easier from there)
 
 /// Returns the number of changed rows on success
-pub fn toggle_read_status(cache_path: &str, item_id: u32, read: bool) -> Result<usize,rusqlite::Error> {
+pub fn toggle_read_status(cache_path: &str, item_id: u32, unread: bool) -> Result<usize,rusqlite::Error> {
     let conn = rusqlite::Connection::open(cache_path)?;
         // The rss_item and rss_feed tables share several common fields, in this
         // statement we use the rssurl/feedurl as a unique identifer to determine
         // how many unread articles each feed has
+    
+    println!("id={},unread={}", item_id, unread);
     conn.execute("
         UPDATE rss_item
             SET unread = ?1
-        WHERE id = ?2 ;", rusqlite::params![ read, item_id.to_string() ]
+        WHERE id = ?2 ;", rusqlite::params![ unread, item_id.to_string() ]
     )
 }
 
