@@ -23,14 +23,14 @@ struct RssFeedRowView: View {
       HStack {
           
          if self.showLogos {
-            NavigationLink(destination: ItemsView(feedurl: feed.rssurl, unread_count: $unread_count)
+            NavigationLink(destination: ItemsView(feedurl: feed.rssurl, muted: feed.muted, unread_count: $unread_count)
             ) {
                FeedLogoView(channelId: feed.getChannelId() ?? "")
             }
          }
 
          VStack(alignment: .leading, spacing: 5){
-            NavigationLink(destination: ItemsView(feedurl: feed.rssurl, unread_count: $unread_count) 
+            NavigationLink(destination: ItemsView(feedurl: feed.rssurl, muted: feed.muted, unread_count: $unread_count) 
             ){
                 Text("\(feed.title)")
                   .foregroundColor(.white)
@@ -50,24 +50,39 @@ struct RssFeedRowView: View {
          )
          .padding( self.showLogos ? 0 : 15)
          
-         Text( "\(self.unread_count)/\(feed.item_count)" )
-            .padding(7)
-            .background(Color.black.opacity(0.2))
-            .cornerRadius(5)
-            .foregroundColor(.white)
-            .font(Font.system(size: 18, weight: .bold))
-            .frame(
-               // The image leads with 5px of padding
-               width: (self.showLogos ? self.screenWidth * 0.5 : self.screenWidth * 0.4)  - (IMAGE_WIDTH+5), 
-               alignment: Alignment.center
-            )
-            .lineLimit(1) 
-            .onTapGesture {
-               self.alertState.title = "Mark all entries for \(self.feed.title) as read?" 
-               self.alertState.message = ""
-               self.alertState.type = AlertType.Choice
-               self.alertState.show = true 
-            }
+         if !self.feed.muted {
+            Text(  "\(self.unread_count)/\(feed.item_count)" )
+               .padding(7)
+               .background(Color.black.opacity(0.2))
+               .cornerRadius(5)
+               .foregroundColor(.white)
+               .font(Font.system(size: 18, weight: .bold))
+               .frame(
+                  // The image leads with 5px of padding
+                  width: (self.showLogos ? self.screenWidth * 0.5 : self.screenWidth * 0.4)  - (IMAGE_WIDTH+5), 
+                  alignment: Alignment.center
+               )
+               .lineLimit(1) 
+               .onTapGesture {
+                 self.alertState.title = "Mark all entries for \(self.feed.title) as read?" 
+                 self.alertState.message = ""
+                 self.alertState.type = AlertType.Choice
+                 self.alertState.show = true 
+               }
+         }
+         else {
+            Image(systemName: "speaker.slash")
+               .padding(7)
+               .background(Color.black.opacity(0.2))
+               .cornerRadius(5)
+               .foregroundColor(.white)
+               .font(Font.system(size: 18, weight: .bold))
+               .frame(
+                  width: (self.showLogos ? self.screenWidth * 0.5 : self.screenWidth * 0.4)  - (IMAGE_WIDTH+5), 
+                  alignment: Alignment.center
+               )
+               .lineLimit(1) 
+         }
       }
       .padding(.bottom, 5)
       // We need to handle both a choice and error alert for each row

@@ -11,6 +11,7 @@ class RssFeed: ObservableObject, Codable, Equatable {
    let title: String
    var item_count: Int
    let id = UUID(); // client-side only attribute
+   let muted: Bool
    
    /// Returns true if the provided feeds have the same
    /// properties, ignores differences in the `id` property
@@ -32,6 +33,7 @@ class RssFeed: ObservableObject, Codable, Equatable {
       case title 
       case unread_count
       case item_count = "total_count"
+      case muted
    } 
    
    func encode(to encoder: Encoder) throws {
@@ -41,6 +43,7 @@ class RssFeed: ObservableObject, Codable, Equatable {
       try container.encode(self.title, forKey: .title)
       try container.encode(self.unread_count, forKey: .unread_count)
       try container.encode(self.item_count, forKey: .item_count)
+      try container.encode(self.muted, forKey: .muted)
    } 
    
    required init(from decoder: Decoder ) throws {
@@ -51,14 +54,16 @@ class RssFeed: ObservableObject, Codable, Equatable {
       self.title = try values.decode(String.self, forKey: .title)
       self.unread_count = try values.decode(Int.self, forKey: .unread_count)
       self.item_count = try values.decode(Int.self, forKey: .item_count)
+      self.muted = try values.decode(Bool.self, forKey: .muted)
    }
 
-   init(rssurl: String, url: String, title: String, unread_count: Int, item_count: Int) {
+   init(rssurl: String, url: String, title: String, unread_count: Int, item_count: Int, muted: Bool) {
       self.rssurl = rssurl;
       self.url = url;
       self.title = title;
       self.unread_count = unread_count;
       self.item_count = item_count;
+      self.muted = muted;
    }
    
    func getChannelId() -> String? {

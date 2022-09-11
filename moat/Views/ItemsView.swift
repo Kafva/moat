@@ -3,6 +3,7 @@ import SwiftUI
 struct ItemsView: View {
 
    var feedurl: String
+   var muted: Bool
    var apiWrapper = ApiWrapper<RssItem>()
 
    @StateObject var items: ObservableArray<RssItem> = ObservableArray();
@@ -11,9 +12,10 @@ struct ItemsView: View {
    
    @Binding var unread_count: Int
 
-   init?(feedurl: String, unread_count: Binding<Int>) {
+   init?(feedurl: String, muted: Bool, unread_count: Binding<Int>) {
       setViewTransparency()
       self.feedurl = feedurl;
+      self.muted = muted;
       self._unread_count = unread_count;
    }
    
@@ -57,6 +59,7 @@ struct ItemsView: View {
                      ForEach(self.items.arr, id: \.id ) { item in
                         RssItemRowView(
                            rssurl: feedurl, 
+                           muted: muted,
                            item: item, 
                            screenWidth: geometry.size.width,
                            unread_count: $unread_count

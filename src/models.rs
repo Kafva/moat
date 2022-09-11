@@ -36,11 +36,6 @@ pub struct RssItem {
     url: String,        // URL to the item
     pubdate: u32,       // UNIX epoch  
     unread: bool 
-    //feedurl: String,  // Same as the `rss_feed.rssurl` from the source feed
-    //content VARCHAR(65535) NOT NULL
-    //deleted INTEGER(1) NOT NULL DEFAULT 0
-    //base VARCHAR(128) NOT NULL DEFAULT ""
-    //content_mime_type VARCHAR(255) NOT NULL DEFAULT ""   
 }
 
 impl RssItem {
@@ -63,19 +58,22 @@ fn default_cache_path() -> String {
 pub struct Config {
     pub cache_path: String,
     pub newsboat_path: String,
-    pub muted_list_path: String
+    pub muted_list: Option<Vec<String>>
 }
 
 impl Config {
     pub fn new() -> Config {
         Config {
             cache_path: default_cache_path(),
-            muted_list_path: String::from(""),
+            
+            muted_list: None, 
 
             #[cfg(target_os = "macos")]
             newsboat_path: "/usr/local/bin/newsboat".to_string(),
+
             #[cfg(target_os = "linux")]
-            newsboat_path: "/usr/bin/newsboat".to_string()
+            newsboat_path: "/usr/bin/newsboat".to_string(),
+                
         } 
     }
 }

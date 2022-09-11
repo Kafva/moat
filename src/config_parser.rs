@@ -1,5 +1,6 @@
 use std::fs::File;
 use std::io::BufReader;
+use std::path::Path;
 use std::io::prelude::*; // Needed for .lines()
 use super::models::Config;
 
@@ -45,7 +46,11 @@ pub fn get_config(config_path: &str) -> Result<Config, std::io::Error> {
                         config.newsboat_path = expand_tilde(value) 
                     }
                     "muted_list_path" => {
-                        config.muted_list_path = expand_tilde(value) 
+                        config.muted_list = Some(get_muted_list(expand_tilde(value))
+                            .expect(&format!(
+                                "Invalid configuration: Could not read file referenced at {}:{}", config_path, i+1
+                            ))
+                        )
                     }
                     _ => {
                         panic!("Invalid configuration: Unrecognized key at {}:{}", config_path, i+1);
@@ -61,7 +66,33 @@ pub fn get_config(config_path: &str) -> Result<Config, std::io::Error> {
         }
     }
     
+
+    // If no muted_list was provided in the config use ~/.newsboat/muted_list (if it exists)
+    if config.muted_list == None &&
+        Path::new( default_muted_list_path().as_str() ).exists() {
+        config.muted_list = Some( get_muted_list( default_muted_list_path() )?)
+    }
+    
     Ok(config)
+}
+
+fn default_muted_list_path() -> String {
+    format!("{}/.newsboat/muted_list", std::env::var("HOME").unwrap())
+}
+
+/// Returns a vector with the rssurl of every feed that should be muted
+pub fn get_muted_list(muted_list_path: String) -> Result<Vec<String>, std::io::Error> {
+    let file = File::open(muted_list_path)?;
+    let buf_reader = BufReader::new(file);
+    
+    let mut muted_list = Vec::new();
+
+    for line in buf_reader.lines() {
+
+        muted_list.push(line)
+    }
+    
+    muted_list.into_iter().collect()
 }
 
 /******* Tests **********/
@@ -83,32 +114,32 @@ mod tests {
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: Missing value for key at ./conf/missing_value.conf:1")]
+    #[should_panic(expected = "Invalid configuration: Missing value for key at ./conf/.tests/missing_value.conf:1")]
     fn test_missing_value(){
-        super::get_config("./conf/missing_value.conf").unwrap();
+        super::get_config("./conf/.tests/missing_value.conf").unwrap();
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: Missing key for value at ./conf/missing_key.conf:1")]
+    #[should_panic(expected = "Invalid configuration: Missing key for value at ./conf/.tests/missing_key.conf:1")]
     fn test_missing_key(){
-        super::get_config("./conf/missing_key.conf").unwrap();
+        super::get_config("./conf/.tests/missing_key.conf").unwrap();
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: Unrecognized key at ./conf/invalid_key.conf:1")]
+    #[should_panic(expected = "Invalid configuration: Unrecognized key at ./conf/.tests/invalid_key.conf:1")]
     fn test_invalid_key(){
-        super::get_config("./conf/invalid_key.conf").unwrap();
+        super::get_config("./conf/.tests/invalid_key.conf").unwrap();
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: Missing '=' at ./conf/missing_equals.conf:1")]
+    #[should_panic(expected = "Invalid configuration: Missing '=' at ./conf/.tests/missing_equals.conf:1")]
     fn test_missing_equals(){
-        super::get_config("./conf/missing_equals.conf").unwrap();
+        super::get_config("./conf/.tests/missing_equals.conf").unwrap();
     }
     
     #[test]
-    #[should_panic(expected = "Invalid configuration: More than one '=' found at ./conf/too_many_equals.conf:1")]
+    #[should_panic(expected = "Invalid configuration: More than one '=' found at ./conf/.tests/too_many_equals.conf:1")]
     fn test_too_many_equals(){
-        super::get_config("./conf/too_many_equals.conf").unwrap();
+        super::get_config("./conf/.tests/too_many_equals.conf").unwrap();
     }
 }

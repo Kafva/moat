@@ -3,6 +3,7 @@ import SwiftUI
 struct RssItemRowView: View {
 
    var rssurl: String
+   var muted: Bool
    var item: RssItem;
    var screenWidth: CGFloat;
    var apiWrapper = ApiWrapper<ServerResponse>()
@@ -12,8 +13,9 @@ struct RssItemRowView: View {
    @Binding var unread_count: Int;
    @EnvironmentObject var alertState: AlertState;
    
-   init(rssurl: String, item: RssItem, screenWidth: CGFloat, unread_count: Binding<Int>){
+   init(rssurl: String, muted: Bool, item: RssItem, screenWidth: CGFloat, unread_count: Binding<Int>){
       self.rssurl = rssurl
+      self.muted = muted
       self.item = item
       self.screenWidth = screenWidth
       self.unread = self.item.unread
@@ -64,16 +66,17 @@ struct RssItemRowView: View {
            unread_count: self.$unread_count
         )
         
-        ItemButtonView(
-           unread_count: self.$unread_count,
-           unread: self.$unread, 
-           video_id: self.item.id,
-           rssurl: self.rssurl,
-           screenWidth: self.screenWidth, 
-           apiWrapper: apiWrapper
-        )
-        .environmentObject(alertState)
-
+        if !muted {
+            ItemButtonView(
+               unread_count: self.$unread_count,
+               unread: self.$unread, 
+               video_id: self.item.id,
+               rssurl: self.rssurl,
+               screenWidth: self.screenWidth, 
+               apiWrapper: apiWrapper
+            )
+            .environmentObject(alertState)
+        }
       }
       .frame(width: self.screenWidth, alignment: .leading)
       .padding(.bottom, 0)
