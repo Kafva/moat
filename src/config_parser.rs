@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::BufReader;
 use std::io::prelude::*; // Needed for .lines()
-use super::global::Config; // We need `global` as a pub module in lib.rs for this to work
+use super::global::Config;
 
 /// The config file contains newline seperated settings on the form
 ///     key=value

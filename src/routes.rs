@@ -1,47 +1,13 @@
-use rocket::{State, Request, Data, data::FromData, data::Outcome, data::ToByteUnit, data::ByteUnit};
+use rocket::{State};
 use rocket::serde::{json::Json};
-use super::global::{Config, RssItem, RssFeed};
+use super::global::{Config, RssItem, RssFeed, ReadToggleData};
 use super::db_parser::{get_feed_list, get_items_from_feed, toggle_read_status};
-use crate::rocket::tokio::io::AsyncReadExt;
 
 // The client will need an API to:
 //  1. Fetch a list of all feeds
 //  2. Fetch all items from a feed
 //  3. Update the 'unread' status of a perticular item or all items in a feed
 
-pub struct ReadToggleData {
-    id: u32,
-    read: bool
-}
-
-
-
-#[derive(Debug)]
-pub enum Err {
-    InvalidData
-}
-
-#[rocket::async_trait]
-impl<'r> FromData<'r> for ReadToggleData {
-    type Error = Err; 
-    
-    async fn from_data(_req: &'r Request<'_>, data: Data<'r>) -> Outcome<'r, Self> {
-        
-        let stream = data.open( "256B".parse::<ByteUnit>().unwrap() );
-        
-        let mut buf: [u8; 256] = [0; 256]; // initialise all elements to zero
-        
-        stream.read(&mut buf);
-        
-        
-        Outcome::Success(
-            ReadToggleData {
-                id: 1,
-                read: true
-            }
-        )
-    }
-}
 /// curl -X POST http://localhost:8000/read -d "id=5384&read=0" 
 /// If the <id> parameter does not conform to the u32 type rocket
 /// will try other potentially matching routes (based on `rank`) until

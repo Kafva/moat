@@ -1,0 +1,28 @@
+# Use `ROCKET_ENV` to modify which configuration is used
+# Defaults for _all_ profiles
+[default]
+port = 5000
+limits = { forms = "64 kB", json = "1 MiB" }
+keep_alive = 5
+log_level = "normal"
+temp_dir = "/tmp"
+cli_colors = true
+
+# Set only when compiled in debug mode, i.e, `cargo build`
+[debug]
+address = "127.0.0.1"
+
+[debug.tls]
+certs = "path/to/cert-chain.pem"
+key = "path/to/key.pem"
+
+## set only when compiled in release mode, i.e, `cargo build --release`
+[release]
+address = "0.0.0.0"
+secret_key = "Replace me"
+
+[release.tls]
+certs = "path/to/cert-chain.pem"
+key = "path/to/key.pem"
+
+
