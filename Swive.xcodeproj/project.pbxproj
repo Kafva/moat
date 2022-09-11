@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9185ABB2637CAA1E71DFA279 /* Pods_Swive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D39C63E8744340F1CF18ACB /* Pods_Swive.framework */; };
 		DD45CC07267B4A28000B0A99 /* FeedsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC06267B4A28000B0A99 /* FeedsView.swift */; };
 		DD45CC0B267B4AAC000B0A99 /* RssItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC09267B4AAC000B0A99 /* RssItem.swift */; };
 		DD45CC0C267B4AAC000B0A99 /* RssFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC0A267B4AAC000B0A99 /* RssFeed.swift */; };
@@ -19,6 +20,7 @@
 		DDA952082670F13B003D760D /* SwiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952072670F13B003D760D /* SwiveTests.swift */; };
 		DDA952132670F13B003D760D /* SwiveUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952122670F13B003D760D /* SwiveUITests.swift */; };
 		DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6E182267361CD0039A899 /* Color+hex.swift */; };
+		DDFB1314267C89B10033528E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFB1313267C89B10033528E /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +41,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		15185687BD2F227C1D12036F /* Pods-Swive.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swive.debug.xcconfig"; path = "Target Support Files/Pods-Swive/Pods-Swive.debug.xcconfig"; sourceTree = "<group>"; };
+		2D39C63E8744340F1CF18ACB /* Pods_Swive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Swive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6E7383BB54A7FFCADA5D88D /* Pods-Swive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swive.release.xcconfig"; path = "Target Support Files/Pods-Swive/Pods-Swive.release.xcconfig"; sourceTree = "<group>"; };
 		DD45CC06267B4A28000B0A99 /* FeedsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedsView.swift; sourceTree = "<group>"; };
 		DD45CC09267B4AAC000B0A99 /* RssItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssItem.swift; sourceTree = "<group>"; };
 		DD45CC0A267B4AAC000B0A99 /* RssFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssFeed.swift; sourceTree = "<group>"; };
@@ -57,6 +62,7 @@
 		DDA952122670F13B003D760D /* SwiveUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiveUITests.swift; sourceTree = "<group>"; };
 		DDA952142670F13B003D760D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDD6E182267361CD0039A899 /* Color+hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+hex.swift"; sourceTree = "<group>"; };
+		DDFB1313267C89B10033528E /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9185ABB2637CAA1E71DFA279 /* Pods_Swive.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,9 +91,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BD4DD9B32A8E0A5B0D6E04A6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				15185687BD2F227C1D12036F /* Pods-Swive.debug.xcconfig */,
+				C6E7383BB54A7FFCADA5D88D /* Pods-Swive.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		DD45CC05267B4A28000B0A99 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DDFB1313267C89B10033528E /* SettingsView.swift */,
 				DD45CC06267B4A28000B0A99 /* FeedsView.swift */,
 			);
 			path = Views;
@@ -108,6 +126,8 @@
 				DDA952062670F13B003D760D /* SwiveTests */,
 				DDA952112670F13B003D760D /* SwiveUITests */,
 				DDA951F32670F139003D760D /* Products */,
+				BD4DD9B32A8E0A5B0D6E04A6 /* Pods */,
+				E95423426A5208FCAFD09035 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -156,6 +176,14 @@
 			path = SwiveUITests;
 			sourceTree = "<group>";
 		};
+		E95423426A5208FCAFD09035 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2D39C63E8744340F1CF18ACB /* Pods_Swive.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -163,9 +191,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DDA952172670F13B003D760D /* Build configuration list for PBXNativeTarget "Swive" */;
 			buildPhases = (
+				D7EAA4BDFA74A2598FDF2B09 /* [CP] Check Pods Manifest.lock */,
 				DDA951EE2670F139003D760D /* Sources */,
 				DDA951EF2670F139003D760D /* Frameworks */,
 				DDA951F02670F139003D760D /* Resources */,
+				DE685AFFF924AD8A768C640F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -279,6 +309,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		D7EAA4BDFA74A2598FDF2B09 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Swive-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DE685AFFF924AD8A768C640F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Swive/Pods-Swive-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Swive/Pods-Swive-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Swive/Pods-Swive-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		DDA951EE2670F139003D760D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -289,6 +361,7 @@
 				DD45CC0C267B4AAC000B0A99 /* RssFeed.swift in Sources */,
 				DD939A262672A9370010BF19 /* Config.swift in Sources */,
 				DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */,
+				DDFB1314267C89B10033528E /* SettingsView.swift in Sources */,
 				DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */,
 				DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */,
 				DD45CC07267B4A28000B0A99 /* FeedsView.swift in Sources */,
@@ -331,6 +404,7 @@
 		DDA952152670F13B003D760D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -392,6 +466,7 @@
 		DDA952162670F13B003D760D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -446,6 +521,7 @@
 		};
 		DDA952182670F13B003D760D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 15185687BD2F227C1D12036F /* Pods-Swive.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -468,6 +544,7 @@
 		};
 		DDA952192670F13B003D760D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C6E7383BB54A7FFCADA5D88D /* Pods-Swive.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
