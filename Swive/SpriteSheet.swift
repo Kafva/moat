@@ -6,8 +6,6 @@ enum CustomError: Error {
 
 public class SpriteSheet {
     
-    var id: uint = 0;
-
     let sheet: SKTexture
     let rows: Int
     let columns: Int
@@ -31,6 +29,7 @@ public class SpriteSheet {
     /// object inn memory is used for the returned texture and the `in` texture
     ///  https://developer.apple.com/documentation/spritekit/sktexture/1520425-init
     func getTexture(columnIndex: Int, rowIndex: Int) throws -> SKTexture {
+        
         if columnIndex < columns && rowIndex < rows {
             // Note that both the (x,y) coords and the height/width is given as
             // a percentage value [0,1]
