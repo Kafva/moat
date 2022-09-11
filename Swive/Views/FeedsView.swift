@@ -25,20 +25,20 @@ struct FeedsView: View {
    /// on the remote server
    func loadFeeds() -> Void {
       guard let url = URL(string: "http://10.0.1.30:5000/feeds") else { return } 
-      let req = URLRequest(url: url);
-      req.addValue(value: "test", forHTTPHeaderField: "x-creds")
+      var req = URLRequest(url: url);
+      req.addValue("test", forHTTPHeaderField: "x-creds")
 
       URLSession.shared.dataTask(with: req) { data, response, err in
          // Create a background task to fetch data from the server
          if data != nil {
             do { 
                
-               let decoded = try JSONDecoder().decode(RssFeed.self, from: data!) 
+               let decoded = try JSONDecoder().decode([RssFeed].self, from: data!) 
                // If the response data was successfully decoded dispatch an update in the
                // main thread (all UI updates should be done in the main thread)
                // to update the state in the view
                DispatchQueue.main.async {
-                  self.feeds = decoded ?? [];
+                  self.feeds = decoded;
                }
             }
             catch { NSLog("Decoding failure \(error)"); }
@@ -71,7 +71,7 @@ struct FeedsView: View {
                               .clipShape(Circle())
                               .frame(width: 50, height: 50, alignment: .leading)
 
-                           Text("\(feed.name)")
+                           Text("\(feed.title)")
                               .foregroundColor(.white)
                               .font(.system(size:30))
                               .fontWeight(.bold)
