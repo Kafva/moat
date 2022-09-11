@@ -22,21 +22,21 @@ struct RssItemRowView: View {
         VStack (alignment: .leading, spacing: 5){
            Link("\(item.title)", destination: URL(string: item.url)! )
              .foregroundColor(.white)
-             .font(.system(size:22,weight: .bold))
+             .font(.system(size:23,weight: .bold))
              .lineLimit(1)
            item.DateText()
              .foregroundColor(.white)
-             .font(.system(size:18))
+             .font(.system(size:16))
              .lineLimit(1)
         }
         // This is required for the elements in the stack to actually
         // "float" to the left
         .frame(
-           width: self.screenWidth * 0.8 - IMAGE_WIDTH, 
+           width: self.screenWidth  - IMAGE_WIDTH, 
            alignment: .leading
         )
       }
-      .frame(width: .infinity, alignment: .center)
+      .frame(width: self.screenWidth, alignment: .leading)
       .padding(.bottom, 5)
    }
 }

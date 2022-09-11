@@ -48,7 +48,7 @@ struct ItemsView: View {
                         RssItemRowView(item: item, screenWidth: geometry.size.width)
                      }
                      .listRowBackground(Color.clear)
-                     .frame(width: .infinity, alignment: .center)
+                     .frame(width: geometry.size.width, alignment: .center)
                   }
                }
             }

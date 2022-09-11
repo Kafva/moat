@@ -17,7 +17,7 @@ class AlertState: ObservableObject {
          // UI changes need to be performed on the main thread
          self.show = true;
          isLoading.wrappedValue = false; 
-         NSLog("===== ALERT [\(self.show)]======\n\(title): \(self.message)");
+         NSLog("===== ALERT [\(self.show)] ======\n\(title): \(self.message)");
       }
       
    }
