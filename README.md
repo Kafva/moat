@@ -15,6 +15,7 @@ The application consists of an iOS client which interacts with an installation o
 ## Client setup
 Install all dependencies
 ```bash
+brew install cocoapods
 pod install
 ```
 and open `moat.xcworkspace` with Xcode. Connect your device and install with <kbd>CMD</kbd> <kbd>R</kbd>.
