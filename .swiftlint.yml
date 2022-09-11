@@ -1,0 +1,18 @@
+# using the swiftlint [--config] option does not seem to work
+excluded:
+  - Pods
+  - build
+  - .build
+
+disabled_rules: # rule identifiers to exclude from running
+  - trailing_whitespace
+  - vertical_whitespace
+  - trailing_comma
+  - trailing_semicolon
+  - identifier_name
+  - comma
+  - comment_spacing
+  - statement_position
+  - closing_brace
+  - opening_brace
+  - force_cast  
