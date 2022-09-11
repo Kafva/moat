@@ -8,7 +8,7 @@ struct RssFeedRowView: View {
    var body: some View {
       // | 50px | 0.5 %      | 0.5 % - 50px |
       HStack {
-         NavigationLink(destination: ItemsView( feed.rssurl.fromBase64() ?? "?" ) ){
+         NavigationLink(destination: ItemsView(feed.rssurl) ){
             Image("umbreon")
                .resizable() // Must be applied before modifying the frame size
                .clipShape(Circle())
@@ -21,7 +21,7 @@ struct RssFeedRowView: View {
          }
 
          VStack (alignment: .leading, spacing: 5){
-            NavigationLink(destination: ItemsView( feed.rssurl.fromBase64() ?? "?" ) ){
+            NavigationLink(destination: ItemsView(feed.rssurl) ){
                 Text("\(feed.title)")
                   .foregroundColor(.white)
                   .font(.system(size:22,weight: .bold))

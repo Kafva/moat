@@ -2,110 +2,64 @@ import SwiftUI
 
 struct ItemsView: View {
 
-   var feedurl: String = "" 
-   @State var items: [RssItem] = [];
-   //@Binding var items;
-   
+   var feedurl: String
+
+   @StateObject var items: ObservableArray<RssItem> = ObservableArray();
+   @StateObject var alertState: AlertState = AlertState();
    @State var isLoading: Bool = true;
 
-   // Alerts
-   @State var showAlert: Bool = false;
-   @State var alertMessage: String = "";
-   @State var alertTitle: String = "";
+   var apiWrapper = ApiWrapper<RssItem>()
 
    init?(_ feedurl: String) {
-      // https://stackoverflow.com/questions/57128547/swiftui-list-color-background
-      UITableView.appearance().backgroundColor = .clear
-      UITableViewCell.appearance().backgroundColor = .clear
-      
-      // https://stackoverflow.com/a/58974331/9033629 
-      UINavigationBar.appearance().barTintColor = .clear
-      UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-      
       self.feedurl = feedurl;
    }
    
-   func makeAlert(title: String, err: Error?) {
-      self.alertTitle = title; 
-      self.alertMessage = "\(err?.localizedDescription ?? "No description available")";
-      self.showAlert = true;
-      NSLog("\(title): \(self.alertMessage)");
-      self.isLoading = false;
-   }
+   var body: some View {
+      GeometryReader { geometry in 
+         ZStack {
+            // We need to re-add the background since the
+            // ItemsView is *not* rendered on top of the view that
+            // is presented from SwiveApp.swift
+            BKG_GRADIENT_LINEAR
+               .edgesIgnoringSafeArea(.vertical) // Fill entire screen 
+            
+            // Gain access to the screen dimensions to perform proper sizing
+            if self.isLoading {
+               LoadingView(
+                  width: geometry.size.width, 
+                  height: geometry.size.height,  
+                  loadingText:"Loading..."
+               )
+               .onAppear(perform: {
+                  self.apiWrapper.loadRows(
+                     rows: items, 
+                     alert: alertState, 
+                     isLoading: $isLoading,
+                     rssurl: self.feedurl                  
+                  )} 
+               )
+            }
+            else {
+               ScrollView(.vertical) { 
+                  // The alignment parameter for a VStack concerns horizontal alignment
+                  VStack(alignment: .center, spacing: 0) {
 
-   /// Fetch a list of all entries from the provided path
-   /// on the remote server
-   func loadItems() -> Void {
-      
-      guard let url = URL(string: "http://10.0.1.30:5000/items/\(self.feedurl)") else { return } 
-      var req = URLRequest(url: url);
-      req.addValue("test", forHTTPHeaderField: "x-creds")
-
-      URLSession.shared.dataTask(with: req) { data, response, err in
-         // Create a background task to fetch data from the server
-         if data != nil {
-            do { 
-               
-               let decoded = try JSONDecoder().decode([RssItem].self, from: data!) 
-               // If the response data was successfully decoded dispatch an update in the
-               // main thread (all UI updates should be done in the main thread)
-               // to update the state in the view
-               DispatchQueue.main.async {
-                  self.items = decoded;
-                  self.isLoading = false;
+                     ForEach(self.items.arr, id: \.id ) { item in
+                        RssItemRowView(item: item, screenWidth: geometry.size.width)
+                     }
+                     .listRowBackground(Color.clear)
+                     .frame(width: .infinity, alignment: .center)
+                  }
                }
             }
-            catch { 
-               makeAlert(title: "Decoding error", err: err); 
-            }
-         }
-         else { 
-            makeAlert(title: "Connection error", err: err) 
-         }
-      }.resume(); // Execute the task immediatelly
+         } 
+         .alert(isPresented: $alertState.show) {
+            Alert(
+               title: Text(alertState.title), 
+               message: Text(alertState.message), 
+               dismissButton: .default(Text("OK"))
+         )}
+      }
    }
-
-    var body: some View {
-        GeometryReader { geometry in 
-            // Gain access to the screen dimensions to perform proper sizing
-            ZStack {
-               // The Gradient background needs to be placed inside the ZStack to appear beneath
-               // the scene (which we give a transparent background)
-               
-               BKG_GRADIENT_LINEAR
-                  .edgesIgnoringSafeArea(.vertical) // Fill entire screen 
-               
-               if self.isLoading {
-                  LoadingView(
-                     width: geometry.size.width, 
-                     height: geometry.size.height,  
-                     loadingText:"Loading..."
-                  )
-                  .onAppear(perform: loadItems)
-                }
-                else {
-                  ScrollView(.vertical) { 
-                    // The alignment parameter for a VStack concerns horizontal alignment
-                    VStack(alignment: .center, spacing: 0) {
-                       
-                       HStack(alignment: .top) {
-
-                       ForEach(self.items, id: \.id ) { item in
-                           Text(item.title)
-                       }
-                    }
-                    .listRowBackground(Color.clear)
-                    .alert(isPresented: self.$showAlert) {
-                       Alert(
-                          title: Text(self.alertTitle), 
-                          message: Text(self.alertMessage), 
-                          dismissButton: .default(Text("OK"))
-                       )}
-                    }
-                }
-            }
-        }
-    }
-    }
 }
 
