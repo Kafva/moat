@@ -11,6 +11,29 @@ import SwiftUI
 //       - Swipe to toggle unread status
 //       - Fetch video thumbnails for the images
 
+//private extension FeedsView {
+//   struct SearchView: View {
+//
+//      var barWidth: CGFloat;
+//      var searchString: String;
+//
+//      var body: some View {
+//         HStack (alignment: .center, spacing: 5){
+//            Image(systemName: "magnifyingglass")
+//            TextField("Search...", text: searchString)
+//               .padding(10)
+//               .background(Color.black.opacity(0.2))
+//               .cornerRadius(5)
+//               .frame(
+//                  width: self.barWidth, 
+//                  height: ROW_HEIGHT, 
+//                  alignment: .center
+//              )
+//         }
+//      }
+//   }
+//}
+
 struct FeedsView: View {
 
    @State var feeds = [RssFeed]();
@@ -56,6 +79,8 @@ struct FeedsView: View {
    }
 
    var body: some View {
+      GeometryReader { geometry in 
+         // Gain access to the screen dimensions to perform proper sizing
       
          ZStack {
             // The Gradient background needs to be placed inside the ZStack to appear beneath
@@ -64,23 +89,21 @@ struct FeedsView: View {
             BKG_GRADIENT_LINEAR
                .edgesIgnoringSafeArea(.vertical) // Fill entire screen 
             
-
             ScrollView(.vertical) { 
                // The alignment parameter for a VStack concerns horizontal alignment
                VStack(alignment: .center, spacing: 0) {
                   
                   HStack (alignment: .center, spacing: 5){
                      Image(systemName: "magnifyingglass")
-                     TextField("Search...", text: $searchString)
-                           .padding(10)
-                           .background(Color.black.opacity(0.2))
-                           .cornerRadius(5)
-                           .frame(
-                              minWidth: 50, idealWidth: 200, maxWidth: 250, 
-                              minHeight: 50, idealHeight: 50, maxHeight: 50, 
-                              alignment: .center
-                           )
-                           //.shadow(color: .gray, radius: 10)
+                     TextField("Search...", text: searchString)
+                        .padding(10)
+                        .background(Color.black.opacity(0.2))
+                        .cornerRadius(5)
+                        .frame(
+                           width: geometry.size.width * 0.7, 
+                           height: ROW_HEIGHT, 
+                           alignment: .center
+                       )
                   }
 
                   ForEach(feeds, id: \.id ) { feed in
@@ -88,35 +111,63 @@ struct FeedsView: View {
                      // to iterate over it using ForEach()
                   
                      if feed.title.contains(searchString) || searchString == "" {
-                        NavigationLink(destination: LoadingView("YEP") ){
-                              HStack(alignment: .firstTextBaseline) {
-                                 Image("umbreon")
-                                    .resizable() // Must be applied before modifying the frame size
-                                    .clipShape(Circle())
-                                    .frame(width: 50, height: 50, alignment: .center)
-
-                                 VStack {
-                                    Text("\(feed.title)")
-                                       .foregroundColor(.white)
-                                       .font(.system(size:17))
-                                       .fontWeight(.bold)
-                                    Link("Site", destination: URL(string: feed.url)! )
-                                       .foregroundColor(.blue)
-                                       .font(.system(size:12))
-                                 }
-                                 .frame(maxWidth: .infinity)
-                                 
-                                 Text( "\(feed.unread)/90" )
-                                    .frame(maxWidth: .infinity)
+                        
+                        // | 50px | 0.7 %      | 0.3 % - 50px |
+                        HStack {
+                           NavigationLink(destination: LoadingView("YEP") ){
+                              Image("umbreon")
+                                 .resizable() // Must be applied before modifying the frame size
+                                 .clipShape(Circle())
+                                 .frame(
+                                    width: IMAGE_WIDTH,  
+                                    height: ROW_HEIGHT, 
+                                    alignment: .center
+                              )
                            }
-                           .padding(10)
+
+                           VStack (alignment: .leading, spacing: 5){
+                              NavigationLink(destination: LoadingView("YEP") ){
+                                 Text("\(feed.title)")
+                                    .foregroundColor(.white)
+                                    .font(.system(size:22))
+                                    .fontWeight(.bold)
+                                    .lineLimit(1)
+                              }
+                              Link("Site", destination: URL(string: feed.url)! )
+                                 .foregroundColor(.blue)
+                                 .font(.system(size:18))
+                                 .lineLimit(1)
+                           }
+                           // This is required for the elements in the stack to actually
+                           // "float" to the left
+                           .frame(
+                              width: geometry.size.width * 0.65, 
+                              alignment: .leading
+                           )
+                           
+                           
+                           Text( "\(feed.unread_count)/\(feed.item_count)" )
+                              .background(Color.black.opacity(0.2))
+                              .cornerRadius(5)
+                              .foregroundColor(.white)
+                              .font(.system(size:18))
+                              .fontWeight(.bold)
+                              .frame(
+                                 width: geometry.size.width * 0.35  - IMAGE_WIDTH, 
+                                 alignment: .leading
+                              )
+                              .lineLimit(1) 
                         }
+                        .padding(10)
                      }
                   }
                }
                .listRowBackground(Color.clear)
                .onAppear(perform: loadFeeds)
             }
+         }
+      
       }
+
    }
 }

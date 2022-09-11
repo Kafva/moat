@@ -35,7 +35,7 @@ pub fn get_feed_list(cache_path: &str) -> Result<Vec<RssFeed>,rusqlite::Error> {
         // statement we use the rssurl/feedurl as a unique identifer to determine
         // how many unread articles each feed has
         conn.prepare("
-        SELECT feedurl, rss_feed.url, author, SUM(unread) 
+        SELECT feedurl, rss_feed.url, author, SUM(unread), COUNT(*) 
         FROM rss_item JOIN rss_feed ON rss_feed.rssurl = feedurl GROUP BY feedurl;"
     )?;
     
@@ -48,6 +48,7 @@ pub fn get_feed_list(cache_path: &str) -> Result<Vec<RssFeed>,rusqlite::Error> {
             row.get(1)?,
             row.get(2)?,
             row.get(3)?,
+            row.get(4)?
         ))
     })?;
 
@@ -120,59 +121,6 @@ mod tests {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//fn test_feed() -> Result<(),rusqlite::Error> {
-//    let cache_path = format!("{}/.newsboat/cache.db", std::env::var("HOME").unwrap());
-//    
-//    let conn = rusqlite::Connection::open(cache_path)?;
-//    let mut stmt = 
-//        conn.prepare("SELECT 
-//            title, author, url, feedurl, unread 
-//        
-//        FROM rss_item WHERE author = \"VICE News\" ORDER BY pubdate ASC;")?;
-//    let title_iter = stmt.query_map([], |row| {
-//        Ok(RssItem {
-//            id: 0,
-//            // Retrieves the given column from the SELECT statement
-//            title: row.get(0)?,
-//            author: row.get(1)?,
-//            url: row.get(2)?,
-//            feedurl: row.get(3)?,
-//            unread: row.get(4)?
-//        })
-//    })?;
-//
-//    for title in title_iter {
-//        println!("Found {:#?}", title.unwrap());
-//    }
-//    Ok(())
-//}
-
-// Run `newsboat -r` and wait for it to exit to update the cache
-// Unless we want to support updating a single feed we can rely entirely on running `newsboat -r`
-// and parsing the cache.db
-
-// The client will need an API to:
-//  1. Fetch a list of all feeds
-//  2. Fetch all items from a feed
-//  Format can be really simple
-
-//  select title from rss_item where author = "VICE News" order by pubdate asc;
 
 // Newsboat keeps a cache.db internally with:
 //  CREATE TABLE rss_feed (  

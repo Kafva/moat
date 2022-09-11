@@ -9,7 +9,8 @@ class RssFeed: ObservableObject, Codable, Equatable {
    let rssurl: String
    let url: String
    let title: String
-   var unread: Int
+   var unread_count: Int
+   var item_count: Int
    let id = UUID(); // client-side only attribute
    
    /// Returns true if the provided feeds have the same
@@ -18,7 +19,8 @@ class RssFeed: ObservableObject, Codable, Equatable {
         return lhs.rssurl == rhs.rssurl &&
             lhs.url == rhs.url &&
             lhs.title == rhs.title &&
-            lhs.unread == rhs.unread
+            lhs.unread_count == rhs.unread_count &&
+            lhs.item_count == rhs.item_count
    } 
 
    
@@ -29,7 +31,8 @@ class RssFeed: ObservableObject, Codable, Equatable {
       case rssurl
       case url
       case title 
-      case unread = "unread_count" 
+      case unread_count
+      case item_count = "total_count"
    } 
    
    func encode(to encoder: Encoder) throws {
@@ -37,7 +40,8 @@ class RssFeed: ObservableObject, Codable, Equatable {
       try container.encode(self.rssurl, forKey: .rssurl)
       try container.encode(self.url, forKey: .url)
       try container.encode(self.title, forKey: .title)
-      try container.encode(self.unread, forKey: .unread)
+      try container.encode(self.unread_count, forKey: .unread_count)
+      try container.encode(self.item_count, forKey: .item_count)
    } 
    
    required init(from decoder: Decoder ) throws {
@@ -46,13 +50,15 @@ class RssFeed: ObservableObject, Codable, Equatable {
       self.rssurl = try values.decode(String.self, forKey: .rssurl)
       self.url = try values.decode(String.self, forKey: .url)
       self.title = try values.decode(String.self, forKey: .title)
-      self.unread = try values.decode(Int.self, forKey: .unread)
+      self.unread_count = try values.decode(Int.self, forKey: .unread_count)
+      self.item_count = try values.decode(Int.self, forKey: .item_count)
    }
 
-   init(rssurl: String, url: String, title: String, unread: Int) {
+   init(rssurl: String, url: String, title: String, unread_count: Int, item_count: Int) {
       self.rssurl = rssurl;
       self.url = url;
       self.title = title;
-      self.unread = unread;
+      self.unread_count = unread_count;
+      self.item_count = item_count;
    }
 }
