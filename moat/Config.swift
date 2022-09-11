@@ -1,6 +1,6 @@
 import SwiftUI
 
-let BUNDLE_IDENTIFIER = "com..Swive"
+let BUNDLE_IDENTIFIER = "com..moat"
 
 let SERVER_REQUEST_TIMEOUT = 10.0
 

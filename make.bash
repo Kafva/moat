@@ -2,7 +2,7 @@
 exitErr(){ echo -e "$1" >&2 ; exit 1; }
 usage="usage: $(basename $0) [-n <device name>] <build|usb-install|test>"
 helpStr=""
-PROJECT=Swive
+PROJECT=moat
 DEVICENAME=sheep
 SCHEME=Install
 

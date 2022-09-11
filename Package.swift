@@ -19,9 +19,9 @@
 // Note that it should not matter what method is used to fetch the dependency in question for the actual project, i.e. it should work to use both CocoaPods and the built in SPM in Xcode from `File > Swift Packages > Add Package Dependency...`
 
 import PackageDescription
-let packageName = "Swive"
+let packageName = "moat"
 let package = Package(
-  name: "Swive",
+  name: "moat",
   defaultLocalization: "en",
   platforms: [.iOS("14.5") ],
   products: [

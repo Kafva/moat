@@ -1,4 +1,4 @@
-# Swive
+# moat
 * [Installation](#installation)
 * [Development](#development)
 	* [Import new images](#import-new-images)
@@ -12,7 +12,7 @@ Begin by installing all dependecies for the client and server
 pod install
 cargo build
 ```
-To install the iOS application, open the `Swive.xcworkspace` file with Xcode, connect your device and run with `CMD+R`.
+To install the iOS application, open the `moat.xcworkspace` file with Xcode, connect your device and run with `CMD+R`.
 
 ## Development
 

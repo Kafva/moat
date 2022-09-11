@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9185ABB2637CAA1E71DFA279 /* Pods_Swive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D39C63E8744340F1CF18ACB /* Pods_Swive.framework */; };
+		BC0A64FC5ED9D01A1D4D270C /* Pods_moat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B4F4D90BA92FC1F4C1F5E5 /* Pods_moat.framework */; };
 		DD0D6285267E7BB60021B988 /* UrlImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0D6284267E7BB60021B988 /* UrlImageView.swift */; };
 		DD45CC07267B4A28000B0A99 /* FeedsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC06267B4A28000B0A99 /* FeedsView.swift */; };
 		DD45CC0B267B4AAC000B0A99 /* RssItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD45CC09267B4AAC000B0A99 /* RssItem.swift */; };
@@ -32,15 +32,15 @@
 		DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A1F2671FF970010BF19 /* SpriteSheet.swift */; };
 		DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A2326727D920010BF19 /* SpriteScene.swift */; };
 		DD939A262672A9370010BF19 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD939A252672A9370010BF19 /* Config.swift */; };
-		DDA951F62670F139003D760D /* SwiveApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA951F52670F139003D760D /* SwiveApp.swift */; };
 		DDA951F82670F139003D760D /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA951F72670F139003D760D /* LoadingView.swift */; };
 		DDA951FA2670F13B003D760D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDA951F92670F13B003D760D /* Assets.xcassets */; };
-		DDA952082670F13B003D760D /* SwiveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952072670F13B003D760D /* SwiveTests.swift */; };
-		DDA952132670F13B003D760D /* SwiveUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952122670F13B003D760D /* SwiveUITests.swift */; };
+		DDA952082670F13B003D760D /* moatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952072670F13B003D760D /* moatTests.swift */; };
+		DDA952132670F13B003D760D /* moatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA952122670F13B003D760D /* moatUITests.swift */; };
 		DDD1585E267F4A60007B7D1E /* YtLogosApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1585D267F4A60007B7D1E /* YtLogosApi.swift */; };
 		DDD15860267F526D007B7D1E /* LoadingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1585F267F526D007B7D1E /* LoadingTextView.swift */; };
 		DDD15862267F6950007B7D1E /* InputField+customStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD15861267F6950007B7D1E /* InputField+customStyle.swift */; };
 		DDD6E183267361CD0039A899 /* Color+hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD6E182267361CD0039A899 /* Color+hex.swift */; };
+		DDF203E3268BB62B00B85F83 /* moatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF203E2268BB62B00B85F83 /* moatApp.swift */; };
 		DDFB1314267C89B10033528E /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDFB1313267C89B10033528E /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
@@ -50,21 +50,21 @@
 			containerPortal = DDA951EA2670F139003D760D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = DDA951F12670F139003D760D;
-			remoteInfo = Swive;
+			remoteInfo = moat;
 		};
 		DDA9520F2670F13B003D760D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DDA951EA2670F139003D760D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = DDA951F12670F139003D760D;
-			remoteInfo = Swive;
+			remoteInfo = moat;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		15185687BD2F227C1D12036F /* Pods-Swive.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swive.debug.xcconfig"; path = "Target Support Files/Pods-Swive/Pods-Swive.debug.xcconfig"; sourceTree = "<group>"; };
-		2D39C63E8744340F1CF18ACB /* Pods_Swive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Swive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C6E7383BB54A7FFCADA5D88D /* Pods-Swive.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Swive.release.xcconfig"; path = "Target Support Files/Pods-Swive/Pods-Swive.release.xcconfig"; sourceTree = "<group>"; };
+		07994357D446971DE3717A10 /* Pods-moat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-moat.debug.xcconfig"; path = "Target Support Files/Pods-moat/Pods-moat.debug.xcconfig"; sourceTree = "<group>"; };
+		872E42D68DFCD786EBA4929B /* Pods-moat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-moat.release.xcconfig"; path = "Target Support Files/Pods-moat/Pods-moat.release.xcconfig"; sourceTree = "<group>"; };
+		A4B4F4D90BA92FC1F4C1F5E5 /* Pods_moat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_moat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD0D6284267E7BB60021B988 /* UrlImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlImageView.swift; sourceTree = "<group>"; };
 		DD45CC06267B4A28000B0A99 /* FeedsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedsView.swift; sourceTree = "<group>"; };
 		DD45CC09267B4AAC000B0A99 /* RssItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RssItem.swift; sourceTree = "<group>"; };
@@ -89,21 +89,21 @@
 		DD939A1F2671FF970010BF19 /* SpriteSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteSheet.swift; sourceTree = "<group>"; };
 		DD939A2326727D920010BF19 /* SpriteScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpriteScene.swift; sourceTree = "<group>"; };
 		DD939A252672A9370010BF19 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
-		DDA951F22670F139003D760D /* Swive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swive.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		DDA951F52670F139003D760D /* SwiveApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiveApp.swift; sourceTree = "<group>"; };
+		DDA951F22670F139003D760D /* moat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = moat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDA951F72670F139003D760D /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		DDA951F92670F13B003D760D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DDA951FE2670F13B003D760D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DDA952032670F13B003D760D /* SwiveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiveTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DDA952072670F13B003D760D /* SwiveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiveTests.swift; sourceTree = "<group>"; };
+		DDA952032670F13B003D760D /* moatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = moatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDA952072670F13B003D760D /* moatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moatTests.swift; sourceTree = "<group>"; };
 		DDA952092670F13B003D760D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DDA9520E2670F13B003D760D /* SwiveUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiveUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DDA952122670F13B003D760D /* SwiveUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiveUITests.swift; sourceTree = "<group>"; };
+		DDA9520E2670F13B003D760D /* moatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = moatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDA952122670F13B003D760D /* moatUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = moatUITests.swift; sourceTree = "<group>"; };
 		DDA952142670F13B003D760D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDD1585D267F4A60007B7D1E /* YtLogosApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YtLogosApi.swift; sourceTree = "<group>"; };
 		DDD1585F267F526D007B7D1E /* LoadingTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingTextView.swift; sourceTree = "<group>"; };
 		DDD15861267F6950007B7D1E /* InputField+customStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "InputField+customStyle.swift"; sourceTree = "<group>"; };
 		DDD6E182267361CD0039A899 /* Color+hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+hex.swift"; sourceTree = "<group>"; };
+		DDF203E2268BB62B00B85F83 /* moatApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = moatApp.swift; sourceTree = "<group>"; };
 		DDFB1313267C89B10033528E /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,7 +112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9185ABB2637CAA1E71DFA279 /* Pods_Swive.framework in Frameworks */,
+				BC0A64FC5ED9D01A1D4D270C /* Pods_moat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,11 +133,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4919571628B684EDF006284D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A4B4F4D90BA92FC1F4C1F5E5 /* Pods_moat.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		BD4DD9B32A8E0A5B0D6E04A6 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				15185687BD2F227C1D12036F /* Pods-Swive.debug.xcconfig */,
-				C6E7383BB54A7FFCADA5D88D /* Pods-Swive.release.xcconfig */,
+				07994357D446971DE3717A10 /* Pods-moat.debug.xcconfig */,
+				872E42D68DFCD786EBA4929B /* Pods-moat.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -195,90 +203,82 @@
 		DDA951E92670F139003D760D = {
 			isa = PBXGroup;
 			children = (
-				DDA951F42670F139003D760D /* Swive */,
-				DDA952062670F13B003D760D /* SwiveTests */,
-				DDA952112670F13B003D760D /* SwiveUITests */,
+				DDA951F42670F139003D760D /* moat */,
+				DDA952062670F13B003D760D /* moatTests */,
+				DDA952112670F13B003D760D /* moatUITests */,
 				DDA951F32670F139003D760D /* Products */,
 				BD4DD9B32A8E0A5B0D6E04A6 /* Pods */,
-				E95423426A5208FCAFD09035 /* Frameworks */,
+				4919571628B684EDF006284D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		DDA951F32670F139003D760D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DDA951F22670F139003D760D /* Swive.app */,
-				DDA952032670F13B003D760D /* SwiveTests.xctest */,
-				DDA9520E2670F13B003D760D /* SwiveUITests.xctest */,
+				DDA951F22670F139003D760D /* moat.app */,
+				DDA952032670F13B003D760D /* moatTests.xctest */,
+				DDA9520E2670F13B003D760D /* moatUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DDA951F42670F139003D760D /* Swive */ = {
+		DDA951F42670F139003D760D /* moat */ = {
 			isa = PBXGroup;
 			children = (
+				DDF203E2268BB62B00B85F83 /* moatApp.swift */,
 				DD80E6DE267CA6C7003B686A /* Util */,
 				DD45CC08267B4AAC000B0A99 /* Models */,
 				DD45CC05267B4A28000B0A99 /* Views */,
 				DD939A252672A9370010BF19 /* Config.swift */,
-				DDA951F52670F139003D760D /* SwiveApp.swift */,
 				DDA951F92670F13B003D760D /* Assets.xcassets */,
 				DDA951FE2670F13B003D760D /* Info.plist */,
 			);
-			path = Swive;
+			path = moat;
 			sourceTree = "<group>";
 		};
-		DDA952062670F13B003D760D /* SwiveTests */ = {
+		DDA952062670F13B003D760D /* moatTests */ = {
 			isa = PBXGroup;
 			children = (
-				DDA952072670F13B003D760D /* SwiveTests.swift */,
+				DDA952072670F13B003D760D /* moatTests.swift */,
 				DDA952092670F13B003D760D /* Info.plist */,
 			);
-			path = SwiveTests;
+			path = moatTests;
 			sourceTree = "<group>";
 		};
-		DDA952112670F13B003D760D /* SwiveUITests */ = {
+		DDA952112670F13B003D760D /* moatUITests */ = {
 			isa = PBXGroup;
 			children = (
-				DDA952122670F13B003D760D /* SwiveUITests.swift */,
+				DDA952122670F13B003D760D /* moatUITests.swift */,
 				DDA952142670F13B003D760D /* Info.plist */,
 			);
-			path = SwiveUITests;
-			sourceTree = "<group>";
-		};
-		E95423426A5208FCAFD09035 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				2D39C63E8744340F1CF18ACB /* Pods_Swive.framework */,
-			);
-			name = Frameworks;
+			path = moatUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		DDA951F12670F139003D760D /* Swive */ = {
+		DDA951F12670F139003D760D /* moat */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DDA952172670F13B003D760D /* Build configuration list for PBXNativeTarget "Swive" */;
+			buildConfigurationList = DDA952172670F13B003D760D /* Build configuration list for PBXNativeTarget "moat" */;
 			buildPhases = (
-				D7EAA4BDFA74A2598FDF2B09 /* [CP] Check Pods Manifest.lock */,
+				66C890885ADA9C8860AA6CC1 /* [CP] Check Pods Manifest.lock */,
 				DDA951EE2670F139003D760D /* Sources */,
 				DDA951EF2670F139003D760D /* Frameworks */,
 				DDA951F02670F139003D760D /* Resources */,
-				DE685AFFF924AD8A768C640F /* [CP] Embed Pods Frameworks */,
+				3E379F657DBB7543CBFD6B5C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = Swive;
-			productName = Swive;
-			productReference = DDA951F22670F139003D760D /* Swive.app */;
+			name = moat;
+			productName = moat;
+			productReference = DDA951F22670F139003D760D /* moat.app */;
 			productType = "com.apple.product-type.application";
 		};
-		DDA952022670F13B003D760D /* SwiveTests */ = {
+		DDA952022670F13B003D760D /* moatTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DDA9521A2670F13B003D760D /* Build configuration list for PBXNativeTarget "SwiveTests" */;
+			buildConfigurationList = DDA9521A2670F13B003D760D /* Build configuration list for PBXNativeTarget "moatTests" */;
 			buildPhases = (
 				DDA951FF2670F13B003D760D /* Sources */,
 				DDA952002670F13B003D760D /* Frameworks */,
@@ -289,14 +289,14 @@
 			dependencies = (
 				DDA952052670F13B003D760D /* PBXTargetDependency */,
 			);
-			name = SwiveTests;
-			productName = SwiveTests;
-			productReference = DDA952032670F13B003D760D /* SwiveTests.xctest */;
+			name = moatTests;
+			productName = moatTests;
+			productReference = DDA952032670F13B003D760D /* moatTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		DDA9520D2670F13B003D760D /* SwiveUITests */ = {
+		DDA9520D2670F13B003D760D /* moatUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DDA9521D2670F13B003D760D /* Build configuration list for PBXNativeTarget "SwiveUITests" */;
+			buildConfigurationList = DDA9521D2670F13B003D760D /* Build configuration list for PBXNativeTarget "moatUITests" */;
 			buildPhases = (
 				DDA9520A2670F13B003D760D /* Sources */,
 				DDA9520B2670F13B003D760D /* Frameworks */,
@@ -307,9 +307,9 @@
 			dependencies = (
 				DDA952102670F13B003D760D /* PBXTargetDependency */,
 			);
-			name = SwiveUITests;
-			productName = SwiveUITests;
-			productReference = DDA9520E2670F13B003D760D /* SwiveUITests.xctest */;
+			name = moatUITests;
+			productName = moatUITests;
+			productReference = DDA9520E2670F13B003D760D /* moatUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -334,7 +334,7 @@
 					};
 				};
 			};
-			buildConfigurationList = DDA951ED2670F139003D760D /* Build configuration list for PBXProject "Swive" */;
+			buildConfigurationList = DDA951ED2670F139003D760D /* Build configuration list for PBXProject "moat" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -347,9 +347,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DDA951F12670F139003D760D /* Swive */,
-				DDA952022670F13B003D760D /* SwiveTests */,
-				DDA9520D2670F13B003D760D /* SwiveUITests */,
+				DDA951F12670F139003D760D /* moat */,
+				DDA952022670F13B003D760D /* moatTests */,
+				DDA9520D2670F13B003D760D /* moatUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -380,7 +380,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D7EAA4BDFA74A2598FDF2B09 /* [CP] Check Pods Manifest.lock */ = {
+		3E379F657DBB7543CBFD6B5C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-moat/Pods-moat-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-moat/Pods-moat-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-moat/Pods-moat-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		66C890885ADA9C8860AA6CC1 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -395,28 +412,11 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Swive-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-moat-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DE685AFFF924AD8A768C640F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Swive/Pods-Swive-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Swive/Pods-Swive-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Swive/Pods-Swive-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -427,7 +427,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDA951F82670F139003D760D /* LoadingView.swift in Sources */,
-				DDA951F62670F139003D760D /* SwiveApp.swift in Sources */,
 				DD45CC0C267B4AAC000B0A99 /* RssFeed.swift in Sources */,
 				DD9150F9267FCD7000F622C0 /* ServerConnectionError.swift in Sources */,
 				DD939A262672A9370010BF19 /* Config.swift in Sources */,
@@ -448,6 +447,7 @@
 				DD939A2426727D920010BF19 /* SpriteScene.swift in Sources */,
 				DD6F23F4268733560008D549 /* ServerResponse.swift in Sources */,
 				DD7C3070267DCB1500D88DD1 /* ActionBarView.swift in Sources */,
+				DDF203E3268BB62B00B85F83 /* moatApp.swift in Sources */,
 				DD939A202671FF970010BF19 /* SpriteSheet.swift in Sources */,
 				DDD15862267F6950007B7D1E /* InputField+customStyle.swift in Sources */,
 				DD7C3074267DD40800D88DD1 /* RssItemRowView.swift in Sources */,
@@ -464,7 +464,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDA952082670F13B003D760D /* SwiveTests.swift in Sources */,
+				DDA952082670F13B003D760D /* moatTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,7 +472,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DDA952132670F13B003D760D /* SwiveUITests.swift in Sources */,
+				DDA952132670F13B003D760D /* moatUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,12 +481,12 @@
 /* Begin PBXTargetDependency section */
 		DDA952052670F13B003D760D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DDA951F12670F139003D760D /* Swive */;
+			target = DDA951F12670F139003D760D /* moat */;
 			targetProxy = DDA952042670F13B003D760D /* PBXContainerItemProxy */;
 		};
 		DDA952102670F13B003D760D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = DDA951F12670F139003D760D /* Swive */;
+			target = DDA951F12670F139003D760D /* moat */;
 			targetProxy = DDA9520F2670F13B003D760D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -612,46 +612,46 @@
 		};
 		DDA952182670F13B003D760D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 15185687BD2F227C1D12036F /* Pods-Swive.debug.xcconfig */;
+			baseConfigurationReference = 07994357D446971DE3717A10 /* Pods-moat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = R394CK45KY;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Swive/Info.plist;
+				INFOPLIST_FILE = moat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com..Swive;
+				PRODUCT_BUNDLE_IDENTIFIER = com..moat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		DDA952192670F13B003D760D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C6E7383BB54A7FFCADA5D88D /* Pods-Swive.release.xcconfig */;
+			baseConfigurationReference = 872E42D68DFCD786EBA4929B /* Pods-moat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = R394CK45KY;
 				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = Swive/Info.plist;
+				INFOPLIST_FILE = moat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com..Swive;
+				PRODUCT_BUNDLE_IDENTIFIER = com..moat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -662,18 +662,18 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = R394CK45KY;
-				INFOPLIST_FILE = SwiveTests/Info.plist;
+				INFOPLIST_FILE = moatTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com..SwiveTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com..moatTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Swive.app/Swive";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/moat.app/moat";
 			};
 			name = Debug;
 		};
@@ -684,18 +684,18 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = R394CK45KY;
-				INFOPLIST_FILE = SwiveTests/Info.plist;
+				INFOPLIST_FILE = moatTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com..SwiveTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com..moatTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Swive.app/Swive";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/moat.app/moat";
 			};
 			name = Release;
 		};
@@ -705,17 +705,17 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = R394CK45KY;
-				INFOPLIST_FILE = SwiveUITests/Info.plist;
+				INFOPLIST_FILE = moatUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com..SwiveUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com..moatUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Swive;
+				TEST_TARGET_NAME = moat;
 			};
 			name = Debug;
 		};
@@ -725,24 +725,24 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = R394CK45KY;
-				INFOPLIST_FILE = SwiveUITests/Info.plist;
+				INFOPLIST_FILE = moatUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com..SwiveUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com..moatUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Swive;
+				TEST_TARGET_NAME = moat;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DDA951ED2670F139003D760D /* Build configuration list for PBXProject "Swive" */ = {
+		DDA951ED2670F139003D760D /* Build configuration list for PBXProject "moat" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DDA952152670F13B003D760D /* Debug */,
@@ -751,7 +751,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DDA952172670F13B003D760D /* Build configuration list for PBXNativeTarget "Swive" */ = {
+		DDA952172670F13B003D760D /* Build configuration list for PBXNativeTarget "moat" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DDA952182670F13B003D760D /* Debug */,
@@ -760,7 +760,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DDA9521A2670F13B003D760D /* Build configuration list for PBXNativeTarget "SwiveTests" */ = {
+		DDA9521A2670F13B003D760D /* Build configuration list for PBXNativeTarget "moatTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DDA9521B2670F13B003D760D /* Debug */,
@@ -769,7 +769,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DDA9521D2670F13B003D760D /* Build configuration list for PBXNativeTarget "SwiveUITests" */ = {
+		DDA9521D2670F13B003D760D /* Build configuration list for PBXNativeTarget "moatUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DDA9521E2670F13B003D760D /* Debug */,

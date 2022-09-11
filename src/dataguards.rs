@@ -136,8 +136,8 @@ impl<'r> FromRequest<'r> for Creds<'r> {
 
     async fn from_request(req: &'r Request<'_>) -> request::Outcome<Self, Self::Error> {
 
-        let env_key = std::env::var("REMOAT_KEY")
-            .expect("No $REMOAT_KEY configured in enviroment");
+        let env_key = std::env::var("MOAT_KEY")
+            .expect("No $MOAT_KEY configured in enviroment");
 
         match req.headers().get_one("x-creds") {
             None =>

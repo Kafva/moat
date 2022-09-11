@@ -22,7 +22,7 @@ struct ItemsView: View {
          ZStack {
             // We need to re-add the background since the
             // ItemsView is *not* rendered on top of the view that
-            // is presented from SwiveApp.swift
+            // is presented from moatApp.swift
             BKG_GRADIENT_LINEAR
                .edgesIgnoringSafeArea(.vertical) // Fill entire screen 
             
