@@ -40,7 +40,7 @@ struct RssFeedRowView: View {
    var body: some View {
       // | 50px | 0.5 %      | 0.5 % - 50px |
       HStack {
-         NavigationLink(destination: LoadingView("YEP") ){
+         NavigationLink(destination: SettingsView() ){
             Image("umbreon")
                .resizable() // Must be applied before modifying the frame size
                .clipShape(Circle())
@@ -53,7 +53,7 @@ struct RssFeedRowView: View {
          }
 
          VStack (alignment: .leading, spacing: 5){
-            NavigationLink(destination: LoadingView("YEP") ){
+            NavigationLink(destination: SettingsView() ){
                Text("\(feed.title)")
                   .foregroundColor(.white)
                   .font(.system(size:22,weight: .bold))
@@ -92,6 +92,9 @@ struct RssFeedRowView: View {
 
 struct FeedsView: View {
 
+   //@EnvironmentObject var env: GlobalState;
+   @State var isLoading: Bool = true;
+
    @State var feeds = [RssFeed]();
    
    @State var searchString: String = "";
@@ -120,6 +123,7 @@ struct FeedsView: View {
    /// Fetch a list of all entries from the provided path
    /// on the remote server
    func loadFeeds() -> Void {
+      
       guard let url = URL(string: "http://10.0.1.30:5000/feeds") else { return } 
       var req = URLRequest(url: url);
       req.addValue("test", forHTTPHeaderField: "x-creds")
@@ -135,75 +139,104 @@ struct FeedsView: View {
                // to update the state in the view
                DispatchQueue.main.async {
                   self.feeds = decoded;
+                  self.isLoading = false;
                }
             }
-            catch { makeAlert(title: "Decoding error", err: err); }
+            catch { 
+               makeAlert(title: "Decoding error", err: err); 
+               self.isLoading = false;
+            }
          }
-         else { makeAlert(title: "Connection error", err: err) }
+         else { 
+            makeAlert(title: "Connection error", err: err) 
+            self.isLoading = false;
+         }
       }.resume(); // Execute the task immediatelly
    }
 
    var body: some View {
-      
-
-      GeometryReader { geometry in 
-         // Gain access to the screen dimensions to perform proper sizing
-      
-         ZStack {
-            // The Gradient background needs to be placed inside the ZStack to appear beneath
-            // the scene (which we give a transparent background)
-            
-            BKG_GRADIENT_LINEAR
-               .edgesIgnoringSafeArea(.vertical) // Fill entire screen 
-            
-            ScrollView(.vertical) { 
-               // The alignment parameter for a VStack concerns horizontal alignment
-               VStack(alignment: .center, spacing: 0) {
-                  
-                  HStack(alignment: .top) {
-                     SearchView( barWidth: geometry.size.width * 0.6, searchBinding: $searchString )
-                        .padding(.bottom, 20)
+         GeometryReader { geometry in 
+            // Gain access to the screen dimensions to perform proper sizing
+         
+            ZStack {
+               // The Gradient background needs to be placed inside the ZStack to appear beneath
+               // the scene (which we give a transparent background)
+               
+               BKG_GRADIENT_LINEAR
+                  .edgesIgnoringSafeArea(.vertical) // Fill entire screen 
+                  .animation(nil)
+               
+      if self.isLoading {
+         LoadingView(width: geometry.size.width, height: geometry.size.height,  loadingText:"Loading...")
+      .onAppear(perform: loadFeeds)
+      }
+      else {
+               
+               ScrollView(.vertical) { 
+                  // The alignment parameter for a VStack concerns horizontal alignment
+                  VStack(alignment: .center, spacing: 0) {
                      
-                     // Settings and reload buttons
-                     NavigationLink(destination: LoadingView("Settings") ){
-                        Image(systemName: "slider.horizontal.3").resizable().frame(
-                           width: 25, height: 25, alignment: .center
-                        )
+                     HStack(alignment: .top) {
+                        SearchView( barWidth: geometry.size.width * 0.6, searchBinding: $searchString )
+                           .padding(.bottom, 20)
+                        
+                        // Settings and reload buttons
+                        NavigationLink(destination: SettingsView() ){
+                           Image(systemName: "slider.horizontal.3").resizable().frame(
+                              width: 25, height: 25, alignment: .center
+                           )
+                        }
+                        .padding(10)
+                        Button(action: {
+                           NSLog("Reload!")
+                        }) {
+                           Image(systemName: "arrow.clockwise").resizable().frame(
+                              width: 25, height: 25, alignment: .center
+                           )
+                        }
+                        .padding(10)
                      }
-                     .padding(10)
-                     Button(action: {
-                        NSLog("Reload!")
-                     }) {
-                        Image(systemName: "arrow.clockwise").resizable().frame(
-                           width: 25, height: 25, alignment: .center
-                        )
-                     }
-                     .padding(10)
-                  }
 
-                  ForEach(feeds, id: \.id ) { feed in
-                     // We need the entry class to have an ID
-                     // to iterate over it using ForEach()
-                  
-                     if feed.title.contains(searchString) || searchString == "" {
-                        RssFeedRowView(feed: feed, screenWidth: geometry.size.width)
+
+                     ForEach(feeds, id: \.id ) { feed in
+                        // We need the entry class to have an ID
+                        // to iterate over it using ForEach()
+                     
+                        if feed.title.contains(searchString) || searchString == "" {
+                           RssFeedRowView(feed: feed, screenWidth: geometry.size.width)
+                        }
                      }
+                     
+                     //if self.isLoading {
+                     //   ZStack(alignment: .center) {
+                     //      ProgressView()
+                     //         .progressViewStyle(CircularProgressViewStyle(tint: .white) )
+                     //         .scaleEffect(s: CGFloat, anchor: UnitPoint)
+                     //         .position(
+                     //            x: geometry.size.width/2 - 60, 
+                     //            y: geometry.size.height/2 - 60
+                     //         )
+                     //   }
+                     //}
+                     
+                     
                   }
-               }
-               .listRowBackground(Color.clear)
-               .onAppear(perform: loadFeeds)
-               .alert(isPresented: self.$showAlert) {
-                  Alert(
-                     title: Text(self.alertTitle), 
-                     message: Text(self.alertMessage), 
-                     dismissButton: .default(Text("OK"))
-                  )
+                  .listRowBackground(Color.clear)
+                  //.onAppear(perform: loadFeeds)
+                  .alert(isPresented: self.$showAlert) {
+                     Alert(
+                        title: Text(self.alertTitle), 
+                        message: Text(self.alertMessage), 
+                        dismissButton: .default(Text("OK"))
+                     )
+                  }
                }
             }
+         
          }
-      
-      }
+            
+         }
 
+      }
    }
-}
 
