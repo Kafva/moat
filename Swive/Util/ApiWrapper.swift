@@ -82,7 +82,7 @@ class ApiWrapper<T: Codable> {
       .resume(); // Execute the task immediatelly
   }
   
-  func setUnreadStatus(unread_binding: Binding<Bool>, rssurl: String = "", video_id: Int = 0, alert: AlertState, isLoading: Binding<Bool>?) -> Void {
+  func setUnreadStatus(unread_count: Binding<Int>, unread_binding: Binding<Bool>, rssurl: String, video_id: Int = 0, alert: AlertState, isLoading: Binding<Bool>?) -> Void {
      
       guard let (serverLocation, serverKey) = 
          self.getServerConfig(alert: alert, isLoading: isLoading) 
@@ -109,53 +109,52 @@ class ApiWrapper<T: Codable> {
 
 
       URLSession.shared.dataTask(with: req) { data, res, err in
-      // Create a background task to fetch data from the server
+         if (res as? HTTPURLResponse)?.statusCode == 401 {
+            alert.makeAlert(
+               title: "Unauthorized", 
+               err: ServerConnectionError.invalidKey, 
+               isLoading: isLoading
+            ); 
+         } 
+         else {
+            if data != nil {
+             do { 
+               
+               let decoded = try JSONDecoder().decode(ServerResponse.self, from: data!); 
 
-      if (res as? HTTPURLResponse)?.statusCode == 401 {
-         alert.makeAlert(
-            title: "Unauthorized", 
-            err: ServerConnectionError.invalidKey, 
-            isLoading: isLoading
-         ); 
-      } 
-      else {
-         if data != nil {
-          do { 
-            
-            let decoded = try JSONDecoder().decode(ServerResponse.self, from: data!); 
+               // If the response data was successfully decoded dispatch an update in the
+               // main thread (all UI updates should be done in the main thread)
+               // to update the state in the view
+               DispatchQueue.main.async {
+                  if !decoded.success {
+                     alert.makeAlert(
+                        title: "Bad request", 
+                        err: ServerConnectionError.unexpected(code: 400) , 
+                        isLoading: isLoading
+                     )
+                  }
+                  else  {
+                     // Update the binding to the unread_count value in the FeedsView
+                     // and toggle the boolean value for the ItemsView
+                     unread_count.wrappedValue += unread_binding.wrappedValue ? -1 : 1 
+                     unread_binding.wrappedValue = !unread_binding.wrappedValue
+                  }
 
-            // If the response data was successfully decoded dispatch an update in the
-            // main thread (all UI updates should be done in the main thread)
-            // to update the state in the view
-            DispatchQueue.main.async {
-               print("DECODED:", decoded.success)
-               if !decoded.success {
-                  alert.makeAlert(
-                     title: "Bad request", 
-                     err: ServerConnectionError.unexpected(code: 400) , 
-                     isLoading: isLoading
-                  )
+                  isLoading?.wrappedValue = false;
                }
-               else  {
-                  unread_binding.wrappedValue = !unread_binding.wrappedValue
-               }
-
-               isLoading?.wrappedValue = false;
+             }
+             catch { 
+               alert.makeAlert(
+                  title: "Decoding error", err: err, isLoading: isLoading
+               ); 
+             }
             }
-          }
-          catch { 
-            alert.makeAlert(
-               title: "Decoding error", err: err, isLoading: isLoading
-            ); 
-          }
+            else { 
+               alert.makeAlert(
+                  title: "Connection error", err: err, isLoading: isLoading
+               ); 
+            }
          }
-         else { 
-            alert.makeAlert(
-               title: "Connection error", err: err, isLoading: isLoading
-            ); 
-         }
-
-      }
       }
       .resume(); // Execute the task immediatelly
 

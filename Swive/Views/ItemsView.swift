@@ -3,16 +3,18 @@ import SwiftUI
 struct ItemsView: View {
 
    var feedurl: String
+   var apiWrapper = ApiWrapper<RssItem>()
 
    @StateObject var items: ObservableArray<RssItem> = ObservableArray();
    @StateObject var alertState: AlertState = AlertState();
    @State var isLoading: Bool = true;
+   
+   @Binding var unread_count: Int
 
-   var apiWrapper = ApiWrapper<RssItem>()
-
-   init?(_ feedurl: String) {
+   init?(feedurl: String, unread_count: Binding<Int>) {
       setViewTransparency()
       self.feedurl = feedurl;
+      self._unread_count = unread_count;
    }
    
    var body: some View {
@@ -53,8 +55,13 @@ struct ItemsView: View {
                   VStack(alignment: .center, spacing: Y_AXIS_SPACING_FOR_ITEMS) {
 
                      ForEach(self.items.arr, id: \.id ) { item in
-                        RssItemRowView(item: item, screenWidth: geometry.size.width)
-                           .environmentObject(alertState)
+                        RssItemRowView(
+                           rssurl: feedurl, 
+                           item: item, 
+                           screenWidth: geometry.size.width,
+                           unread_count: $unread_count
+                        )
+                        .environmentObject(alertState)
                      }
                      .listRowBackground(Color.clear)
                      .frame(width: geometry.size.width, alignment: .center)

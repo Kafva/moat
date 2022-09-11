@@ -25,7 +25,9 @@ struct ItemThumbnailView: View {
        .frame(
           width:  item.getVideoId() != nil ? 
               self.screenWidth*(1-BUTTON_WIDTH_PERCENTAGE_OF_ROW) - THUMBNAIL_WIDTH - 23 :
-              self.screenWidth*(1-BUTTON_WIDTH_PERCENTAGE_OF_ROW) - 15, 
+              // Fill entire the entire row excluding 20px of padding on each side and the
+              // width of the button
+              self.screenWidth*(1-BUTTON_WIDTH_PERCENTAGE_OF_ROW) - X_AXIS_MARGIN_FOR_ROWS*2, 
           alignment: .leading
        )  
        .onTapGesture {

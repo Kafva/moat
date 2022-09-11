@@ -2,7 +2,6 @@ import SwiftUI
 
 let SERVER_REQUEST_TIMEOUT = 3.0
 
-
 /***** UI dimensions *****/
 let IMAGE_WIDTH = CGFloat(50);
 let ROW_HEIGHT = CGFloat(50);
@@ -16,18 +15,10 @@ let INITIAL_X_POS = THUMBNAIL_WIDTH + 35
 let BUTTON_WIDTH_PERCENTAGE_OF_ROW = CGFloat(0.1)
 
 let Y_AXIS_SPACING_FOR_ITEMS = CGFloat(5)
+let X_AXIS_MARGIN_FOR_ROWS = CGFloat(5)
 
 /***** Colors *******/
 let BKG_GRADIENT_LINEAR = LinearGradient(
-    gradient: Gradient(colors: [
-        Color(hex: "#606c88"),
-        Color(hex: "#3f4c6b")
-    ]), 
-    startPoint: .top, 
-    endPoint: .bottom
-);
-
-let UNREAD_GRADIENT = LinearGradient(
     gradient: Gradient(colors: [
         Color(hex: "#606c88"),
         Color(hex: "#3f4c6b")

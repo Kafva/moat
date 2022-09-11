@@ -2,11 +2,14 @@ import SwiftUI
 
 struct RssItemRowView: View {
 
+   var rssurl: String
    var item: RssItem;
    var screenWidth: CGFloat;
+   var apiWrapper = ApiWrapper<ServerResponse>()
    let location = CGPoint(x: INITIAL_X_POS, y: 0);
    
-   var apiWrapper = ApiWrapper<ServerResponse>()
+   @Binding var unread_count: Int;
+   @EnvironmentObject var alertState: AlertState;
 
    var body: some View {
       HStack {
@@ -23,17 +26,24 @@ struct RssItemRowView: View {
            .padding(.leading, 5)
         } 
         else {
-           Spacer().frame(width: 90)
+           Spacer().frame(width: X_AXIS_MARGIN_FOR_ROWS)
         }
 
+        // Both of these subviews require access to the `unread_count` since
+        // they may update the `unread` value in which case the `unread_count`
+        // also needs to be modified 
         ItemThumbnailView(item: self.item, screenWidth: self.screenWidth)
         
         ItemButtonView(
-           unread_binding: self.item.unread, 
-           video_id: self.item.id, 
+           unread_count: self.$unread_count,
+           unread: self.item.unread, 
+           video_id: self.item.id,
+           rssurl: self.rssurl,
            screenWidth: self.screenWidth, 
            apiWrapper: apiWrapper
         )
+        .environmentObject(alertState)
+
       }
       .frame(width: self.screenWidth, alignment: .leading)
       .padding(.bottom, 0)
