@@ -94,7 +94,7 @@ class SpriteScene: SKScene {
         
         guard nodeCount < MAX_SPRITE_COUNT else { 
             #if DEBUG
-                NSLog("Limit reached (\(nodeCount)/\(MAX_SPRITE_COUNT)) -- not adding a new sprite");
+                //NSLog("Limit reached (\(nodeCount)/\(MAX_SPRITE_COUNT)) -- not adding a new sprite");
             #endif
             return; 
         }
@@ -110,7 +110,7 @@ class SpriteScene: SKScene {
             sprite.position = spawnPosition;
             
             #if DEBUG
-                NSLog("Placing new sprite at (\(round(sprite.position.x)),\(round(sprite.position.y)))"); 
+                //NSLog("Placing new sprite at (\(round(sprite.position.x)),\(round(sprite.position.y)))"); 
             #endif
             
             self.sprites.append(sprite);
