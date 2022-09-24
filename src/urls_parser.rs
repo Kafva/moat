@@ -48,7 +48,7 @@ mod tests {
         let _ = File::create("/tmp/empty");
         let muted = get_muted("/tmp/empty".to_string()).unwrap();
         assert!(muted.into_iter().count() == 0);
-        
+
     }
 }
 

@@ -68,30 +68,34 @@ newsmoat() {
   # Copy the cache and changes to other files back to the server on exit
   rsync -q ~/.newsboat/cache.db   $MOAT_SERVER:~/.newsboat/cache.db
   rsync -q ~/.newsboat/urls       $MOAT_SERVER:~/.newsboat/urls
-  rsync -q ~/.newsboat/muted_list $MOAT_SERVER:~/.newsboat/muted_list
 }
 ```
 This solution does **not** work if one were to use several 'newsboat clients' in
-parallel. Newsboat was not modelled as a [client/server application](https://github.com/newsboat/newsboat/issues/471)
-and pursuing a more robust synchronization framework was therefore not deemed preferable.
+parallel. Newsboat was not modelled as a [client/server application](https://github.com/newsboat/newsboat/issues/471) and pursuing a more robust synchronization
+framework was therefore not deemed preferable.
 
 ## Development
 
 ### Import new images
 Instead of using the drag-and-drop functionality to import images through Xcode
-one can use the provided [getAsset.bash](/scripts/getAsset.bash) script which takes an image as input
-and produces a `<image name>.imageset` resource under `Assets.xcassets`.
+one can use the provided [getAsset.bash](/scripts/getAsset.bash) script which
+takes an image as input and produces a `<image name>.imageset` resource under
+`Assets.xcassets`.
 
 ### Linting
 * Neovim: refer to [this](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#sourcekit) configuration
 * VScode: Use the `sswg.swift-lang` extension
 
 ## Additional notes
-The project was mainly modelled with YouTube feeds in mind and therefore
+* The project was mainly modelled with YouTube feeds in mind and therefore
 supports fetching YouTube thumbnails and YouTube channel icons.
 
-A [template](/conf/moat.service) for a systemd `.service` file is provided which
-can be copied to `/etc/systemd/system` to interact with moat as systemd service.
+* A [template](/conf/moat.service) for a systemd `.service` file is provided
+which can be copied to `/etc/systemd/system` to interact with moat as systemd
+service.
 
-The server process needs to be restarted for changes to the muted feeds to take
-effect.
+* The server process needs to be restarted for changes to the muted feeds to
+take-effect.
+
+* Feeds that are removed from `urls` may need to be explicitly deleted from
+`cache.db` to not appear in the feed list.

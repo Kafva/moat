@@ -62,7 +62,7 @@ pub fn toggle_read_status(cache_path: &str,
     }
 }
 
-pub fn get_feed_list(cache_path: &str, 
+pub fn get_feed_list(cache_path: &str,
                      muted_list: &Vec<String>
 ) -> Result<Vec<RssFeed>,rusqlite::Error> {
     let conn = rusqlite::Connection::open(cache_path)?;
@@ -71,12 +71,12 @@ pub fn get_feed_list(cache_path: &str,
 
     let mut stmt =
         // The rss_item and rss_feed tables share several common fields, in this
-        // statement we use the rssurl/feedurl as a unique identifier 
+        // statement we use the rssurl/feedurl as a unique identifier
         // to determine how many unread articles each feed has
         conn.prepare(&format!("
-        SELECT feedurl, rss_feed.url, author, SUM(unread) 
+        SELECT feedurl, rss_feed.url, author, SUM(unread)
         AS unread_count, COUNT(*)
-        FROM rss_item JOIN rss_feed ON rss_feed.rssurl = feedurl 
+        FROM rss_item JOIN rss_feed ON rss_feed.rssurl = feedurl
         GROUP BY feedurl
         ORDER BY {} unread_count DESC;", sql_muted_list)
 

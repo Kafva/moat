@@ -5,7 +5,7 @@ use rocket::request;
 use rocket::tokio::io::AsyncReadExt;
 
 /// Custom type for the data of POST requests to the /read endpoint
-/// The target is either a u32 video_id or rssurl (decoded from base64) 
+/// The target is either a u32 video_id or rssurl (decoded from base64)
 pub struct ReadToggleData {
     pub id: Option<u32>,
     pub rssurl: Option<String>,
@@ -38,7 +38,7 @@ impl std::fmt::Display for KeyErr <'_> {
     }
 }
 
-/// Extracts the value for a specific key in a urlencoded form based on a provided regex 
+/// Extracts the value for a specific key in a urlencoded form based on a provided regex
 /// The value needs to be a generic type <T> which can be parsed from a string
 fn get_value_for_key<'a,T: std::str::FromStr>(key: &'a str, body_as_string: &str, regex: Regex) -> Result<T,KeyErr<'a> > {
 
@@ -97,16 +97,16 @@ impl<'r> FromData<'r> for ReadToggleData {
                         unread: unread
                     }
                 ),
-                Err(e) => data::Outcome::Failure( (Status::BadRequest, e) ) 
+                Err(e) => data::Outcome::Failure( (Status::BadRequest, e) )
             },
             /***** `rssurl` in params *******/
             Err(_) => match get_value_for_key::<String>("rssurl", body_as_string, b64_rssurl_regex) {
-                    
+
                 Ok(b64_rssurl) => {
                         match base64::decode(b64_rssurl) {
                             Ok(decoded) => {
                                 let rssurl = String::from_utf8(decoded).unwrap();
-                                
+
                                 data::Outcome::Success(
                                     ReadToggleData {
                                         rssurl: Some(rssurl),
@@ -114,11 +114,11 @@ impl<'r> FromData<'r> for ReadToggleData {
                                         unread: false // Always set to false
                                     }
                                 )
-                            } 
-                            Err(_) => data::Outcome::Failure( (Status::BadRequest, KeyErr::InvalidBase64Value ) ) 
+                            }
+                            Err(_) => data::Outcome::Failure( (Status::BadRequest, KeyErr::InvalidBase64Value ) )
                         }
                     },
-                    Err(e) => data::Outcome::Failure( (Status::BadRequest, e) ) 
+                    Err(e) => data::Outcome::Failure( (Status::BadRequest, e) )
             }
         }
     }
