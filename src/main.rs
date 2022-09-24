@@ -9,9 +9,9 @@ mod models;
 mod dataguards;
 mod errors;
 mod db_parser;
+mod urls_parser;
 use models::Config;
 use rocket::shield::{Shield, Hsts};
-
 
 #[derive(Parser, Debug)]
 #[clap(version = "0.1.0", author = "Kafva <https://github.com/Kafva>",

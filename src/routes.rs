@@ -57,12 +57,12 @@ pub fn feeds(_key: Creds<'_>, config: &State<Config>) -> Json<Vec<RssFeed>> {
     match &config.muted_list {
         Some(m) => {
             Json( 
-                get_feed_list( config.cache_path.as_str(), m.to_vec()).unwrap() 
+                get_feed_list(config.cache_path.as_str(), m.to_vec()).unwrap() 
             )
         }
         None => {
             Json( 
-                get_feed_list( config.cache_path.as_str(), Vec::new()).unwrap() 
+                get_feed_list(config.cache_path.as_str(), Vec::new()).unwrap() 
             )
         }
     }
