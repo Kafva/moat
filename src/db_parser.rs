@@ -1,5 +1,5 @@
 extern crate base64;
-use super::models::{RssItem, RssFeed};
+use crate::models::{RssItem, RssFeed};
 
 // For YT, video thumbnails can be determined from the entries in the rssurl,
 // if these are to be included we will perform this fetch client side (XML
@@ -63,7 +63,7 @@ pub fn toggle_read_status(cache_path: &str,
 }
 
 pub fn get_feed_list(cache_path: &str, 
-                     muted_list: Vec<String>
+                     muted_list: &Vec<String>
 ) -> Result<Vec<RssFeed>,rusqlite::Error> {
     let conn = rusqlite::Connection::open(cache_path)?;
 
@@ -159,18 +159,16 @@ pub fn get_items_from_feed(cache_path: &str, rssurl: &str
 //============================================================================//
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::db_parser::{get_feed_list,get_items_from_feed};
+    use crate::expand_tilde;
 
     #[test]
     fn test_get_feeds() {
-
+        let muted = vec![];
         let feeds = get_feed_list(
-            &format!("{}/.newsboat/cache.db",
-                std::env::var("HOME").unwrap()
-            ).as_str(),
-            Vec::new()
+            expand_tilde(String::from("~/.newsboat/cache.db")).as_str(),
+            &muted
         ).unwrap();
-
 
         // NOTE that we can use the .into_iter() method instead of manually
         // defining an `impl` for next() for the class in question

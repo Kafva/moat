@@ -10,7 +10,7 @@ use std::{
 /// Names that start with '!' are muted and the corresponding <rss url> will be
 /// part of the output vector.
 /// Except for the <name>, no fields are allowed to contain blankspace
-pub fn get_muted(urls_path: &str) -> Result<Vec<String>, std::io::Error> {
+pub fn get_muted(urls_path: String) -> Result<Vec<String>, std::io::Error> {
     let mut muted: Vec<String> = Vec::new();
     let file = File::open(urls_path)?;
 
@@ -34,15 +34,21 @@ pub fn get_muted(urls_path: &str) -> Result<Vec<String>, std::io::Error> {
 //============================================================================//
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::get_muted;
+    use crate::expand_tilde;
+    use std::fs::File;
 
     #[test]
     // To see stdout of tests:
     //  cargo test -- --nocapture
     fn test_get_muted() {
-        let muted = get_muted("/Users/jonas/.newsboat/urls");
-        println!("{:#?}", muted);
-        assert!( muted.into_iter().count() > 0 );
+        let muted = get_muted(expand_tilde(String::from("~/.newsboat/urls"))).unwrap();
+        assert!(muted.into_iter().count() > 0);
+
+        let _ = File::create("/tmp/empty");
+        let muted = get_muted("/tmp/empty".to_string()).unwrap();
+        assert!(muted.into_iter().count() == 0);
+        
     }
 }
 

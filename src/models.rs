@@ -33,7 +33,7 @@ pub struct RssItem {
 pub struct Config {
     pub cache_path: String,
     pub newsboat_path: String,
-    pub muted_list: Option<Vec<String>>
+    pub muted_list: Vec<String>
 }
 
 //============================================================================//

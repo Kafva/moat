@@ -1,6 +1,7 @@
 #[macro_use] extern crate rocket;
 use rocket::{Rocket, Build};
 use clap::Parser;
+use crate::urls_parser::get_muted;
 
 // The `mod` keyword will expand to the contents of the file
 // with the corresponding name
@@ -28,7 +29,11 @@ struct Args {
 
     /// Path to newsboat cache.db
     #[clap(short, long, default_value = "~/.newsboat/cache.db", value_parser)]
-    cache_path: String
+    cache_path: String,
+
+    /// Path to newsboat urls file
+    #[clap(short, long, default_value = "~/.newsboat/urls", value_parser)]
+    urls_path: String
 }
 
 fn expand_tilde(value: String) -> String {
@@ -43,7 +48,7 @@ fn rocket() -> Rocket<Build> {
     let config = Config {
         cache_path: expand_tilde(opts.cache_path),
         newsboat_path: expand_tilde(opts.newsboat_path),
-        muted_list: None,
+        muted_list: get_muted(expand_tilde(opts.urls_path)).unwrap(),
     };
 
     // HTTP headers that should be included in all responses

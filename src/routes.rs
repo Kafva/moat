@@ -1,8 +1,8 @@
 use rocket::State;
 use rocket::serde::json::Json;
-use super::models::{Config, RssItem, RssFeed};
-use super::dataguards::{ReadToggleData, Creds};
-use super::db_parser::{get_feed_list, get_items_from_feed, toggle_read_status};
+use crate::models::{Config, RssItem, RssFeed};
+use crate::dataguards::{ReadToggleData, Creds};
+use crate::db_parser::{get_feed_list, get_items_from_feed, toggle_read_status};
 
 /// curl -X POST -H "x-creds: test" https://moat:7654/unread -d "id=5384&unread=0" 
 /// curl -X POST -H "x-creds: test" https://moat:7654/unread/ -d "rssurl=$(printf 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64 )"
@@ -53,19 +53,9 @@ pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
 // curl -X GET -H "x-creds: test" https://moat:7654/feeds
 #[get("/feeds")]
 pub fn feeds(_key: Creds<'_>, config: &State<Config>) -> Json<Vec<RssFeed>> {
-    
-    match &config.muted_list {
-        Some(m) => {
-            Json( 
-                get_feed_list(config.cache_path.as_str(), m.to_vec()).unwrap() 
-            )
-        }
-        None => {
-            Json( 
-                get_feed_list(config.cache_path.as_str(), Vec::new()).unwrap() 
-            )
-        }
-    }
+    Json( 
+        get_feed_list(config.cache_path.as_str(), &config.muted_list).unwrap() 
+    )
 }
 
 // We would like an API akin to 'GET /items/<feed-id>' but Newsboat
