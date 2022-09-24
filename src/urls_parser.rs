@@ -11,14 +11,21 @@ use std::{
 /// part of the output vector.
 /// Except for the <name>, no fields are allowed to contain blankspace
 pub fn get_muted(urls_path: &str) -> Result<Vec<String>, std::io::Error> {
-    let muted = Vec::new();
+    let mut muted: Vec<String> = Vec::new();
     let file = File::open(urls_path)?;
 
     for line in BufReader::new(file).lines() {
-         let line   = line.unwrap(); 
-         let rssurl = line.split_whitespace().next().unwrap_or("");
-         println!("{:#?}", rssurl);
-        
+         let line   = line.unwrap();
+         if line.trim().starts_with("http") {
+             let fields: Vec<&str> = line.split_whitespace().collect();
+
+             let last_field = fields.get(3).expect("error parsing urls file");
+             if last_field.trim_matches('"').starts_with("!") {
+                 let rssurl = fields.get(0).expect("error parsing urls file");
+                 let muted_entry = String::from(*rssurl);
+                 muted.push(muted_entry);
+             }
+         }
     }
 
     return Ok(muted);
@@ -30,10 +37,12 @@ mod tests {
     use super::*;
 
     #[test]
+    // To see stdout of tests:
+    //  cargo test -- --nocapture
     fn test_get_muted() {
         let muted = get_muted("/Users/jonas/.newsboat/urls");
+        println!("{:#?}", muted);
         assert!( muted.into_iter().count() > 0 );
     }
-
 }
 
