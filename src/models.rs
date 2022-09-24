@@ -1,30 +1,22 @@
-use rocket::serde::{Serialize};
+use rocket::serde::Serialize;
 
 #[derive(Serialize, Debug)]
 pub struct RssFeed {
-    rssurl: String, // Can be utilised to fetch video thumbnails
-    url: String,    // URL to actual page
+    /// RSS url, can be used to fetch video thumbnails
+    rssurl: String,
+    /// URL to actual page
+    url: String,    
+    /// Title of feed
     title: String,
-    // Computed attributes, not present in cache.db
-    unread_count: u32, 
-    total_count: u32, 
-    // Muted attribute, determined from the optional ~/.newsboat/muted_list file
-    muted: bool
-}
 
-impl RssFeed {
-    // There is an attribute named 'lastmodified' in cache.db but it seems
-    // to always be set to zero
-    pub fn new(rssurl: String, url: String, title: String, unread_count: u32, total_count: u32, muted: bool) -> RssFeed {
-        RssFeed {
-            rssurl,
-            url,
-            title,
-            unread_count,
-            total_count,
-            muted
-        }
-    }
+    // COMPUTED ATTRIBUTES, (not present in cache.db)
+
+    /// Number of unread entries
+    unread_count: u32, 
+    /// Total number of entries in feed
+    total_count: u32, 
+    /// Muted attribute, determined from the ~/.newsboat/urls
+    muted: bool
 }
 
 /// Largely uses the same attributes defined in the schema for cache.db
@@ -38,8 +30,33 @@ pub struct RssItem {
     unread: bool 
 }
 
+pub struct Config {
+    pub cache_path: String,
+    pub newsboat_path: String,
+    pub muted_list: Option<Vec<String>>
+}
+
+//============================================================================//
+
+impl RssFeed {
+    // There is an attribute named 'lastmodified' in cache.db but it seems
+    // to always be set to zero
+    pub fn new(rssurl: String, url: String, title: String, unread_count: 
+               u32, total_count: u32, muted: bool) -> RssFeed {
+        RssFeed {
+            rssurl,
+            url,
+            title,
+            unread_count,
+            total_count,
+            muted
+        }
+    }
+}
+
 impl RssItem {
-    pub fn new(id: u32, title: String, author: String, url: String, pubdate: u32, unread: bool) -> RssItem {
+    pub fn new(id: u32, title: String, author: String, url: String, 
+               pubdate: u32, unread: bool) -> RssItem {
         RssItem {
             id,
             title,
@@ -51,29 +68,3 @@ impl RssItem {
     }
 }
 
-fn default_cache_path() -> String {
-    format!("{}/.newsboat/cache.db", std::env::var("HOME").unwrap())
-}
-
-pub struct Config {
-    pub cache_path: String,
-    pub newsboat_path: String,
-    pub muted_list: Option<Vec<String>>
-}
-
-impl Config {
-    pub fn new() -> Config {
-        Config {
-            cache_path: default_cache_path(),
-            
-            muted_list: None, 
-
-            #[cfg(target_os = "macos")]
-            newsboat_path: "/usr/local/bin/newsboat".to_string(),
-
-            #[cfg(target_os = "linux")]
-            newsboat_path: "/usr/bin/newsboat".to_string(),
-                
-        } 
-    }
-}

@@ -1,5 +1,5 @@
-use rocket::{State};
-use rocket::serde::{json::Json};
+use rocket::State;
+use rocket::serde::json::Json;
 use super::models::{Config, RssItem, RssFeed};
 use super::dataguards::{ReadToggleData, Creds};
 use super::db_parser::{get_feed_list, get_items_from_feed, toggle_read_status};
@@ -10,7 +10,8 @@ use super::db_parser::{get_feed_list, get_items_from_feed, toggle_read_status};
 /// will try other potentially matching routes (based on `rank`) until
 /// no matching alternatives remain, at which point 404 is returned
 #[post("/unread", data = "<data>")]
-pub fn unread(_key: Creds<'_>,  config: &State<Config>, data: ReadToggleData ) -> &'static str {
+pub fn unread(_key: Creds<'_>,  config: &State<Config>, 
+              data: ReadToggleData) -> &'static str {
 
     let success = toggle_read_status(
         &config.cache_path.as_str(), 
