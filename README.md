@@ -5,7 +5,7 @@
 This project provides an RSS reader for iOS that interacts with a
 [newsboat](https://github.com/newsboat/newsboat) installation on a remote
 server. By sharing the information in `~/.newsboat/cache.db` between the iOS
-client and newsboat itself, the *read* status for items is kept synchronized.
+client and newsboat itself, the read status for items is kept synchronized.
 
 ## Client setup
 Install all dependencies
@@ -17,29 +17,24 @@ and open `moat.xcworkspace` with Xcode. Connect your device and install with
 <kbd>CMD</kbd> <kbd>R</kbd>.
 
 ## Server setup
-The server is configured through the `Rocket.toml` file and an application
-specific configuration file (example in [conf/server.conf](/conf/server.conf)). All endpoints on
-the server require a secret key (passed in the HTTP header `x-creds`) which
-needs to be set in the environment on startup
+The server is configured through command line options and `Rocket.toml`.
+A secret key needs to be set on startup, `MOAT_KEY`, the corresponding value
+needs to be present in the `x-creds` header of all client requests.
 ```bash
 MOAT_KEY="secret value" cargo run --release
 ```
-Issuing `cargo run --release` will implicitly build the project.
-
-### HTTPS
-It is integral for the application to use HTTPS since the contents of
-the `x-creds` field need to be kept confidential. To setup HTTPS the server
-needs two files to be present at the root of the project:
-
-* `./ssl/server.crt`
-* `./ssl/server.key`
+The certificate and key used for TLS are read from `./ssl/server.{crt,key}` by
+default.
 
 The certificate needs to be signed by an entity that the iOS client trusts.
 To install your own CA as a trusted root authority on iOS:
 
-1. Serve up the `.crt` from a machine and download it through Safari on the iOS device
+1. Serve up the `.crt` from a machine and download it through Safari on the
+iOS device
 2. This should give a prompt to install a profile for your CA
-3. To trust the certificate as a root authority go to *Settings > General > About > Certificate Trust Settings*, and toggle *Enable Full Trust for Root Certificates* for the certificate as described [here](https://apple.stackexchange.com/a/371757/290763).
+3. To trust the certificate as a root authority go to
+*Settings > General > About > Certificate Trust Settings*, and toggle
+*Enable Full Trust for Root Certificates* for the certificate as described [here](https://apple.stackexchange.com/a/371757/290763).
 
 ### Newsboat `urls` file
 The feeds that are shown in the app are determined by `~/.newsboat/urls` on
@@ -48,7 +43,7 @@ the server, an example entry is shown below.
 # <rss url>                      <display url>                   <tag> <name>
 https://news.ycombinator.com/rss "https://news.ycombinator.com/" "🔖"  "~Hacker News"
 ```
-Feed names need to start with either `~` or `!`, *read*/*unread* status flags
+Feed names need to start with either `~` or `!`, read/unread status flags
 are not processed for feeds that use a `!` name (these are considered "muted").
 The tag field is unused by moat.
 
