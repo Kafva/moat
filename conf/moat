@@ -1,0 +1,25 @@
+#!/sbin/openrc-run
+# vi: ft=sh
+depend() {
+   need localmount
+   need net
+}
+
+start() {
+   ebegin "Starting moat"
+
+   cd /home/jonas/Repos/moat
+   /usr/local/bin/moat_server &> /tmp/moat_log &
+   eend $?
+}
+
+status(){
+  tail -f /tmp/moat_log
+}
+
+stop() {
+   ebegin "Stopping moat"
+   pkill -x moat_server
+   eend $?
+}
+

@@ -81,10 +81,9 @@ framework was therefore not deemed preferable.
 ## Development
 
 ### Import new images
-Instead of using the drag-and-drop functionality to import images through Xcode
-one can use the provided [getAsset.bash](/scripts/getAsset.bash) script which
-takes an image as input and produces a `<image name>.imageset` resource under
-`Assets.xcassets`.
+The [xc_asset.sh](/scripts/xc_asset.sh) script can be used to generate 
+`<image name>.imageset` resources instead of relying on the drag-and-drop 
+functionality of Xcode.
 
 ### Linting
 * Neovim: refer to [this](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#sourcekit) configuration
@@ -102,4 +101,6 @@ service.
 take-effect.
 
 * Feeds that are removed from `urls` may need to be explicitly deleted from
-`cache.db` to not appear in the feed list.
+`cache.db` to not appear in the feed list, [moat_util.sh](/scripts/moat_util.sh)
+shows how this can be accomplished.
+
