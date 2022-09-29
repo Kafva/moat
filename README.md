@@ -53,7 +53,7 @@ The tag field is unused by moat.
 The server can be built for `aarch64-unknown-linux-musl` (Alpine) using [Dockerfile.aarch64](/Dockerfile.aarch64).
 ```bash
 docker build -f Dockerfile.aarch64 --rm  --tag=moat . 
-docker run -v `pwd`:/build -it moat
+docker run --name=moat_builder -v `pwd`:/build -it moat
 ```
 
 ## Usage together with newsboat

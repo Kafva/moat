@@ -13,18 +13,3 @@ ENV CC_aarch64_unknown_linux_musl=clang \
     CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-Clink-self-contained=yes -Clinker=rust-lld"
 
 ENTRYPOINT ["cargo", "build", "--release", "--target", "aarch64-unknown-linux-musl"]
-
-
-# cargo build --target aarch64-unknown-linux-musl
-# curl -LO http://dl-cdn.alpinelinux.org/alpine/latest-stable/main/aarch64/sqlite-libs-3.38.5-r0.apk
-
-
-# Requires docker to be installed on the build machine
-# cargo install cross
-# cross build --target aarch64-unknown-linux-musl
-#
-# Dies on: 
-#   Compiling rocket_codegen v0.5.0-rc.1
-
-
-
