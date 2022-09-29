@@ -21,7 +21,9 @@ The server is configured through command line options and `Rocket.toml`.
 A secret key needs to be set on startup, `MOAT_KEY`, the corresponding value
 needs to be present in the `x-creds` header of all client requests.
 ```bash
-MOAT_KEY="secret value" cargo run --release
+cargo build --release
+cargo install --path=.
+MOAT_KEY="secret value" ~/.cargo/bin/moat_server
 ```
 The certificate and key used for TLS are read from `./ssl/server.{crt,key}` by
 default.
@@ -46,6 +48,13 @@ https://news.ycombinator.com/rss "https://news.ycombinator.com/" "🔖"  "~Hacke
 Feed names need to start with either `~` or `!`, read/unread status flags
 are not processed for feeds that use a `!` name (these are considered "muted").
 The tag field is unused by moat.
+
+### Cross compile for aarch64
+The server can be built for `aarch64-unknown-linux-musl` (Alpine) using [Dockerfile.aarch64](/Dockerfile.aarch64).
+```bash
+docker build -f Dockerfile.aarch64 --rm  --tag=moat . 
+docker run -v `pwd`:/build -it moat
+```
 
 ## Usage together with newsboat
 Maintaining a synchronized state when using `newsboat` on another machine than

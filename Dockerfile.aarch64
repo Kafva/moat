@@ -1,18 +1,30 @@
 # vi: ft=dockerfile
-#   docker build -f Dockerfile.aarch64 --rm  --tag=moat . && docker run -v `pwd`:/build -it moat
 FROM rust:alpine3.16
 
 WORKDIR /build
 
-RUN apk add -U musl-dev clang llvm sqlite-libs
-RUN rustup toolchain add nightly-x86_64-unknown-linux-musl
+RUN apk add -U musl-dev clang llvm
 RUN rustup target add aarch64-unknown-linux-musl
-
+RUN rustup toolchain install nightly-x86_64-unknown-linux-musl
 
 # https://github.com/briansmith/ring/issues/1414#issuecomment-1055177218
 ENV CC_aarch64_unknown_linux_musl=clang \
     AR_aarch64_unknown_linux_musl=llvm-ar \
     CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-Clink-self-contained=yes -Clinker=rust-lld"
 
-ENTRYPOINT ["cargo", "build", "--target", "aarch64-unknown-linux-musl"]
+ENTRYPOINT ["cargo", "build", "--release", "--target", "aarch64-unknown-linux-musl"]
+
+
+# cargo build --target aarch64-unknown-linux-musl
+# curl -LO http://dl-cdn.alpinelinux.org/alpine/latest-stable/main/aarch64/sqlite-libs-3.38.5-r0.apk
+
+
+# Requires docker to be installed on the build machine
+# cargo install cross
+# cross build --target aarch64-unknown-linux-musl
+#
+# Dies on: 
+#   Compiling rocket_codegen v0.5.0-rc.1
+
+
 

@@ -7,7 +7,7 @@ Type=simple
 User=CHANGE_THIS
 WorkingDirectory=CHANGE_THIS
 Environment="MOAT_KEY=CHANGE_THIS"
-ExecStart=/CHANGE_THIS/moat/target/release/moat_server
+ExecStart=/CHANGE_THIS/.cargo/bin/moat_server
 
 [Install]
 WantedBy=multi-user.target
