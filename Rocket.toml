@@ -10,11 +10,11 @@ temp_dir = "/tmp"
 cli_colors = true
 
 [default.tls]
-certs = "./ssl/dev_server.crt"
-key = "./ssl/dev_server.key"
+certs = "./tls/dev_server.crt"
+key = "./tls/dev_server.key"
 
 [release.tls]
 # TLS requires an addition in the 'feature' configuration of rocket 
 # inside Cargo.toml
-certs = "./ssl/server.crt"
-key = "./ssl/server.key"
+certs = "./tls/server.crt"
+key = "./tls/server.key"

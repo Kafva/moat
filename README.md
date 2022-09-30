@@ -25,7 +25,7 @@ cargo build --release
 cargo install --path=.
 MOAT_KEY="secret value" ~/.cargo/bin/moat_server
 ```
-The certificate and key used for TLS are read from `./ssl/server.{crt,key}` by
+The certificate and key used for TLS are read from `./tls/server.{crt,key}` by
 default.
 
 The certificate needs to be signed by an entity that the iOS client trusts.
