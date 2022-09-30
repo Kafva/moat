@@ -1,5 +1,5 @@
 [Unit]
-Description=RSS feed server
+Description=REST based API for newsboat
 After=network.target
 
 [Service]

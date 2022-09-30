@@ -93,9 +93,7 @@ functionality of Xcode.
 * The project was mainly modelled with YouTube feeds in mind and therefore
 supports fetching YouTube thumbnails and YouTube channel icons.
 
-* A [template](/conf/moat.service) for a systemd `.service` file is provided
-which can be copied to `/etc/systemd/system` to interact with moat as systemd
-service.
+* Templates for Systemd (`/etc/systemd/system`) and OpenRC (`/etc/init.d`) services are available under [conf](/conf).
 
 * The server process needs to be restarted for changes to the muted feeds to
 take-effect.

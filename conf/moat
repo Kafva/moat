@@ -1,25 +1,29 @@
 #!/sbin/openrc-run
 # vi: ft=sh
+# See: man openrc-run
+
+# !! Values for:
+#   MOAT_USER
+#   MOAT_KEY
+# Need to be set in: /etc/conf.d/moat !!
+
+# The CWD needs to contain:
+#   ./tls
+#   ./Rocket.toml
+directory=/home/$MOAT_USER/.config/moat
+output_log=/tmp/moat.log
+error_log=/tmp/moat.err
+
+description="REST based API for newsboat"
+procname="moat_server"
+pidfile=/run/moat.pid
+
+command_background=true
+command_user=$(id -u $MOAT_USER)
+command=/usr/local/bin/moat_server
+
 depend() {
    need localmount
    need net
-}
-
-start() {
-   ebegin "Starting moat"
-
-   cd /home/jonas/Repos/moat
-   /usr/local/bin/moat_server &> /tmp/moat_log &
-   eend $?
-}
-
-status(){
-  tail -f /tmp/moat_log
-}
-
-stop() {
-   ebegin "Stopping moat"
-   pkill -x moat_server
-   eend $?
 }
 
