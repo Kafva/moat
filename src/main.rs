@@ -13,6 +13,7 @@ mod db_parser;
 mod urls_parser;
 use models::Config;
 use rocket::shield::{Shield, Hsts};
+use crate::db_parser::get_feed_list;
 
 #[derive(Parser, Debug)]
 #[clap(version = "0.1.0", author = "Kafva <https://github.com/Kafva>",
@@ -50,6 +51,12 @@ fn rocket() -> Rocket<Build> {
         newsboat_path: expand_tilde(opts.newsboat_path),
         muted_list: get_muted(expand_tilde(opts.urls_path)).unwrap(),
     };
+
+    // Sanity check, verify that the cache.db exists and has at least one entry
+    let feeds = get_feed_list(&config.cache_path, &config.muted_list);
+    if feeds.is_err() || feeds.unwrap().is_empty() {
+        panic!("cache.db does not exist or is empty")
+    }
 
     // HTTP headers that should be included in all responses
     // are configured through 'Shields', here we add 'Strict-Transport-Security'

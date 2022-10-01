@@ -3,6 +3,7 @@ use rocket::serde::json::Json;
 use crate::models::{Config, RssItem, RssFeed};
 use crate::dataguards::{ReadToggleData, Creds};
 use crate::db_parser::{get_feed_list, get_items_from_feed, toggle_read_status};
+use crate::errors::{ERR_RESPONSE,OK_RESPONSE};
 
 /// curl -X POST -H "x-creds: test" https://moat:7654/unread -d "id=5384&unread=0"
 /// curl -X POST -H "x-creds: test" https://moat:7654/unread/ -d "rssurl=$(printf 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64 )"
@@ -21,14 +22,12 @@ pub fn unread(_key: Creds<'_>,  config: &State<Config>,
     ).unwrap();
 
     if success > 0 {
-        "{ \"success\": true }"
-    }
-    else {
-        "{ \"success\": false }"
+        OK_RESPONSE
+    } else {
+        ERR_RESPONSE
     }
 }
 
-/// curl -H "x-creds: test" -X GET https://moat:7654/reload
 #[get("/reload")]
 pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
     // Newsboat has a built-in command to reload all feeds in the background
@@ -43,42 +42,38 @@ pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
 
     if output.stderr.len() == 0 &&
         output.stdout.len() == 0 {
-        "{ \"success\": true }"
+        OK_RESPONSE
     }
     else {
-        "{ \"success\": false }"
+        ERR_RESPONSE
     }
 }
 
-// curl -X GET -H "x-creds: test" https://moat:7654/feeds
 #[get("/feeds")]
 pub fn feeds(_key: Creds<'_>, config: &State<Config>) -> Json<Vec<RssFeed>> {
-    Json(
-        get_feed_list(config.cache_path.as_str(), &config.muted_list).unwrap()
-    )
+    match get_feed_list(config.cache_path.as_str(), &config.muted_list) {
+        Ok(a) => Json(a),
+        Err(_) => Json(Vec::new())
+    }
 }
 
-// We would like an API akin to 'GET /items/<feed-id>' but Newsboat
-// only has the rssurl as a unique identifer
-// By always sorting the feeds on a specific key we could derive
-// our own feed-id but this would produce issues if the
-// `.newsboat/urls` file changes and the client has an old value
-// for which feed corresponds to which ID.
-// The API was therefore constructed to use 'GET /items/< rssurl | base64url >' instead
-//      curl -X GET -H "x-creds: test" https://moat:7654/items/$(printf 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64 )
+/// The API uses 'GET /items/<rssurl|base64url>'
+///  curl -X GET -H "x-creds: test" https://moat:7654/items/$(base64 -w <<< 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA')
 #[get("/items/<b64_rssurl>")]
-pub fn items(_key: Creds<'_>, config: &State<Config>, b64_rssurl: &str) -> Json<Vec<RssItem>> {
-
+pub fn items(_key: Creds<'_>, config: &State<Config>,
+             b64_rssurl: &str) -> Json<Vec<RssItem>> {
     // Decode the rssurl from base64
-    let rssurl = String::from_utf8(
-        base64::decode(b64_rssurl).unwrap()
-    ).unwrap();
+    let decoded = base64::decode(b64_rssurl).unwrap_or_default();
+    let rssurl = String::from_utf8(decoded).unwrap_or_default();
 
-    Json(
-        get_items_from_feed(
-            config.cache_path.as_str(),
-            rssurl.as_str()
-        )
-        .unwrap()
-    )
+    // Empty response on error
+    if rssurl.is_empty() {
+        Json(Vec::new())
+    } else {
+        match get_items_from_feed(config.cache_path.as_str(),
+                                  rssurl.as_str().trim()) {
+            Ok(a) => Json(a),
+            Err(_) => Json(Vec::new())
+        }
+    }
 }
