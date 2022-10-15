@@ -78,17 +78,6 @@ This solution does **not** work if one were to use several 'newsboat clients' in
 parallel. Newsboat was not modelled as a [client/server application](https://github.com/newsboat/newsboat/issues/471) and pursuing a more robust synchronization
 framework was therefore not deemed preferable.
 
-## Development
-
-### Import new images
-The [xc_asset.sh](/scripts/xc_asset.sh) script can be used to generate 
-`<image name>.imageset` resources instead of relying on the drag-and-drop 
-functionality of Xcode.
-
-### Linting
-* Neovim: refer to [this](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#sourcekit) configuration
-* VScode: Use the `sswg.swift-lang` extension
-
 ## Additional notes
 * The project was mainly modelled with YouTube feeds in mind and therefore
 supports fetching YouTube thumbnails and YouTube channel icons.
