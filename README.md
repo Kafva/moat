@@ -2,10 +2,7 @@
   <img src="./moat/Assets.xcassets/AppIcon.appiconset/57.png">&nbsp;&nbsp;moat
 </h1>
 
-This project provides an RSS reader for iOS that interacts with a
-[newsboat](https://github.com/newsboat/newsboat) installation on a remote
-server. By sharing the information in `~/.newsboat/cache.db` between the iOS
-client and newsboat itself, the read status for items is kept synchronized.
+An iOS client for [newsboat](https://github.com/newsboat/newsboat).
 
 ## Client setup
 Install all dependencies
@@ -52,7 +49,7 @@ The tag field is unused by moat.
 ### Cross compile for aarch64
 The server can be built for `aarch64-unknown-linux-musl` (Alpine) using [Dockerfile.aarch64](/Dockerfile.aarch64).
 ```bash
-docker build -f Dockerfile.aarch64 --rm  --tag=moat . 
+docker build -f Dockerfile.aarch64 --rm  --tag=moat .
 docker run --name=moat_builder -v `pwd`:/build -it moat
 ```
 
