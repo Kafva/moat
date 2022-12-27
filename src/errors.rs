@@ -1,8 +1,8 @@
-use rocket::Request;
 use rocket::http::Status;
+use rocket::Request;
 
 pub const ERR_RESPONSE: &'static str = "{ \"success\": false }";
-pub const OK_RESPONSE: &'static  str = "{ \"success\": true }";
+pub const OK_RESPONSE: &'static str = "{ \"success\": true }";
 
 #[catch(500)]
 pub fn internal_error() -> &'static str {

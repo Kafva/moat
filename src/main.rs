@@ -1,27 +1,36 @@
-#[macro_use] extern crate rocket;
-use rocket::{Rocket, Build};
-use clap::Parser;
+#[macro_use]
+extern crate rocket;
 use crate::urls_parser::get_muted;
+use clap::Parser;
+use rocket::{Build, Rocket};
 
 // The `mod` keyword will expand to the contents of the file
 // with the corresponding name
-mod routes;
-mod models;
 mod dataguards;
-mod errors;
 mod db_parser;
+mod errors;
+mod models;
+mod routes;
 mod urls_parser;
-use models::Config;
-use rocket::shield::{Shield, Hsts};
 use crate::db_parser::get_feed_list;
+use models::Config;
+use rocket::shield::{Hsts, Shield};
 
 #[derive(Parser, Debug)]
-#[clap(version = "0.1.0", author = "Kafva <https://github.com/Kafva>",
-  about = "moat server")]
+#[clap(
+    version = "0.1.0",
+    author = "Kafva <https://github.com/Kafva>",
+    about = "moat server"
+)]
 struct Args {
     /// Path to newsboat executable
     #[cfg(target_os = "macos")]
-    #[clap(short, long, default_value = "/opt/homebrew/bin/newsboat", value_parser)]
+    #[clap(
+        short,
+        long,
+        default_value = "/opt/homebrew/bin/newsboat",
+        value_parser
+    )]
     newsboat_path: String,
 
     #[cfg(target_os = "linux")]
@@ -34,7 +43,7 @@ struct Args {
 
     /// Path to newsboat urls file
     #[clap(short, long, default_value = "~/.newsboat/urls", value_parser)]
-    urls_path: String
+    urls_path: String,
 }
 
 fn expand_tilde(value: String) -> String {
@@ -66,17 +75,23 @@ fn rocket() -> Rocket<Build> {
     // start the server with each route mounted at '/'
     rocket::build()
         .manage(Config::from(config))
-        .register("/", catchers![
-            errors::internal_error,
-            errors::unauthorized,
-            errors::not_found,
-            errors::default
-        ])
-        .mount("/", routes![
-        routes::feeds,
-        routes::items,
-        routes::reload,
-        routes::unread
-    ])
-    .attach(shield)
+        .register(
+            "/",
+            catchers![
+                errors::internal_error,
+                errors::unauthorized,
+                errors::not_found,
+                errors::default
+            ],
+        )
+        .mount(
+            "/",
+            routes![
+                routes::feeds,
+                routes::items,
+                routes::reload,
+                routes::unread
+            ],
+        )
+        .attach(shield)
 }

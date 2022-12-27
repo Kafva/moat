@@ -1,5 +1,5 @@
 extern crate base64;
-use crate::models::{RssItem, RssFeed};
+use crate::models::{RssFeed, RssItem};
 
 // For YT, video thumbnails can be determined from the entries in the rssurl,
 // if these are to be included we will perform this fetch client side (XML
@@ -35,36 +35,41 @@ use crate::models::{RssItem, RssFeed};
 //  );
 
 /// Returns the number of changed rows on success
-pub fn toggle_read_status(cache_path: &str,
-                          rssurl: Option<String>,
-                          id: Option<u32>,
-                          unread: bool) -> Result<usize,rusqlite::Error> {
+pub fn toggle_read_status(
+    cache_path: &str,
+    rssurl: Option<String>,
+    id: Option<u32>,
+    unread: bool,
+) -> Result<usize, rusqlite::Error> {
     let conn = rusqlite::Connection::open(cache_path)?;
 
     match id {
-        Some(id) =>
-            conn.execute("
+        Some(id) => conn.execute(
+            "
                 UPDATE rss_item
                     SET unread = ?1
-                WHERE id = ?2 ;", rusqlite::params![ unread, id ]
+                WHERE id = ?2 ;",
+            rusqlite::params![unread, id],
         ),
         None => match rssurl {
             // If a rssurl is provided we ignore any potential `unread` value and
             // always set the unread field in the db to false
-            Some(rssurl) =>
-                conn.execute("
+            Some(rssurl) => conn.execute(
+                "
                     UPDATE rss_item
                         SET unread = ?1
-                    WHERE feedurl = ?2 ;", rusqlite::params![ false, rssurl ]
-                ),
-            None => Ok(0)
-        }
+                    WHERE feedurl = ?2 ;",
+                rusqlite::params![false, rssurl],
+            ),
+            None => Ok(0),
+        },
     }
 }
 
-pub fn get_feed_list(cache_path: &str,
-                     muted_list: &Vec<String>
-) -> Result<Vec<RssFeed>,rusqlite::Error> {
+pub fn get_feed_list(
+    cache_path: &str,
+    muted_list: &Vec<String>,
+) -> Result<Vec<RssFeed>, rusqlite::Error> {
     let conn = rusqlite::Connection::open(cache_path)?;
 
     let sql_muted_list = get_muted_as_sql_stmt(&muted_list);
@@ -85,7 +90,6 @@ pub fn get_feed_list(cache_path: &str,
     // Use a lambda statement on each row to create an iterator
     // over all feed objects from the query
     let feeds_iter = stmt.query_map([], |row| {
-
         let rssurl = row.get(0)?;
         let muted = muted_list.contains(&rssurl);
 
@@ -95,7 +99,7 @@ pub fn get_feed_list(cache_path: &str,
             row.get(2)?, // author
             row.get(3)?, // unread_count
             row.get(4)?, // total_count
-            muted // muted flag
+            muted,       // muted flag
         ))
     })?;
 
@@ -105,7 +109,7 @@ pub fn get_feed_list(cache_path: &str,
 
 fn get_muted_as_sql_stmt(muted_list: &Vec<String>) -> String {
     if muted_list.len() == 0 {
-        return String::from("")
+        return String::from("");
     }
 
     let mut sql_list = String::from("(");
@@ -126,21 +130,25 @@ fn get_muted_as_sql_stmt(muted_list: &Vec<String>) -> String {
     format!("rss_feed.rssurl IN {},", sql_list)
 }
 
-pub fn get_items_from_feed(cache_path: &str, rssurl: &str
+pub fn get_items_from_feed(
+    cache_path: &str,
+    rssurl: &str,
 ) -> Result<Vec<RssItem>, rusqlite::Error> {
     let conn = rusqlite::Connection::open(cache_path)?;
-    let mut stmt =
-        conn.prepare( &format!("
+    let mut stmt = conn.prepare(
+        &format!(
+            "
             SELECT id, title, author, url, pubdate, unread FROM rss_item
             WHERE feedurl = '{}'
-            ORDER BY pubdate DESC;", rssurl
-        ).as_str()
+            ORDER BY pubdate DESC;",
+            rssurl
+        )
+        .as_str(),
     )?;
 
     // Use a lambda statement on each row to create an iterator
     // over all items returned from the query
     let items_iter = stmt.query_map([], |row| {
-
         Ok(RssItem::new(
             row.get(0)?,
             row.get(1)?,
@@ -151,7 +159,6 @@ pub fn get_items_from_feed(cache_path: &str, rssurl: &str
         ))
     })?;
 
-
     // Collect all the items into a vector
     items_iter.collect()
 }
@@ -159,7 +166,7 @@ pub fn get_items_from_feed(cache_path: &str, rssurl: &str
 //============================================================================//
 #[cfg(test)]
 mod tests {
-    use crate::db_parser::{get_feed_list,get_items_from_feed};
+    use crate::db_parser::{get_feed_list, get_items_from_feed};
     use crate::expand_tilde;
 
     #[test]
@@ -167,18 +174,18 @@ mod tests {
         let muted = vec![];
         let feeds = get_feed_list(
             expand_tilde(String::from("~/.newsboat/cache.db")).as_str(),
-            &muted
-        ).unwrap();
+            &muted,
+        )
+        .unwrap();
 
         // NOTE that we can use the .into_iter() method instead of manually
         // defining an `impl` for next() for the class in question
         //  https://doc.rust-lang.org/rust-by-example/trait/iter.html
-        assert!( feeds.into_iter().count() > 0 );
+        assert!(feeds.into_iter().count() > 0);
     }
 
     #[test]
     fn test_get_items() {
-
         let items = get_items_from_feed(
             &format!("{}/.newsboat/cache.db",
                 std::env::var("HOME").unwrap()
@@ -186,6 +193,6 @@ mod tests {
             "https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA"
         ).unwrap();
 
-        assert!( items.into_iter().count() > 0 );
+        assert!(items.into_iter().count() > 0);
     }
 }

@@ -14,7 +14,7 @@ certs = "./tls/dev_server.crt"
 key = "./tls/dev_server.key"
 
 [release.tls]
-# TLS requires an addition in the 'feature' configuration of rocket 
+# TLS requires an addition in the 'feature' configuration of rocket
 # inside Cargo.toml
 certs = "./tls/server.crt"
 key = "./tls/server.key"
