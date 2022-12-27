@@ -1,5 +1,5 @@
 # vi: ft=dockerfile
-FROM rust:alpine3.16
+FROM docker.io/rust:alpine3.16
 
 WORKDIR /build
 
