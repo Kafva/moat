@@ -23,7 +23,7 @@ extension Color {
                 }
             }
         }
-        
+
         NSLog("Failed to convert '\(hex)' into a Color object -- using fallback value");
         self.init( red: 0, green: 0, blue: 0 );
     }

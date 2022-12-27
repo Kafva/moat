@@ -17,10 +17,10 @@ func setViewTransparency() {
   UITableViewCell.appearance().backgroundColor = .clear
   UIButton.appearance().backgroundColor = .clear
 
-  // https://stackoverflow.com/a/58974331/9033629 
+  // https://stackoverflow.com/a/58974331/9033629
   UINavigationBar.appearance().barTintColor = .clear
   UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-  
+
   // https://stackoverflow.com/a/26390278/9033629
   UINavigationBar.appearance().shadowImage = UIImage()
 }

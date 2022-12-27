@@ -7,14 +7,14 @@ class ServerResponse: Codable {
    private enum CodingKeys: String, CodingKey {
         case success
         case message
-   } 
-   
+   }
+
    func encode(to encoder: Encoder) throws {
       var container = encoder.container(keyedBy: CodingKeys.self)
       try container.encode(self.success, forKey: .success)
       try container.encodeIfPresent(self.message, forKey: .message)
-   } 
-   
+   }
+
    required init(from decoder: Decoder ) throws {
       let values = try decoder.container(keyedBy: CodingKeys.self)
       self.success = try values.decode(Bool.self, forKey: .success)

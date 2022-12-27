@@ -7,8 +7,8 @@ extension TextField {
          .background(Color.black.opacity(0.2))
          .cornerRadius(5)
          .frame(
-            width: width, 
-            height: ROW_HEIGHT, 
+            width: width,
+            height: ROW_HEIGHT,
             alignment: .center
         )
    }
@@ -21,8 +21,8 @@ extension SecureField {
          .background(Color.black.opacity(0.2))
          .cornerRadius(5)
          .frame(
-            width: width, 
-            height: ROW_HEIGHT, 
+            width: width,
+            height: ROW_HEIGHT,
             alignment: .center
         )
    }

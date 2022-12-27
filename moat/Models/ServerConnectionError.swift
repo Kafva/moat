@@ -7,7 +7,7 @@ enum ServerConnectionError: Error, LocalizedError {
     case noServerKey
     case feedReloadFailure
     case unexpected(code: Int)
-    
+
     // The error description will be shown when a `throw` occurs
     // and is required by the LocalizedError protocol
     public var errorDescription: String? {

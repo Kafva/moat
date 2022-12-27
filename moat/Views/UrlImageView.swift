@@ -2,7 +2,7 @@ import SwiftUI
 
 /// https://www.lukecsmith.co.uk/2020/11/20/loading-from-url-and-caching-images-in-swiftui/
 struct UrlImageView: View {
-    
+
     @ObservedObject var imageLoader: ImageLoader
 
     init(_ url: String) {

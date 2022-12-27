@@ -3,51 +3,51 @@ import SwiftUI
 struct SettingsView: View {
 
    var feeds: [RssFeed]
-   @State var finishedCount: Int = 0; 
+   @State var finishedCount: Int = 0;
    @State var isLoading: Bool = false;
    @State var infiniteLoad: Bool = false;
-   
+
    @State var logosOn: Bool = UserDefaults.standard.bool(forKey: "logosOn") ;
    @State var spritesOn: Bool = UserDefaults.standard.bool(forKey: "spritesOn") ;
    @State var serverLocation: String = UserDefaults.standard.string(forKey: "serverLocation") ?? ""
    @State var serverPort: String = UserDefaults.standard.string(forKey: "serverPort") ?? ""
-   @State var serverKey: String = "" 
-   
+   @State var serverKey: String = ""
+
    init(feeds: [RssFeed]){
       self.feeds = feeds;
       setViewTransparency();
    }
-   
+
    var body: some View {
 
-      GeometryReader { geometry in 
+      GeometryReader { geometry in
          // Gain access to the screen dimensions to perform proper sizing
-      
+
          ZStack {
             // The Gradient background needs to be placed inside the ZStack to appear beneath
             // the scene (which we give a transparent background)
-            
+
             BKG_GRADIENT_LINEAR
-               .edgesIgnoringSafeArea(.vertical) // Fill entire screen 
-            
+               .edgesIgnoringSafeArea(.vertical) // Fill entire screen
+
             if self.isLoading {
                ZStack {
                   if UserDefaults.standard.bool(forKey: "spritesOn") {
                      LoadingView(
                         sceneSize: CGSize(
-                           width: geometry.size.width, 
-                           height: geometry.size.height  
+                           width: geometry.size.width,
+                           height: geometry.size.height
                         )
                      )
                     .navigationBarTitle("")
                     .navigationBarHidden(true)
                   }
-                 
+
                  // To prevent the loadingView from being redrawn whenever
                  // the loading text changes we keep them seperate from each other
-                 LoadingTextView(loadingText: self.infiniteLoad ? 
-                    "Loading..." : 
-                    String(format: "Fetching icons\n%.0f %%", 
+                 LoadingTextView(loadingText: self.infiniteLoad ?
+                    "Loading..." :
+                    String(format: "Fetching icons\n%.0f %%",
                        (Double(self.finishedCount)/Double(self.feeds.count)) * 100
                     )
                  )
@@ -55,28 +55,28 @@ struct SettingsView: View {
             }
             else {
                VStack(alignment: .leading, spacing: 10) {
-                   
-                  Toggle("Show YouTube logo for feeds", isOn: $logosOn) 
+
+                  Toggle("Show YouTube logo for feeds", isOn: $logosOn)
                      .onChange(of: logosOn) { _ in
                         UserDefaults.standard.setValue(logosOn, forKey: "logosOn")
                      }
-                  Toggle("Spawn sprites on loading screen", isOn: $spritesOn) 
+                  Toggle("Spawn sprites on loading screen", isOn: $spritesOn)
                      .onChange(of: spritesOn) { _ in
                         UserDefaults.standard.setValue(spritesOn, forKey: "spritesOn")
                      }
-                  
+
                      SettingsTextView(
-                        screenWidth: geometry.size.width, 
-                        text: "Server location", 
+                        screenWidth: geometry.size.width,
+                        text: "Server location",
                         default_text: "IP or domain name",
-                        setting_key: "serverLocation", 
+                        setting_key: "serverLocation",
                         setting_value: $serverLocation
                      )
                      SettingsTextView(
-                        screenWidth: geometry.size.width, 
-                        text: "Server port", 
+                        screenWidth: geometry.size.width,
+                        text: "Server port",
                         default_text: "",
-                        setting_key: "serverPort", 
+                        setting_key: "serverPort",
                         setting_value: $serverPort
                      )
 
@@ -92,7 +92,7 @@ struct SettingsView: View {
                            setCreds(value)
                         })
                      }
-                     
+
                      Button(action: {
                        self.isLoading = true
                        setLogosInUserDefaults(feeds: feeds, finishedCount: $finishedCount, completion: { logos in
@@ -121,7 +121,7 @@ struct SettingsView: View {
                   // use this hack to set the values correctly
                   // Note that the server key field isn't included since
                   // we don't want to supply the current key in plain text to the user
-                  spritesOn = UserDefaults.standard.bool(forKey: "spritesOn") 
+                  spritesOn = UserDefaults.standard.bool(forKey: "spritesOn")
                   serverLocation = UserDefaults.standard.string(forKey: "serverLocation") ?? ""
                })
 

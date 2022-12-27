@@ -5,23 +5,23 @@ struct RssFeedRowView: View {
    var feed: RssFeed;
    var screenWidth: CGFloat;
    @StateObject var alertState: AlertState = AlertState()
-   var showLogos = UserDefaults.standard.bool(forKey: "logosOn") 
-   
+   var showLogos = UserDefaults.standard.bool(forKey: "logosOn")
+
    // This state is passed onwards to the  ItemsView for each feed so
    // that the unread_count is upated in the feeds view when changes are made
    @State var unread_count: Int
-   
+
    var apiWrapper = ApiWrapper<ServerResponse>()
-   
+
    init(feed: RssFeed, screenWidth: CGFloat){
       self.feed = feed
       self.screenWidth = screenWidth
       self.unread_count = feed.unread_count
    }
-   
+
    var body: some View {
       HStack {
-          
+
          if self.showLogos {
             NavigationLink(destination: ItemsView(feedurl: feed.rssurl, muted: feed.muted, unread_count: $unread_count)
             ) {
@@ -30,7 +30,7 @@ struct RssFeedRowView: View {
          }
 
          VStack(alignment: .leading, spacing: 5){
-            NavigationLink(destination: ItemsView(feedurl: feed.rssurl, muted: feed.muted, unread_count: $unread_count) 
+            NavigationLink(destination: ItemsView(feedurl: feed.rssurl, muted: feed.muted, unread_count: $unread_count)
             ){
                 Text("\(feed.title)")
                   .foregroundColor(.white)
@@ -45,11 +45,11 @@ struct RssFeedRowView: View {
          // This is required for the elements in the stack to actually
          // "float" to the left
          .frame(
-            width: self.showLogos ? self.screenWidth * 0.5 : self.screenWidth * 0.6, 
+            width: self.showLogos ? self.screenWidth * 0.5 : self.screenWidth * 0.6,
             alignment: .leading
          )
          .padding( self.showLogos ? 0 : 15)
-         
+
          if !self.feed.muted {
             Text(  "\(self.unread_count)/\(feed.item_count)" )
                .padding(7)
@@ -59,15 +59,15 @@ struct RssFeedRowView: View {
                .font(Font.system(size: 18, weight: .bold))
                .frame(
                   // The image leads with 5px of padding
-                  width: (self.showLogos ? self.screenWidth * 0.5 : self.screenWidth * 0.4)  - (IMAGE_WIDTH+5), 
+                  width: (self.showLogos ? self.screenWidth * 0.5 : self.screenWidth * 0.4)  - (IMAGE_WIDTH+5),
                   alignment: Alignment.center
                )
-               .lineLimit(1) 
+               .lineLimit(1)
                .onTapGesture {
-                 self.alertState.title = "Mark all entries for \(self.feed.title) as read?" 
+                 self.alertState.title = "Mark all entries for \(self.feed.title) as read?"
                  self.alertState.message = ""
                  self.alertState.type = AlertType.Choice
-                 self.alertState.show = true 
+                 self.alertState.show = true
                }
          }
          else {
@@ -78,10 +78,10 @@ struct RssFeedRowView: View {
                .foregroundColor(.white)
                .font(Font.system(size: 18, weight: .bold))
                .frame(
-                  width: (self.showLogos ? self.screenWidth * 0.5 : self.screenWidth * 0.4)  - (IMAGE_WIDTH+5), 
+                  width: (self.showLogos ? self.screenWidth * 0.5 : self.screenWidth * 0.4)  - (IMAGE_WIDTH+5),
                   alignment: Alignment.center
                )
-               .lineLimit(1) 
+               .lineLimit(1)
          }
       }
       .padding(.bottom, 5)
@@ -97,21 +97,21 @@ struct RssFeedRowView: View {
                      action: { /* Do nothing */ }
                   ),
                   secondaryButton: .default(
-                     Text("Yes"), 
-                     action: { 
+                     Text("Yes"),
+                     action: {
                         self.apiWrapper.setAllItemsAsRead(
                            unread_count: self.$unread_count,
-                           rssurl: self.feed.rssurl, 
-                           alert: self.alertState 
+                           rssurl: self.feed.rssurl,
+                           alert: self.alertState
                         )
-                     } 
+                     }
                   )
                )
             }
             else {
                a = Alert(
-                  title: Text(alertState.title), 
-                  message: Text(alertState.message), 
+                  title: Text(alertState.title),
+                  message: Text(alertState.message),
                   dismissButton: .default(Text("OK"))
                )
             }

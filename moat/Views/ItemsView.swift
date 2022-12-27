@@ -9,7 +9,7 @@ struct ItemsView: View {
    @StateObject var items: ObservableArray<RssItem> = ObservableArray();
    @StateObject var alertState: AlertState = AlertState();
    @State var isLoading: Bool = true;
-   
+
    @Binding var unread_count: Int
 
    init?(feedurl: String, muted: Bool, unread_count: Binding<Int>) {
@@ -18,23 +18,23 @@ struct ItemsView: View {
       self.muted = muted;
       self._unread_count = unread_count;
    }
-   
+
    var body: some View {
-      GeometryReader { geometry in 
+      GeometryReader { geometry in
          ZStack {
             // We need to re-add the background since the
             // ItemsView is *not* rendered on top of the view that
             // is presented from moatApp.swift
             BKG_GRADIENT_LINEAR
-               .edgesIgnoringSafeArea(.vertical) // Fill entire screen 
-            
+               .edgesIgnoringSafeArea(.vertical) // Fill entire screen
+
             // Gain access to the screen dimensions to perform proper sizing
             if self.isLoading {
                ZStack {
                   if UserDefaults.standard.bool(forKey: "spritesOn") {
                      LoadingView(
                         sceneSize: CGSize(
-                           width: geometry.size.width, 
+                           width: geometry.size.width,
                            height: geometry.size.height
                         )
                      )
@@ -42,25 +42,25 @@ struct ItemsView: View {
                   LoadingTextView()
                       .onAppear(perform: {
                          self.apiWrapper.loadRows(
-                            rows: items, 
-                            alert: alertState, 
+                            rows: items,
+                            alert: alertState,
                             isLoading: $isLoading,
-                            rssurl: self.feedurl                  
-                         ) 
+                            rssurl: self.feedurl
+                         )
                      })
                }
             }
             else {
 
-               ScrollView(.vertical) { 
+               ScrollView(.vertical) {
                   // The alignment parameter for a VStack concerns horizontal alignment
                   VStack(alignment: .center, spacing: Y_AXIS_SPACING_FOR_ITEMS) {
 
                      ForEach(self.items.arr, id: \.id ) { item in
                         RssItemRowView(
-                           rssurl: feedurl, 
+                           rssurl: feedurl,
                            muted: muted,
-                           item: item, 
+                           item: item,
                            screenWidth: geometry.size.width,
                            unread_count: $unread_count
                         )
@@ -71,11 +71,11 @@ struct ItemsView: View {
                   }
                }
             }
-         } 
+         }
          .alert(isPresented: $alertState.show) {
             Alert(
-               title: Text(alertState.title), 
-               message: Text(alertState.message), 
+               title: Text(alertState.title),
+               message: Text(alertState.message),
                dismissButton: .default(Text("OK"))
          )}
       }

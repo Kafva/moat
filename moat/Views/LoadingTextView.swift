@@ -4,7 +4,7 @@ struct LoadingTextView: View {
 
   var loadingText: String = "Loading..."
   @State private var bouncing = false
-  
+
   var body: some View {
 
     Text(loadingText)

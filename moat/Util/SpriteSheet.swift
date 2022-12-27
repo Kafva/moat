@@ -5,7 +5,7 @@ enum CustomError: Error {
 }
 
 public class SpriteSheet {
-    
+
     let sheet: SKTexture
     let rows: Int
     let columns: Int
@@ -20,7 +20,7 @@ public class SpriteSheet {
         self.spacingX = spacingX;
         self.spacingY = spacingY;
         self.spriteSize = spriteSize;
-        
+
         self.sheet = SKTexture(imageNamed: sheetImage);
     }
 
@@ -29,11 +29,11 @@ public class SpriteSheet {
     /// object inn memory is used for the returned texture and the `in` texture
     ///  https://developer.apple.com/documentation/spritekit/sktexture/1520425-init
     func getTexture(columnIndex: Int, rowIndex: Int) throws -> SKTexture {
-        
+
         if columnIndex < columns && rowIndex < rows {
             // Note that both the (x,y) coords and the height/width is given as
             // a percentage value [0,1]
-            
+
             // Determine the width and height proporitions of each sprite
             let spriteWidth = self.sheet.size().width / CGFloat(self.columns)
                 / self.sheet.size().width;
@@ -46,7 +46,7 @@ public class SpriteSheet {
                 width: spriteWidth,
                 height: spriteHeight
             )
-        
+
             return SKTexture(rect: rect, in: self.sheet);
         }
         else {
@@ -54,7 +54,7 @@ public class SpriteSheet {
                 "Index outside bounds of sprite sheet: (\(columnIndex-1),\(rowIndex-1)) -- (\(self.columns-1),\(self.rows-1))"
             );
         }
-        
+
     }
 
     /// Create a new sprite using the texture from the given column and
@@ -66,10 +66,10 @@ public class SpriteSheet {
             texture: try self.getTexture(columnIndex: columnIndex, rowIndex: rowIndex),
             size: self.spriteSize
         );
-        
+
         sprite.name = name;
         sprite.scale(to: self.spriteSize)
-        
+
         return sprite;
     }
 }

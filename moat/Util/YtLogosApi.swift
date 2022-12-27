@@ -13,14 +13,14 @@ func getLogoUrl(channelId: String, name: String,  completion: @escaping (String)
   ]) {
     // Note that we use both the 'shared' session and cookie storage
     HTTPCookieStorage.shared.setCookie(cookie)
-  } 
-  
+  }
+
   let req = URLRequest(url: channel_url)
-  
+
   URLSession.shared.dataTask(with: req) { data, _, _ in
       if let data = data {
         completion(
-          extractLogoUrl( String(decoding: data, as: UTF8.self), name: name ) ?? "" 
+          extractLogoUrl( String(decoding: data, as: UTF8.self), name: name ) ?? ""
         )
       }
   }.resume()
@@ -54,32 +54,32 @@ func setLogosInUserDefaults(feeds: [RssFeed], finishedCount: Binding<Int>, compl
   finishedCount.wrappedValue=0;
 
   for feed in feeds {
-    
-    guard let channelId = feed.getChannelId() else { 
+
+    guard let channelId = feed.getChannelId() else {
       print("Skipping logo fetch for \(feed.title)")
-      
+
       finishedCount.wrappedValue+=1;
-      
+
       if finishedCount.wrappedValue == feeds.count {
         completion(logos)
       }
-      continue 
+      continue
     }
 
     getLogoUrl(channelId: channelId, name: feed.title, completion: { logoUrl in
       logos[channelId] = logoUrl
-      
+
       finishedCount.wrappedValue+=1;
-      
+
       if finishedCount.wrappedValue == feeds.count {
         completion(logos)
       }
     })
-  }  
+  }
 }
 
 func getLogoUrlFromUserDefaults(channelId: String) -> String? {
-  let logos = UserDefaults.standard.object(forKey: "logos") 
+  let logos = UserDefaults.standard.object(forKey: "logos")
     as? [String: String] ?? [String: String]()
 
   return logos[channelId]

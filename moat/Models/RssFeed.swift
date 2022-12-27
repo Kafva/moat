@@ -12,7 +12,7 @@ class RssFeed: ObservableObject, Codable, Equatable {
    var item_count: Int
    let id = UUID(); // client-side only attribute
    let muted: Bool
-   
+
    /// Returns true if the provided feeds have the same
    /// properties, ignores differences in the `id` property
    public static func == (lhs: RssFeed, rhs: RssFeed) -> Bool {
@@ -21,21 +21,21 @@ class RssFeed: ObservableObject, Codable, Equatable {
             lhs.title == rhs.title &&
             lhs.unread_count == rhs.unread_count &&
             lhs.item_count == rhs.item_count
-   } 
+   }
 
-   
+
    private enum CodingKeys: String, CodingKey {
       // An enum which impllements the CodingKey protocol can be used to
-      // map different JSON keys to different attributes in a codable object 
+      // map different JSON keys to different attributes in a codable object
       // i.e. a key-name could be mapped to an internal attribute named something else
       case rssurl
       case url
-      case title 
+      case title
       case unread_count
       case item_count = "total_count"
       case muted
-   } 
-   
+   }
+
    func encode(to encoder: Encoder) throws {
       var container = encoder.container(keyedBy: CodingKeys.self)
       try container.encode(self.rssurl, forKey: .rssurl)
@@ -44,8 +44,8 @@ class RssFeed: ObservableObject, Codable, Equatable {
       try container.encode(self.unread_count, forKey: .unread_count)
       try container.encode(self.item_count, forKey: .item_count)
       try container.encode(self.muted, forKey: .muted)
-   } 
-   
+   }
+
    required init(from decoder: Decoder ) throws {
       let values = try decoder.container(keyedBy: CodingKeys.self)
 
@@ -65,19 +65,19 @@ class RssFeed: ObservableObject, Codable, Equatable {
       self.item_count = item_count;
       self.muted = muted;
    }
-   
+
    func getChannelId() -> String? {
       // If the feed is a YouTube channel on the form
-      //  https://www.youtube.com/feeds/videos.xml?channel_id=<...> 
+      //  https://www.youtube.com/feeds/videos.xml?channel_id=<...>
       // return the video ID
       guard let url_params = URL(string: self.rssurl)?.query else {
-         return nil 
+         return nil
       }
-      
+
       let components = url_params.components(separatedBy: "=");
 
       if components.first == "channel_id" && components.count == 2  {
-         return components[1] 
+         return components[1]
       }
       else { return nil }
    }

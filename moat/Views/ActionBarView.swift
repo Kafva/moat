@@ -1,24 +1,24 @@
 import SwiftUI
 
 struct ActionBarView: View {
-   
+
    @EnvironmentObject var feeds: ObservableArray<RssFeed>
    @EnvironmentObject var alertState: AlertState
    @Binding var searchString: String
    @Binding var isLoading: Bool
    @Binding var isReloading: Bool
-   
+
    @Binding var textFieldFocused: Bool;
 
    var searchBarWidth: CGFloat
-   
+
    var apiWrapper = ApiWrapper<RssFeed>()
 
    var body: some View {
       HStack(alignment: .top) {
          SearchView( barWidth: searchBarWidth, searchBinding: $searchString, textFieldFocused: $textFieldFocused)
             .padding(.bottom, 20)
-         
+
         // Settings and reload buttons
         NavigationLink(destination: SettingsView(feeds: feeds.arr) ){
             Image(systemName: "slider.horizontal.3").resizable().frame(
@@ -43,8 +43,8 @@ struct ActionBarView: View {
                alert: alertState,
                isLoading: $isLoading,
                isReloading: $isReloading
-            ) 
-         }) { 
+            )
+         }) {
                Image(systemName: "arrow.clockwise").resizable().frame(
                width: 25, height: 25, alignment: .center
             )
