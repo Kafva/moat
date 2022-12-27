@@ -53,6 +53,7 @@ The server can be built for `aarch64-unknown-linux-musl` (Alpine) using
 ```bash
 docker build -f Dockerfile.aarch64 --rm  --tag=moat .
 docker run --name=moat_builder -v `pwd`:/build -it moat
+# => ./target/aarch64-unknown-linux-musl/release/moat_server
 ```
 
 ## Usage together with newsboat
