@@ -29,12 +29,15 @@ func getLogoUrl(channelId: String, name: String,  completion: @escaping (String)
 /// Patterns:
 ///   https://yt3.ggpht.com/ytc/AAUvwniD_RGcy5bq8EqWUnk8wHzafZo4w8ZJfNU-QWLUzg=s300-c-k-c0x00ffffff-no-rj
 ///   https://yt3.ggpht.com/B3TFzvwt8Abuk3xweJvBLcL5Xt3Y7TatvDyWDtsEoR3A4oZkTA4ajbz_yRo2QF70WYDpb9k=s88-c-k-c0x00ffffff-no-rj
+///
+/// Update (Jan 29 2023)
+///   https://yt3.ggpht.com/ -> https://yt3.googleusercontent.com/
 func extractLogoUrl(_ htmlBody: String, name: String ) -> String? {
   if htmlBody.matches("Before you continue to YouTube").first != nil {
     print("Failed to fetch YouTube logo for \(name): Blocked by consent screen")
     return ""
   }
-  if let logo = htmlBody.matches("https://yt3.ggpht.com(/ytc)?/[-=+_A-Za-z0-9]{10,255}-no-rj").first {
+  if let logo = htmlBody.matches("https://yt3.googleusercontent.com(/ytc)?/[-=+_A-Za-z0-9]{10,255}-no-rj").first {
     return logo
   }  else {
     print("Failed to fetch YouTube logo for \(name)")
