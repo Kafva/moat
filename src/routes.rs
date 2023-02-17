@@ -1,4 +1,4 @@
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{web, HttpResponse, Responder};
 use super::Config;
 use std::process::Command;
 
@@ -13,6 +13,10 @@ pub async fn unread(
 }
 
 pub async fn reload(config: web::Data<Config>) -> impl Responder {
+    // 1. Check creds header
+    // 2. check method or decorator?
+
+
     let output = Command::new(config.newsboat_bin.as_str())
         .arg("-C")
         .arg(config.newsboat_config.as_str())

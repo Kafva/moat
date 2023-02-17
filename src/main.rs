@@ -1,7 +1,8 @@
 mod routes;
 mod util;
 
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::middleware::Logger;
+use actix_web::{web, App, HttpServer};
 use clap::Parser;
 
 use crate::{
@@ -65,7 +66,6 @@ struct Args {
 //============================================================================//
 
 
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let args: Args = Args::parse();
@@ -78,13 +78,22 @@ async fn main() -> std::io::Result<()> {
            muted_list: get_muted(urls.as_str()).unwrap(),
     };
 
+    env_logger::init_from_env(env_logger::Env::default()
+                              .default_filter_or("info"));
+
+    log::info!("Listening on {}:{}...", args.addr, args.port);
+
     HttpServer::new(move || {
-        App::new().app_data(web::Data::new(config.to_owned()))
+        App::new()
+            .wrap(Logger::default())
+            .wrap(Logger::new("%a %{User-Agent}i"))
+            .app_data(web::Data::new(config.to_owned()))
             .route("/unread", web::get().to(unread))
             .route("/reload", web::get().to(reload))
             .route("/feeds", web::get().to(feeds))
             .route("/items", web::get().to(items))
     })
+    .workers(2)
     .bind((args.addr, args.port))?
     .run()
     .await

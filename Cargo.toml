@@ -5,7 +5,9 @@ authors = ["Kafva <https://github.com/Kafva>"]
 edition = "2021"
 
 [dependencies]
-actix-web = "4"
+actix-web = { version = "4" }
 clap =   { version = "3.1.12",     features = ["derive"] }
+log = "0.4"
+env_logger = "0.10.0"
 rusqlite = { version = "0.28.0",   features = ["bundled"] }
-base64 = "0.13.0"
+

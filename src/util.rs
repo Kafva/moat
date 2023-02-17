@@ -40,11 +40,18 @@ mod tests {
     use crate::util::{get_muted,expand_tilde};
     use std::fs::File;
 
+    fn setup() {
+        std::process::Command::new("./scripts/test_setup.sh").output()
+            .expect("Test setup failed");
+    }
+
+
     /// To see stdout of tests:
     ///  cargo test -- --nocapture
     #[test]
     fn test_get_muted() {
-        let muted_path = expand_tilde("~/.newsboat/urls");
+        setup();
+        let muted_path = expand_tilde("/tmp/moat/urls");
         let muted = get_muted(&muted_path).unwrap();
         assert!(muted.into_iter().count() > 0);
 
