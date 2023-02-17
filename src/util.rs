@@ -42,12 +42,14 @@ mod tests {
     };
     use std::fs::File;
 
+
+
     /// To see stdout of tests:
     ///  cargo test -- --nocapture
     #[test]
     fn test_get_muted() {
-        let muted =
-            get_muted(expand_tilde(String::from("~/.newsboat/urls"))).unwrap();
+        let muted_path = expand_tilde(String::from("~/.newsboat/urls"));
+        let muted = get_muted(muted_path).unwrap();
         assert!(muted.into_iter().count() > 0);
 
         let _ = File::create("/tmp/empty");
