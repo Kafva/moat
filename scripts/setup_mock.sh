@@ -14,7 +14,7 @@ cp ~/.newsboat/cache.db $MOAT_DIR
 
 cat << EOF > $MOAT_DIR/urls
 https://news.ycombinator.com/rss "https://news.ycombinator.com/" "🔖" "~Hacker News"
-https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA "https://www.youtube.com/channel/UCXU7XVK_2Wd6tAHYO8g9vAA/videos" "🤡" "~Preston Jacobs"
+https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA "https://www.youtube.com/channel/UCXU7XVK_2Wd6tAHYO8g9vAA/videos" "🤡" "!Preston Jacobs"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCtUbO6rBht0daVIOGML3c8w "https://www.youtube.com/channel/UCtUbO6rBht0daVIOGML3c8w/videos" "🤡" "~Summoning Salt"
 EOF
 

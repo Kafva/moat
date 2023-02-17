@@ -12,8 +12,8 @@ pub fn expand_tilde(value: String) -> String {
 ///   <rss url>  <display url>    <tag> <name>
 /// Names that start with '!' are muted and the corresponding <rss url> will be
 /// part of the output vector.
-/// Except for the <name>, no fields are allowed to contain blankspace
-pub fn get_muted(urls_path: String) -> Result<Vec<String>, std::io::Error> {
+/// Except for the <name>, no fields are allowed to contain blankspace.
+pub fn get_muted(urls_path: &str) -> Result<Vec<String>, std::io::Error> {
     let mut muted: Vec<String> = Vec::new();
     let file = File::open(urls_path)?;
 
@@ -37,23 +37,25 @@ pub fn get_muted(urls_path: String) -> Result<Vec<String>, std::io::Error> {
 //============================================================================//
 #[cfg(test)]
 mod tests {
-    use crate::util::{
-        expand_tilde,get_muted
-    };
+    use crate::util::get_muted;
     use std::fs::File;
 
 
+    fn setup() {
+        std::process::Command::new("./scripts/setup_mock.sh").output()
+            .expect("Test setup failed");
+    }
 
     /// To see stdout of tests:
     ///  cargo test -- --nocapture
     #[test]
     fn test_get_muted() {
-        let muted_path = expand_tilde(String::from("~/.newsboat/urls"));
-        let muted = get_muted(muted_path).unwrap();
+        setup();
+        let muted = get_muted("/tmp/moat/urls").unwrap();
         assert!(muted.into_iter().count() > 0);
 
         let _ = File::create("/tmp/empty");
-        let muted = get_muted("/tmp/empty".to_string()).unwrap();
+        let muted = get_muted("/tmp/empty").unwrap();
         assert!(muted.into_iter().count() == 0);
     }
 }

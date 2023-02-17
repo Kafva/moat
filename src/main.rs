@@ -64,7 +64,7 @@ async fn main() -> std::io::Result<()> {
     let _config = Config {
         cache_db: expand_tilde(args.cache_db),
         newsboat_bin: expand_tilde(args.newsboat_bin),
-        muted_list: get_muted(expand_tilde(args.urls)).unwrap(),
+        muted_list: get_muted(expand_tilde(args.urls).as_str()).unwrap(),
     };
     
 

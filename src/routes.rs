@@ -7,7 +7,11 @@ pub async fn unread(
 }
 
 pub async fn reload() -> impl Responder {
-    HttpResponse::Ok().body("TODO")
+    let output = std::process::Command::new(config.newsboat_path.as_str())
+        .arg("-x")
+        .arg("reload")
+        .output()
+        .expect("Failed to update cache.db");
 }
 
 pub async fn feeds() -> impl Responder {
