@@ -14,10 +14,16 @@ pub async fn unread(
 
 pub async fn reload(config: web::Data<Config>) -> impl Responder {
     let output = Command::new(config.newsboat_bin.as_str())
+        .arg("-C")
+        .arg(config.newsboat_config.as_str())
+        .arg("-c")
+        .arg(config.cache_db.as_str())
+        .arg("-u")
+        .arg(config.urls.as_str())
         .arg("-x")
         .arg("reload")
         .output()
-        .expect("Failed to update cache.db");
+        .expect("Reload failed");
 
     if output.stderr.len() == 0 && 
        output.stdout.len() == 0 {
