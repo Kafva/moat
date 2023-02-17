@@ -1,4 +1,10 @@
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use super::Config;
+use std::process::Command;
+
+pub const ERR_RESPONSE: &'static str = "{ \"success\": false }";
+pub const OK_RESPONSE: &'static str = "{ \"success\": true }";
+
 
 pub async fn unread(
     _req_body: String
@@ -6,12 +12,19 @@ pub async fn unread(
     HttpResponse::Ok().body("TODO")
 }
 
-pub async fn reload() -> impl Responder {
-    let output = std::process::Command::new(config.newsboat_path.as_str())
+pub async fn reload(config: web::Data<Config>) -> impl Responder {
+    let output = Command::new(config.newsboat_bin.as_str())
         .arg("-x")
         .arg("reload")
         .output()
         .expect("Failed to update cache.db");
+
+    if output.stderr.len() == 0 && 
+       output.stdout.len() == 0 {
+        OK_RESPONSE
+    } else {
+        ERR_RESPONSE
+    }
 }
 
 pub async fn feeds() -> impl Responder {

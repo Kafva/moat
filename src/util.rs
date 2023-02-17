@@ -3,7 +3,7 @@ use std::{
     io::{prelude::*, BufReader},
 };
 
-pub fn expand_tilde(value: String) -> String {
+pub fn expand_tilde(value: &str) -> String {
     value.replace("~", std::env::var("HOME").unwrap().as_str())
 }
 
@@ -37,21 +37,15 @@ pub fn get_muted(urls_path: &str) -> Result<Vec<String>, std::io::Error> {
 //============================================================================//
 #[cfg(test)]
 mod tests {
-    use crate::util::get_muted;
+    use crate::util::{get_muted,expand_tilde};
     use std::fs::File;
-
-
-    fn setup() {
-        std::process::Command::new("./scripts/setup_mock.sh").output()
-            .expect("Test setup failed");
-    }
 
     /// To see stdout of tests:
     ///  cargo test -- --nocapture
     #[test]
     fn test_get_muted() {
-        setup();
-        let muted = get_muted("/tmp/moat/urls").unwrap();
+        let muted_path = expand_tilde("~/.newsboat/urls");
+        let muted = get_muted(&muted_path).unwrap();
         assert!(muted.into_iter().count() > 0);
 
         let _ = File::create("/tmp/empty");
