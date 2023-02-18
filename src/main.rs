@@ -1,25 +1,17 @@
+mod config;
 mod routes;
 mod util;
 
+use std::path::Path;
 use actix_web::middleware::Logger;
 use actix_web::{web, App, HttpServer};
 use clap::Parser;
 
 use crate::{
     util::{get_muted,expand_tilde},
+    config::{DEFAULT_NEWSBOAT_BIN,Config},
     routes::*,
 };
-
-// Muted list seperate from config..?
-
-#[derive(Clone)]
-pub struct Config {
-    pub cache_db: String,
-    pub newsboat_bin: String,
-    pub newsboat_config: String,
-    pub urls: String,
-    pub muted_list: Vec<String>,
-}
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -30,28 +22,29 @@ pub struct Config {
 struct Args {
     /// Path to newsboat executable
     #[cfg(target_os = "macos")]
-    #[clap(
-        short,
-        long,
-        default_value = "/opt/homebrew/bin/newsboat",
-        value_parser
+    #[clap(short, long, default_value = DEFAULT_NEWSBOAT_BIN,
+        value_parser = path_exists
     )]
     newsboat_bin: String,
 
     #[cfg(target_os = "linux")]
-    #[clap(short = 'b', long, default_value = "/usr/bin/newsboat", value_parser)]
+    #[clap(short = 'b', long, default_value = DEFAULT_NEWSBOAT_BIN, 
+           value_parser = path_exists)]
     newsboat_bin: String,
 
     /// Path to newsboat config
-    #[clap(short = 'C', long, default_value = "~/.newsboat/config", value_parser)]
+    #[clap(short = 'C', long, default_value = "~/.newsboat/config", 
+           value_parser = path_exists)]
     newsboat_config: String,
 
     /// Path to newsboat cache.db
-    #[clap(short = 'c', long, default_value = "~/.newsboat/cache.db", value_parser)]
+    #[clap(short = 'c', long, default_value = "~/.newsboat/cache.db", 
+           value_parser = path_exists)]
     cache_db: String,
 
     /// Path to newsboat urls file
-    #[clap(short, long, default_value = "~/.newsboat/urls", value_parser)]
+    #[clap(short, long, default_value = "~/.newsboat/urls", 
+           value_parser = path_exists)]
     urls: String,
 
     /// Address to bind to
@@ -99,6 +92,16 @@ async fn main() -> std::io::Result<()> {
     .await
 }
 
+//============================================================================//
 
-
+fn path_exists(path_str: &str) -> Result<String,String> {
+    let expanded_path = expand_tilde(path_str);
+    let filepath = Path::new(expanded_path.as_str());
+    
+    if !filepath.is_file() {
+        Err("No such file".to_string())
+    } else {
+        Ok(String::from(path_str))
+    }
+}
 
