@@ -9,7 +9,7 @@ use clap::Parser;
 
 use crate::{
     util::{get_muted,expand_tilde},
-    config::{DEFAULT_NEWSBOAT_BIN,Config},
+    config::{DEFAULT_NEWSBOAT_BIN,Config,MOAT_KEY_ENV},
     routes::*,
 };
 
@@ -74,6 +74,11 @@ async fn main() -> std::io::Result<()> {
     env_logger::init_from_env(env_logger::Env::default()
                               .default_filter_or("info"));
 
+    if std::env::var(MOAT_KEY_ENV).is_err() {
+        log::error!("Server requires '{}' to be set", MOAT_KEY_ENV);
+        // TODO exit
+    }
+
     log::info!("Listening on {}:{}...", args.addr, args.port);
 
     HttpServer::new(move || {
@@ -81,8 +86,8 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
             .app_data(web::Data::new(config.to_owned()))
+            .service(reload)
             .route("/unread", web::get().to(unread))
-            .route("/reload", web::get().to(reload))
             .route("/feeds", web::get().to(feeds))
             .route("/items", web::get().to(items))
     })
