@@ -1,23 +1,23 @@
 {
-	"images" : [
-	{
-	"filename" : "umbreon.png",
-	"idiom" : "universal",
-	"scale" : "1x"
-	},
-	{
-	"filename" : "umbreon@2x.png",
-	"idiom" : "universal",
-	"scale" : "2x"
-	},
-	{
-	"filename" : "umbreon@3x.png",
-	"idiom" : "universal",
-	"scale" : "3x"
-	}
-	],
-	"info" : {
-	"author" : "xcode",
-	"version" : 1
-	}
-	}
+    "images" : [
+    {
+    "filename" : "umbreon.png",
+    "idiom" : "universal",
+    "scale" : "1x"
+    },
+    {
+    "filename" : "umbreon@2x.png",
+    "idiom" : "universal",
+    "scale" : "2x"
+    },
+    {
+    "filename" : "umbreon@3x.png",
+    "idiom" : "universal",
+    "scale" : "3x"
+    }
+    ],
+    "info" : {
+    "author" : "xcode",
+    "version" : 1
+    }
+    }

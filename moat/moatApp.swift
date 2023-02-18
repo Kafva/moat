@@ -3,7 +3,6 @@ import SwiftUI
 // '@main' denotes the entrypoint for the application
 // swiftlint:disable type_name
 @main struct moatApp: App {
-
     // @State should (just like in other UI frameworks) be kept as high
     // up as possible and passed downwards. Subviews which need to know the
     // status of a @State variable are passed them as @Bindings
@@ -30,11 +29,11 @@ import SwiftUI
                     // The Gradient background needs to be placed inside the ZStack to appear beneath
                     // the scene (which we give a transparent background)
                     BKG_GRADIENT_LINEAR
-                        .edgesIgnoringSafeArea(.vertical) // Fill entire screen
+                        .edgesIgnoringSafeArea(.vertical)  // Fill entire screen
                     FeedsView()
-                    // https://stackoverflow.com/a/57518324/9033629
-                    .navigationBarTitle("")
-                    .navigationBarHidden(true)
+                        // https://stackoverflow.com/a/57518324/9033629
+                        .navigationBarTitle("")
+                        .navigationBarHidden(true)
                 }
             }
             //  https://stackoverflow.com/a/64752414/9033629

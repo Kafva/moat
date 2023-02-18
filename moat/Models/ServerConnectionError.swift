@@ -13,11 +13,14 @@ enum ServerConnectionError: Error, LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .noServerLocation:
-            return NSLocalizedString("No server location has been configured", comment: "")
+            return NSLocalizedString(
+                "No server location has been configured", comment: "")
         case .noServerPort:
-            return NSLocalizedString("No server port has been configured", comment: "")
+            return NSLocalizedString(
+                "No server port has been configured", comment: "")
         case .noServerKey:
-            return NSLocalizedString("No server key has been configured", comment: "")
+            return NSLocalizedString(
+                "No server key has been configured", comment: "")
         case .invalidKey:
             return NSLocalizedString("Invalid server key", comment: "")
         case .feedReloadFailure:
