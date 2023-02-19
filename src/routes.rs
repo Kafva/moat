@@ -7,10 +7,10 @@ use super::Config;
 use std::process::Command;
 use std::future::{ready, Ready};
 
+//============================================================================//
+
 pub const ERR_RESPONSE: &'static str = "{ \"success\": false }";
 pub const OK_RESPONSE: &'static str = "{ \"success\": true }";
-
-//============================================================================//
 
 pub struct Creds;
 
@@ -70,7 +70,7 @@ pub async fn reload(_: Creds, config: web::Data<Config>) -> impl Responder {
 pub async fn feeds(_: Creds, pool: web::Data<sqlx::SqlitePool>) -> impl Responder {
     log::info!("Pool {:#?}", pool);
 
-    let _ = db::feed_list(&pool).await;
+    let _ = db::feeds(&pool).await;
 
     HttpResponse::Ok().body("TODO")
 }
