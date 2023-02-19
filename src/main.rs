@@ -1,4 +1,5 @@
 mod config;
+mod middleware;
 mod routes;
 mod util;
 
@@ -10,6 +11,7 @@ use clap::Parser;
 use crate::{
     util::{get_muted,expand_tilde},
     config::{DEFAULT_NEWSBOAT_BIN,Config,MOAT_KEY_ENV},
+    middleware::CheckCreds,
     routes::*,
 };
 
@@ -85,11 +87,12 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
+            .wrap(CheckCreds)
             .app_data(web::Data::new(config.to_owned()))
             .service(reload)
-            .route("/unread", web::get().to(unread))
-            .route("/feeds", web::get().to(feeds))
-            .route("/items", web::get().to(items))
+            .service(unread)
+            .service(feeds)
+            .service(items)
     })
     .workers(2)
     .bind((args.addr, args.port))?
