@@ -1,12 +1,10 @@
 mod config;
 mod routes;
 mod util;
+mod db;
 
-
-use std::{
-    path::Path,
-    io::{Error,ErrorKind}
-};
+use sqlx::SqlitePool;
+use std::path::Path;
 use actix_web::middleware::Logger;
 use actix_web::{web, App, HttpServer};
 use clap::Parser;
@@ -81,6 +79,9 @@ async fn main() -> std::io::Result<()> {
 
     let _ = get_env_key();
 
+    let pool = SqlitePool::connect(&config.cache_db).await
+                          .expect("Could not open database");
+
     log::info!("Listening on {}:{}...", args.addr, args.port);
 
     HttpServer::new(move || {
@@ -88,6 +89,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
             .app_data(web::Data::new(config.to_owned()))
+            .app_data(web::Data::new(pool.to_owned()))
             .service(reload)
             .service(unread)
             .service(feeds)

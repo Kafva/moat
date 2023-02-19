@@ -1,5 +1,8 @@
-use crate::util::get_env_key;
-use actix_web::{patch, get, web, HttpResponse, HttpRequest, Responder, FromRequest};
+use crate::{
+    util::get_env_key,
+    db,
+};
+use actix_web::{patch, get, post, web, HttpResponse, HttpRequest, Responder, FromRequest};
 use super::Config;
 use std::process::Command;
 use std::future::{ready, Ready};
@@ -36,13 +39,15 @@ impl FromRequest for Creds {
 // Endpoints will not return 415 when the wrong method is provided
 //  https://github.com/actix/actix-web/issues/2735
 
-#[get("/unread")]
+#[post("/unread")]
 pub async fn unread(_: Creds) -> impl Responder {
+    // WAIT FOR LOCK ON DB
     HttpResponse::Ok().body("TODO")
 }
 
 #[patch("/reload")]
-pub async fn reload(config: web::Data<Config>, _: Creds) -> impl Responder {
+pub async fn reload(_: Creds, config: web::Data<Config>) -> impl Responder {
+    // TODO LOCK database
     let status = Command::new(config.newsboat_bin.as_str())
         .arg("-C")
         .arg(config.newsboat_config.as_str())
@@ -62,7 +67,11 @@ pub async fn reload(config: web::Data<Config>, _: Creds) -> impl Responder {
 }
 
 #[get("/feeds")]
-pub async fn feeds(_: Creds) -> impl Responder {
+pub async fn feeds(_: Creds, pool: web::Data<sqlx::SqlitePool>) -> impl Responder {
+    log::info!("Pool {:#?}", pool);
+
+    let _ = db::feed_list(&pool).await;
+
     HttpResponse::Ok().body("TODO")
 }
 
