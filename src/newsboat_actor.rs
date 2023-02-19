@@ -1,3 +1,5 @@
+use super::moat_log;
+use crate::Muted;
 use std::process::Command;
 use sqlx::SqliteConnection;
 use actix::prelude::*;
@@ -19,7 +21,8 @@ pub struct ReloadMessage;
 
 pub struct NewsboatActor {
     pub config: Config,
-    pub conn: SqliteConnection
+    pub muted: Muted,
+    pub conn: SqliteConnection,
 }
 
 // Provide Actor implementation for our actor
@@ -27,11 +30,11 @@ impl Actor for NewsboatActor {
     type Context = Context<Self>;
 
     fn started(&mut self, _ctx: &mut Context<Self>) {
-       log::info!("Actor is alive");
+       moat_log!("Actor started...");
     }
 
     fn stopped(&mut self, _ctx: &mut Context<Self>) {
-       log::info!("Actor is stopped");
+       moat_log!("Actor stopped...");
     }
 }
 
@@ -43,7 +46,7 @@ impl Handler<FeedsMessage> for NewsboatActor {
     fn handle(&mut self, _: FeedsMessage, _: &mut Context<Self>) -> Self::Result {
        // This is the only way I found for executing an async task in the
        // handler for an actor...
-       futures::executor::block_on(feeds(&mut self.conn))
+       futures::executor::block_on(feeds(&mut self.conn, &self.muted))
     }
 }
 

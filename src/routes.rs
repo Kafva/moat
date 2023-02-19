@@ -8,6 +8,7 @@
 // `NewsboatActor`.
 //
 //============================================================================//
+use super::moat_log;
 use crate::{
     util::get_env_key,
     newsboat_actor::{NewsboatActor,ReloadMessage,FeedsMessage},
@@ -66,7 +67,7 @@ pub async fn reload(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>)
 #[get("/feeds")]
 pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) -> impl Responder {
     let rss_feeds = actor_addr.send(FeedsMessage).await;
-    log::info!("{:#?}", rss_feeds);
+    moat_log!("{:#?}", rss_feeds);
 
     HttpResponse::Ok().body("TODO")
 }

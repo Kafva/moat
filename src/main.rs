@@ -2,6 +2,7 @@ mod config;
 mod routes;
 mod util;
 mod db;
+mod muted;
 mod newsboat_actor;
 
 use actix::prelude::*;
@@ -12,9 +13,10 @@ use actix_web::{web, App, HttpServer};
 use clap::Parser;
 
 use crate::{
-    util::{get_muted,expand_tilde,get_env_key},
-    config::{DEFAULT_NEWSBOAT_BIN,Config,MOAT_KEY_ENV},
+    util::{expand_tilde,get_env_key},
+    config::{DEFAULT_NEWSBOAT_BIN,Config,MOAT_KEY_ENV,DEFAULT_LOG_LEVEL},
     newsboat_actor::NewsboatActor,
+    muted::Muted,
     routes::*,
 };
 
@@ -73,22 +75,25 @@ async fn main() -> std::io::Result<()> {
            cache_db: expand_tilde(args.cache_db.as_str()),
            newsboat_config: expand_tilde(args.newsboat_config.as_str()),
            newsboat_bin: expand_tilde(args.newsboat_bin.as_str()),
-           urls: urls.clone(),
-           muted_list: get_muted(urls.as_str()).unwrap(),
+           urls: urls.clone()
     };
 
+    if std::env::var("RUST_LOG").unwrap_or("".to_string()) == "" {
+        std::env::set_var("RUST_LOG", DEFAULT_LOG_LEVEL)
+    }
 
-    env_logger::init_from_env(env_logger::Env::default()
-                              .default_filter_or("info"));
+    env_logger::builder().format_target(false).init();
 
     let _ = get_env_key();
+
+    let muted = Muted::from_urls_file(&urls)?;
 
     let conn = SqliteConnection::connect(&config.cache_db).await
                           .expect("Could not open database");
 
-    let actor_addr = NewsboatActor { config, conn }.start();
+    let actor_addr = NewsboatActor { config, muted, conn }.start();
 
-    log::info!("Listening on {}:{}...", args.addr, args.port);
+    moat_log!("Listening on {}:{}...", args.addr, args.port);
 
     HttpServer::new(move || {
         App::new()
