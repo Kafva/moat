@@ -6,7 +6,6 @@ pub const DEFAULT_NEWSBOAT_BIN: &'static str = "/usr/bin/newsboat";
 
 pub const MOAT_KEY_ENV: &'static str = "MOAT_KEY";
 
-
 #[derive(Clone)]
 pub struct Config {
     pub cache_db: String,
@@ -15,4 +14,3 @@ pub struct Config {
     pub urls: String,
     pub muted_list: Vec<String>,
 }
-

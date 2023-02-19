@@ -2,13 +2,17 @@ mod config;
 mod routes;
 mod util;
 
-use std::path::Path;
+
+use std::{
+    path::Path,
+    io::{Error,ErrorKind}
+};
 use actix_web::middleware::Logger;
 use actix_web::{web, App, HttpServer};
 use clap::Parser;
 
 use crate::{
-    util::{get_muted,expand_tilde},
+    util::{get_muted,expand_tilde,get_env_key},
     config::{DEFAULT_NEWSBOAT_BIN,Config,MOAT_KEY_ENV},
     routes::*,
 };
@@ -71,13 +75,11 @@ async fn main() -> std::io::Result<()> {
            muted_list: get_muted(urls.as_str()).unwrap(),
     };
 
+
     env_logger::init_from_env(env_logger::Env::default()
                               .default_filter_or("info"));
 
-    if std::env::var(MOAT_KEY_ENV).is_err() {
-        log::error!("Server requires '{}' to be set", MOAT_KEY_ENV);
-        // TODO exit
-    }
+    let _ = get_env_key();
 
     log::info!("Listening on {}:{}...", args.addr, args.port);
 
