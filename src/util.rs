@@ -30,7 +30,20 @@ pub fn path_exists(path_str: &str) -> Result<String,String> {
 }
 
 #[macro_export]
-macro_rules! moat_log {
+macro_rules! moat_debug {
+    // Match a format literal + one or more expressions
+    ($fmt:literal, $($x:expr),*) => {
+        log::debug!(concat!("\x1b[90m[\x1b[0m{}:{}\x1b[90m]\x1b[0m ", $fmt),
+                   file!(), line!(), $($x),*);
+    };
+    ($fmt:literal) => {
+        log::debug!(concat!("\x1b[90m[\x1b[0m{}:{}\x1b[90m]\x1b[0m ", $fmt),
+                   file!(), line!());
+    };
+}
+
+#[macro_export]
+macro_rules! moat_info {
     // Match a format literal + one or more expressions
     ($fmt:literal, $($x:expr),*) => {
         log::info!(concat!("\x1b[90m[\x1b[0m{}:{}\x1b[90m]\x1b[0m ", $fmt),

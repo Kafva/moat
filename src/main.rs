@@ -6,10 +6,12 @@ mod muted;
 mod newsboat_actor;
 
 use actix::prelude::*;
-use sqlx::{SqliteConnection,Connection};
+use sqlx::{SqliteConnection,Connection,ConnectOptions};
+use sqlx::sqlite::SqliteConnectOptions;
 use actix_web::middleware::Logger;
 use actix_web::{web, App, HttpServer};
 use clap::Parser;
+use std::{env, str::FromStr};
 
 use crate::{
     util::{expand_tilde,get_env_key,path_exists},
@@ -77,8 +79,8 @@ async fn main() -> std::io::Result<()> {
            urls: urls.clone()
     };
 
-    if std::env::var("RUST_LOG").unwrap_or("".to_string()) == "" {
-        std::env::set_var("RUST_LOG", DEFAULT_LOG_LEVEL)
+    if env::var("RUST_LOG").unwrap_or("".to_string()) == "" {
+        env::set_var("RUST_LOG", DEFAULT_LOG_LEVEL)
     }
 
     env_logger::builder().format_target(false).init();
@@ -87,12 +89,17 @@ async fn main() -> std::io::Result<()> {
 
     let muted = Muted::from_urls_file(&urls)?;
 
-    let conn = SqliteConnection::connect(&config.cache_db).await
-                          .expect("Could not open database");
+    let conn = if env::var("RUST_LOG").unwrap_or("".to_string()) == "debug" {
+        SqliteConnection::connect(&config.cache_db).await
+    } else {
+        SqliteConnectOptions::from_str(&config.cache_db).unwrap()
+                .disable_statement_logging().connect().await
+
+    }.expect("Could not open database");
 
     let actor_addr = NewsboatActor { config, muted, conn }.start();
 
-    moat_log!("Listening on {}:{}...", args.addr, args.port);
+    moat_info!("Listening on {}:{}...", args.addr, args.port);
 
     HttpServer::new(move || {
         App::new()
