@@ -1,4 +1,5 @@
 use sqlx::SqlitePool;
+//use sqlx::SqliteConnection;
 
 #[allow(unused)]
 #[derive(Debug,Default)]
@@ -26,7 +27,9 @@ pub async fn feeds(pool: &SqlitePool) -> Result<Vec<RssFeed>, sqlx::Error> {
     let _conn = pool.acquire().await?;
 
     log::info!("DONE");
-    return Ok(vec![ RssFeed::default() ]);
+    let mut feed = RssFeed::default();
+    feed.title = "XD".to_string();
+    return Ok(vec![ feed ]);
 
 }
 

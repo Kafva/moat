@@ -39,52 +39,11 @@ impl Actor for NewsboatActor {
 
 impl Handler<FeedsMessage> for NewsboatActor {
     type Result = Result<Vec<RssFeed>, sqlx::Error>;
-    //type Result = ();
 
-    fn handle(&mut self, msg: FeedsMessage, ctx: &mut Context<Self>) -> Self::Result {
-       //let executor = async {
-       //     feeds(&self.pool).await
-       //};
-       //ctx.spawn(executor);
-       //let fut = Box::pin(async {
-       //      feeds(&self.pool).await;
-       //});
-
-       //let fut = feeds(&self.pool).into_actor(self);
-       //let actor_fut = fut.into_actor(self);
-       
-       //ctx.wait(fut);
-
-       //ctx.spawn()
-       //
-       //let x = actix_web::rt::System::current().to_owned
-       
-       let x = futures::executor::block_on(feeds(&self.pool));
-       log::info!("{:#?}", x);
-
-
-       //let out = actix_web::rt::Runtime::block_on(|| feeds(&self.pool) );
-       //let x = actix_web::rt::System::new().block_on( feeds(&self.pool) );
-       //let pool = self.pool.clone();
-       //let _x = actix_web::web::block( move || async {
-       //     feeds(pool).await
-       //});
-       //log::info!("xd {:#?}", x);
-
-       //let actor_fut = _x.into_actor(self);
-       //ctx.wait(actor_fut);
-
-
-       //let fut = Box::pin(async {
-       //    //feeds(&self.pool).await;
-       //    println!("Easy task done!");
-       //});
-
-       //let actor_future = fut.into_actor(self);
-
-       //// Still using `wait` here.
-       //ctx.wait(actor_future);
-       Ok(vec![ RssFeed::default() ])
+    fn handle(&mut self, _: FeedsMessage, _: &mut Context<Self>) -> Self::Result {
+       // This is the only way I found for executing an async task in the
+       // handler for an actor...
+       futures::executor::block_on(feeds(&self.pool))
     }
 }
 
