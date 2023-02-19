@@ -5,7 +5,7 @@ mod db;
 mod newsboat_actor;
 
 use actix::prelude::*;
-use sqlx::SqlitePool;
+use sqlx::{SqliteConnection,Connection};
 use std::path::Path;
 use actix_web::middleware::Logger;
 use actix_web::{web, App, HttpServer};
@@ -83,10 +83,10 @@ async fn main() -> std::io::Result<()> {
 
     let _ = get_env_key();
 
-    let pool = SqlitePool::connect(&config.cache_db).await
+    let conn = SqliteConnection::connect(&config.cache_db).await
                           .expect("Could not open database");
 
-    let actor_addr = NewsboatActor { config, pool }.start();
+    let actor_addr = NewsboatActor { config, conn }.start();
 
     log::info!("Listening on {}:{}...", args.addr, args.port);
 

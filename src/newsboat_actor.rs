@@ -1,5 +1,5 @@
 use std::process::Command;
-use sqlx::SqlitePool;
+use sqlx::SqliteConnection;
 use actix::prelude::*;
 use crate::{
     db::{RssFeed,feeds},
@@ -19,7 +19,7 @@ pub struct ReloadMessage;
 
 pub struct NewsboatActor {
     pub config: Config,
-    pub pool: SqlitePool
+    pub conn: SqliteConnection
 }
 
 // Provide Actor implementation for our actor
@@ -43,7 +43,7 @@ impl Handler<FeedsMessage> for NewsboatActor {
     fn handle(&mut self, _: FeedsMessage, _: &mut Context<Self>) -> Self::Result {
        // This is the only way I found for executing an async task in the
        // handler for an actor...
-       futures::executor::block_on(feeds(&self.pool))
+       futures::executor::block_on(feeds(&mut self.conn))
     }
 }
 

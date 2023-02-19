@@ -1,5 +1,5 @@
-use sqlx::SqlitePool;
-//use sqlx::SqliteConnection;
+//use sqlx::SqlitePool;
+use sqlx::SqliteConnection;
 
 #[allow(unused)]
 #[derive(Debug,Default)]
@@ -23,9 +23,17 @@ pub struct RssFeed {
 
 //============================================================================//
 
-pub async fn feeds(pool: &SqlitePool) -> Result<Vec<RssFeed>, sqlx::Error> {
-    let _conn = pool.acquire().await?;
+pub async fn feeds(conn: &mut SqliteConnection) -> Result<Vec<RssFeed>, sqlx::Error> {
+    //let _conn = pool.acquire().await?;
+    let rows = sqlx::query("
+        SELECT feedurl, rss_feed.url, author, SUM(unread)
+        AS unread_count, COUNT(*)
+        FROM rss_item JOIN rss_feed ON rss_feed.rssurl = feedurl
+        GROUP BY feedurl;
+        "
+    ).fetch_all(conn).await?;
 
+    log::info!("OUT {:#?}", rows.len());
     log::info!("DONE");
     let mut feed = RssFeed::default();
     feed.title = "XD".to_string();
