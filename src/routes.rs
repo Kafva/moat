@@ -17,35 +17,35 @@ pub struct Creds {
 
 impl FromRequest for Creds {
     type Error = actix_web::Error;
-    type Future = Ready<Result<Creds,actix_web::Error>>;
+    type Future = Ready<Result<Creds,Self::Error>>;
 
-    fn from_request(req: &HttpRequest, _: &mut actix_web::dev::Payload) -> <Self as FromRequest>::Future  {
+    fn from_request(req: &HttpRequest, _: &mut actix_web::dev::Payload) ->
+       <Self as FromRequest>::Future {
+
+        let key = std::env::var(MOAT_KEY_ENV)
+                  .unwrap_or_else(|_| panic!("Error retrieving key") );
+
+        if key == "" {
+            panic!("Key is unset")
+        }
+
         if let Some(creds) = req.headers().get("x-creds") {
-            if let Ok(key) = std::env::var(MOAT_KEY_ENV) {
-                let valid = key != "" && 
-                            creds.to_str().unwrap_or("") == key;
-                return ready(Ok(Creds { valid }))
+            if creds.to_str().unwrap_or("") == key {
+                return ready(Ok(Creds { valid: true }))
             }
         } 
-        ready(Ok(Creds { valid: false }))
+        ready(Err(actix_web::error::ErrorUnauthorized("")))
     }
 }
 
 
 #[get("/unread")]
-pub async fn unread(creds: Creds) -> impl Responder {
-    if !creds.valid { 
-        return HttpResponse::Unauthorized().body("")
-    }
-
+pub async fn unread(_: Creds) -> impl Responder {
     HttpResponse::Ok().body("TODO")
 }
 
 #[patch("/reload")]
-pub async fn reload(config: web::Data<Config>, creds: Creds) -> impl Responder {
-    if !creds.valid { 
-        return HttpResponse::Unauthorized().body("")
-    }
+pub async fn reload(config: web::Data<Config>, _: Creds) -> impl Responder {
     let output = Command::new(config.newsboat_bin.as_str())
         .arg("-C")
         .arg(config.newsboat_config.as_str())

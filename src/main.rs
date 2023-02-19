@@ -1,5 +1,4 @@
 mod config;
-mod middleware;
 mod routes;
 mod util;
 
