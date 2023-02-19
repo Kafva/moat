@@ -4,21 +4,19 @@ use std::process::Command;
 use crate::config::MOAT_KEY_ENV;
 use std::future::{ready, Ready};
 
-
 pub const ERR_RESPONSE: &'static str = "{ \"success\": false }";
 pub const OK_RESPONSE: &'static str = "{ \"success\": true }";
 
-// Endpoints will not return 415 when the wrong method is provided
-//  https://github.com/actix/actix-web/issues/2735
+//============================================================================//
 
-pub struct Creds {
-    pub valid: bool
-}
+pub struct Creds;
 
 impl FromRequest for Creds {
     type Error = actix_web::Error;
     type Future = Ready<Result<Creds,Self::Error>>;
 
+    /// Verify the `x-creds` header of an incoming request, ran for every
+    /// endpoint that takes `Creds` as an argument.
     fn from_request(req: &HttpRequest, _: &mut actix_web::dev::Payload) ->
        <Self as FromRequest>::Future {
 
@@ -31,13 +29,17 @@ impl FromRequest for Creds {
 
         if let Some(creds) = req.headers().get("x-creds") {
             if creds.to_str().unwrap_or("") == key {
-                return ready(Ok(Creds { valid: true }))
+                return ready(Ok(Creds))
             }
         } 
         ready(Err(actix_web::error::ErrorUnauthorized("")))
     }
 }
 
+//============================================================================//
+
+// Endpoints will not return 415 when the wrong method is provided
+//  https://github.com/actix/actix-web/issues/2735
 
 #[get("/unread")]
 pub async fn unread(_: Creds) -> impl Responder {
