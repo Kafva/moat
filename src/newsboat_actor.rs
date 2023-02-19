@@ -10,7 +10,6 @@ use crate::{
 
 #[derive(Message)]
 #[rtype(result = "Result<Vec<RssFeed>, sqlx::Error>")]
-//#[rtype(result = "()")]
 pub struct FeedsMessage;
 
 #[derive(Message)]

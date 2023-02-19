@@ -7,13 +7,12 @@ mod newsboat_actor;
 
 use actix::prelude::*;
 use sqlx::{SqliteConnection,Connection};
-use std::path::Path;
 use actix_web::middleware::Logger;
 use actix_web::{web, App, HttpServer};
 use clap::Parser;
 
 use crate::{
-    util::{expand_tilde,get_env_key},
+    util::{expand_tilde,get_env_key,path_exists},
     config::{DEFAULT_NEWSBOAT_BIN,Config,MOAT_KEY_ENV,DEFAULT_LOG_LEVEL},
     newsboat_actor::NewsboatActor,
     muted::Muted,
@@ -110,17 +109,3 @@ async fn main() -> std::io::Result<()> {
     .run()
     .await
 }
-
-//============================================================================//
-
-fn path_exists(path_str: &str) -> Result<String,String> {
-    let expanded_path = expand_tilde(path_str);
-    let filepath = Path::new(expanded_path.as_str());
-
-    if !filepath.is_file() {
-        Err("No such file".to_string())
-    } else {
-        Ok(String::from(path_str))
-    }
-}
-

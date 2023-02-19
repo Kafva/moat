@@ -12,15 +12,13 @@ use super::moat_log;
 use crate::{
     util::get_env_key,
     newsboat_actor::{NewsboatActor,ReloadMessage,FeedsMessage},
+    config::{OK_RESPONSE,ERR_RESPONSE}
 };
 use actix_web::{patch, get, post, web, HttpResponse, HttpRequest, Responder,
                 FromRequest};
 use std::future::{ready, Ready};
 
 //============================================================================//
-
-pub const ERR_RESPONSE: &'static str = "{ \"success\": false }";
-pub const OK_RESPONSE: &'static str = "{ \"success\": true }";
 
 pub struct Creds;
 
@@ -44,7 +42,6 @@ impl FromRequest for Creds {
     }
 }
 
-
 //============================================================================//
 
 #[post("/unread")]
@@ -67,7 +64,7 @@ pub async fn reload(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>)
 #[get("/feeds")]
 pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) -> impl Responder {
     let rss_feeds = actor_addr.send(FeedsMessage).await;
-    moat_log!("{:#?}", rss_feeds);
+    moat_log!("feeds: {:#?}", rss_feeds);
 
     HttpResponse::Ok().body("TODO")
 }

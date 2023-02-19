@@ -1,4 +1,5 @@
 use crate::MOAT_KEY_ENV;
+use std::path::Path;
 
 pub fn expand_tilde(value: &str) -> String {
     value.replace("~", std::env::var("HOME").unwrap().as_str())
@@ -15,6 +16,17 @@ pub fn get_env_key() -> String {
         panic!("Key is unset")
     }
     key
+}
+
+pub fn path_exists(path_str: &str) -> Result<String,String> {
+    let expanded_path = expand_tilde(path_str);
+    let filepath = Path::new(expanded_path.as_str());
+
+    if !filepath.is_file() {
+        Err("No such file".to_string())
+    } else {
+        Ok(String::from(path_str))
+    }
 }
 
 #[macro_export]
