@@ -25,6 +25,7 @@ pub struct RssFeed {
 pub async fn feeds(pool: &SqlitePool) -> Result<Vec<RssFeed>, sqlx::Error> {
     let _conn = pool.acquire().await?;
 
+    log::info!("DONE");
     return Ok(vec![ RssFeed::default() ]);
 
 }

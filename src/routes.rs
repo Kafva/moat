@@ -10,7 +10,7 @@
 //============================================================================//
 use crate::{
     util::get_env_key,
-    newsboat_actor::{NewsboatActor,ReloadMessage},
+    newsboat_actor::{NewsboatActor,ReloadMessage,FeedsMessage},
 };
 use actix_web::{patch, get, post, web, HttpResponse, HttpRequest, Responder,
                 FromRequest};
@@ -64,9 +64,8 @@ pub async fn reload(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>)
 }
 
 #[get("/feeds")]
-pub async fn feeds(_: Creds) -> impl Responder {
-    //log::info!("Pool {:#?}", pool);
-    //let _ = db::feeds(&pool).await;
+pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) -> impl Responder {
+    let _ = actor_addr.send(FeedsMessage).await;
 
     HttpResponse::Ok().body("TODO")
 }
