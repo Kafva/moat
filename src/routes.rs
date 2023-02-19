@@ -1,10 +1,19 @@
+// Endpoints will not return 415 when the wrong method is provided
+//  https://github.com/actix/actix-web/issues/2735
+//
+// The /unread and /reload endpoints both write to the db, however, `/reload`
+// interacts indirectly with it via the newsboat executable, not the connection
+// pool of the app. To avoid having to lock the database, we therefore use a 
+// a dedicated actor. Every endpoint defers its operations to the 
+// `NewsboatActor`.
+//
+//============================================================================//
 use crate::{
     util::get_env_key,
-    db,
+    newsboat_actor::{NewsboatActor,ReloadMessage},
 };
-use actix_web::{patch, get, post, web, HttpResponse, HttpRequest, Responder, FromRequest};
-use super::Config;
-use std::process::Command;
+use actix_web::{patch, get, post, web, HttpResponse, HttpRequest, Responder,
+                FromRequest};
 use std::future::{ready, Ready};
 
 //============================================================================//
@@ -34,30 +43,18 @@ impl FromRequest for Creds {
     }
 }
 
-//============================================================================//
 
-// Endpoints will not return 415 when the wrong method is provided
-//  https://github.com/actix/actix-web/issues/2735
+//============================================================================//
 
 #[post("/unread")]
 pub async fn unread(_: Creds) -> impl Responder {
-    // WAIT FOR LOCK ON DB
     HttpResponse::Ok().body("TODO")
 }
 
 #[patch("/reload")]
-pub async fn reload(_: Creds, config: web::Data<Config>) -> impl Responder {
-    // TODO LOCK database
-    let status = Command::new(config.newsboat_bin.as_str())
-        .arg("-C")
-        .arg(config.newsboat_config.as_str())
-        .arg("-c")
-        .arg(config.cache_db.as_str())
-        .arg("-u")
-        .arg(config.urls.as_str())
-        .arg("-x")
-        .arg("reload")
-        .status();
+pub async fn reload(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) -> impl Responder {
+
+    let status = actor_addr.send(ReloadMessage).await;
 
     if status.is_ok() {
         HttpResponse::Ok().body(OK_RESPONSE)
@@ -67,10 +64,9 @@ pub async fn reload(_: Creds, config: web::Data<Config>) -> impl Responder {
 }
 
 #[get("/feeds")]
-pub async fn feeds(_: Creds, pool: web::Data<sqlx::SqlitePool>) -> impl Responder {
-    log::info!("Pool {:#?}", pool);
-
-    let _ = db::feeds(&pool).await;
+pub async fn feeds(_: Creds) -> impl Responder {
+    //log::info!("Pool {:#?}", pool);
+    //let _ = db::feeds(&pool).await;
 
     HttpResponse::Ok().body("TODO")
 }
