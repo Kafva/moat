@@ -3,7 +3,7 @@ use crate::Muted;
 use sqlx::SqliteConnection;
 
 #[allow(unused)]
-#[derive(Debug,Default,sqlx::FromRow)]
+#[derive(Debug,Default,sqlx::FromRow,serde::Serialize)]
 pub struct RssFeed {
     /// First column in urls file
     feedurl: String,
@@ -25,28 +25,25 @@ pub struct RssFeed {
 
 pub async fn feeds(conn: &mut SqliteConnection, muted: &Muted) -> Result<Vec<RssFeed>, sqlx::Error> {
     let muted_entries = muted.as_quoted_csv();
-    moat_debug!("Muted: {:#?}", muted_entries);
 
-    sqlx::query_as::<_,RssFeed>("
-        SELECT 
-            feedurl, 
-            rss_feed.url AS url, 
-            author AS title, 
-            SUM(unread) AS unread_count, 
+    // .bind() is not supported for IN (...)
+    // https://github.com/launchbadge/sqlx/blob/main/FAQ.md#how-can-i-do-a-select--where-foo-in--query
+    sqlx::query_as::<_,RssFeed>(&format!("
+        SELECT
+            feedurl,
+            rss_feed.url AS url,
+            author AS title,
+            SUM(unread) AS unread_count,
             COUNT(*) AS total_count,
-            (feedurl IN (?)) AS muted
+            (feedurl IN ({})) AS muted
 
-        FROM rss_item JOIN rss_feed ON 
+        FROM rss_item JOIN rss_feed ON
             rss_feed.rssurl = feedurl
         GROUP BY feedurl
-        ORDER BY rss_feed.rssurl IN (?), unread_count DESC;
-        "
-
-    )
-    .bind(muted_entries.clone())
-    .bind(muted_entries)
+        ORDER BY rss_feed.rssurl IN ({}), unread_count DESC;
+        ",
+        muted_entries, muted_entries))
     .fetch_all(conn).await
-
 }
 
 

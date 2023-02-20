@@ -29,11 +29,11 @@ impl Actor for NewsboatActor {
     type Context = Context<Self>;
 
     fn started(&mut self, _ctx: &mut Context<Self>) {
-       moat_info!("Actor started...");
+       //moat_info!("Actor started...");
     }
 
     fn stopped(&mut self, _ctx: &mut Context<Self>) {
-       moat_info!("Actor stopped...");
+       //moat_info!("Actor stopped...");
     }
 }
 

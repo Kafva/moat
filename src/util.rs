@@ -29,28 +29,49 @@ pub fn path_exists(path_str: &str) -> Result<String,String> {
     }
 }
 
+
+#[macro_export]
+macro_rules! moat_log_prefix {
+    () => {
+        "\x1b[90m[\x1b[0m{}:{}\x1b[90m]\x1b[0m "
+    };
+}
+
+
 #[macro_export]
 macro_rules! moat_debug {
     // Match a format literal + one or more expressions
     ($fmt:literal, $($x:expr),*) => {
-        log::debug!(concat!("\x1b[90m[\x1b[0m{}:{}\x1b[90m]\x1b[0m ", $fmt),
+        log::debug!(concat!(moat_log_prefix!(), $fmt),
                    file!(), line!(), $($x),*);
     };
     ($fmt:literal) => {
-        log::debug!(concat!("\x1b[90m[\x1b[0m{}:{}\x1b[90m]\x1b[0m ", $fmt),
+        log::debug!(concat!(moat_log_prefix!(), $fmt),
                    file!(), line!());
     };
 }
 
 #[macro_export]
 macro_rules! moat_info {
-    // Match a format literal + one or more expressions
     ($fmt:literal, $($x:expr),*) => {
-        log::info!(concat!("\x1b[90m[\x1b[0m{}:{}\x1b[90m]\x1b[0m ", $fmt),
+        log::info!(concat!(moat_log_prefix!(), $fmt),
                    file!(), line!(), $($x),*);
     };
     ($fmt:literal) => {
-        log::info!(concat!("\x1b[90m[\x1b[0m{}:{}\x1b[90m]\x1b[0m ", $fmt),
+        log::info!(concat!(moat_log_prefix!(), $fmt),
                    file!(), line!());
     };
 }
+
+#[macro_export]
+macro_rules! moat_err {
+    ($fmt:literal, $($x:expr),*) => {
+        log::error!(concat!(moat_log_prefix!(), $fmt),
+                   file!(), line!(), $($x),*);
+    };
+    ($fmt:literal) => {
+        log::error!(concat!(moat_log_prefix!(), $fmt),
+                   file!(), line!());
+    };
+}
+

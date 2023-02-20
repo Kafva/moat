@@ -3,12 +3,13 @@
 //
 // The /unread and /reload endpoints both write to the db, however, `/reload`
 // interacts indirectly with it via the newsboat executable, not the connection
-// pool of the app. To avoid having to lock the database, we therefore use a 
-// a dedicated actor. Every endpoint defers its operations to the 
+// pool of the app. To avoid having to lock the database, we therefore use a
+// a dedicated actor. Every endpoint defers its operations to the
 // `NewsboatActor`.
 //
 //============================================================================//
-use super::moat_debug;
+use crate::{moat_log_prefix,moat_err};
+use crate::db::RssFeed;
 use crate::{
     util::get_env_key,
     newsboat_actor::{NewsboatActor,ReloadMessage,FeedsMessage},
@@ -37,7 +38,7 @@ impl FromRequest for Creds {
             if creds.to_str().unwrap_or("") == key {
                 return ready(Ok(Creds))
             }
-        } 
+        }
         ready(Err(actix_web::error::ErrorUnauthorized("")))
     }
 }
@@ -61,12 +62,17 @@ pub async fn reload(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>)
     }
 }
 
+/// Responds with an empty list on failure.
 #[get("/feeds")]
-pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) -> impl Responder {
-    let rss_feeds = actor_addr.send(FeedsMessage).await;
-    moat_debug!("feeds: {:#?}", rss_feeds);
+pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) -> web::Json<Vec<RssFeed>> {
 
-    HttpResponse::Ok().body("TODO")
+    if let Ok(rss_feeds) = actor_addr.send(FeedsMessage).await {
+        let rss_feeds = rss_feeds.unwrap();
+        web::Json(rss_feeds)
+    } else {
+        moat_err!("/feeds request failed");
+        web::Json(vec![])
+    }
 }
 
 #[get("/items")]
