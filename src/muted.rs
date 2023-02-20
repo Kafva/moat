@@ -4,6 +4,7 @@ use std::{
 };
 
 
+#[derive(Debug)]
 pub struct Muted {
     pub entries: Vec<String>,
 }
@@ -35,6 +36,16 @@ impl Muted {
         }
 
         return Ok(Self { entries });
+    }
+
+    /// Create a comma separated string of all entries, with each being
+    /// enclosed in double quotes.
+    pub fn as_quoted_csv(&self) -> String {
+        let enclosed: Vec<String> = self.entries.iter()
+            .map(|e| format!("'{}'", e).to_string())
+            .collect();
+
+        enclosed.join(",")
     }
 }
 

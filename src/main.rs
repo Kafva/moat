@@ -101,6 +101,7 @@ async fn main() -> std::io::Result<()> {
 
     moat_info!("Listening on {}:{}...", args.addr, args.port);
 
+
     HttpServer::new(move || {
         App::new()
             .wrap(Logger::default())
