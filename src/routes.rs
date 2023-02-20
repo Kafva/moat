@@ -9,7 +9,7 @@
 //
 //============================================================================//
 use crate::newsboat_actor::ItemsMessage;
-use crate::{moat_log_prefix,moat_err};
+use crate::{moat_log_prefix,moat_err,moat_debug};
 use crate::db::RssItem;
 use crate::db::RssFeed;
 use crate::{
@@ -20,6 +20,7 @@ use crate::{
 use actix_web::{patch, get, post, web, HttpResponse, HttpRequest, Responder,
                 FromRequest};
 use std::future::{ready, Ready};
+use base64::{Engine as _, engine::general_purpose};
 
 //============================================================================//
 
@@ -78,21 +79,31 @@ pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) 
 }
 
 
+
 /// Fetch all `RssItem` objects for a given rssurl.
+/// Example:
+///
+/// curl -X GET -H "x-creds: 1" http://127.0.0.1:7654/items/$(echo -n 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA')
+///
 #[get("/items/{b64_rssurl}")]
 pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>, 
                    path: web::Path<(String,)>) -> web::Json<Vec<RssItem>> {
     
-    let rssurl = path.into_inner().0; // TODO decode b64
-    //let decoded = base64::decode(b64_rssurl).unwrap_or_default();
-    //let rssurl = String::from_utf8(decoded).unwrap_or_default();
+    let b64_rssurl = path.into_inner().0;
 
-    if let Ok(rss_items) = actor_addr.send(ItemsMessage { rssurl } ).await {
-        let rss_items = rss_items.unwrap();
-        web::Json(rss_items)
-    } else {
-        moat_err!("/items request error");
-        web::Json(vec![])
+    // TODO un-nested pattern, error response + ?
+    if let Ok(rssurl) = general_purpose::STANDARD.decode(b64_rssurl) {
+
+        if let Ok(rssurl) = String::from_utf8(rssurl) {
+            moat_debug!("rssurl: {:#?}", rssurl);
+
+            if let Ok(rss_items) = actor_addr.send(ItemsMessage { rssurl } ).await {
+                let rss_items = rss_items.unwrap();
+                return web::Json(rss_items)
+            }
+        }
     }
+    moat_err!("/items request error");
+    web::Json(vec![])
 }
 
