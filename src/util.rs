@@ -29,14 +29,12 @@ pub fn path_exists(path_str: &str) -> Result<String,String> {
     }
 }
 
-
 #[macro_export]
 macro_rules! moat_log_prefix {
     () => {
         "\x1b[90m[\x1b[0m{}:{}\x1b[90m]\x1b[0m "
     };
 }
-
 
 #[macro_export]
 macro_rules! moat_debug {

@@ -84,6 +84,8 @@ pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>,
                    path: web::Path<(String,)>) -> web::Json<Vec<RssItem>> {
     
     let rssurl = path.into_inner().0; // TODO decode b64
+    //let decoded = base64::decode(b64_rssurl).unwrap_or_default();
+    //let rssurl = String::from_utf8(decoded).unwrap_or_default();
 
     if let Ok(rss_items) = actor_addr.send(ItemsMessage { rssurl } ).await {
         let rss_items = rss_items.unwrap();

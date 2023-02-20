@@ -55,7 +55,6 @@ impl Handler<FeedsMessage> for NewsboatActor {
     }
 }
 
-
 impl Handler<ReloadMessage> for NewsboatActor {
     type Result = Result<std::process::ExitStatus, std::io::Error>;
 

@@ -58,9 +58,17 @@ pub async fn feeds(conn: &mut SqliteConnection,
     .fetch_all(conn).await
 }
 
-pub async fn items(_conn: &mut SqliteConnection, 
-                   _rssurl: String) -> Result<Vec<RssItem>, sqlx::Error> {
+pub async fn items(conn: &mut SqliteConnection,
+                   rssurl: String) -> Result<Vec<RssItem>, sqlx::Error> {
 
-    Ok(vec![ RssItem::default() ])
+    sqlx::query_as::<_,RssItem>("
+            SELECT id, title, author, url, pubdate, unread FROM rss_item
+            WHERE feedurl = ?
+            ORDER BY pubdate DESC;
+        ")
+    .bind(rssurl)
+    .fetch_all(conn).await
+
+    // Ok(vec![ RssItem::default() ])
 }
 
