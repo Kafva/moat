@@ -4,7 +4,7 @@ use std::process::Command;
 use sqlx::SqliteConnection;
 use actix::prelude::*;
 use crate::{
-    db::{RssFeed,feeds},
+    db::{RssFeed,RssItem,feeds,items},
     config::Config
 };
 
@@ -15,6 +15,12 @@ pub struct FeedsMessage;
 #[derive(Message)]
 #[rtype(result = "Result<std::process::ExitStatus, std::io::Error>")]
 pub struct ReloadMessage;
+
+#[derive(Message)]
+#[rtype(result = "Result<Vec<RssItem>, sqlx::Error>")]
+pub struct ItemsMessage {
+    pub rssurl: String
+}
 
 //============================================================================//
 
@@ -64,6 +70,14 @@ impl Handler<ReloadMessage> for NewsboatActor {
             .arg("-x")
             .arg("reload")
             .status()
+    }
+}
+
+impl Handler<ItemsMessage> for NewsboatActor {
+    type Result = Result<Vec<RssItem>, sqlx::Error>;
+
+    fn handle(&mut self, msg: ItemsMessage, _: &mut Context<Self>) -> Self::Result {
+       futures::executor::block_on(items(&mut self.conn, msg.rssurl))
     }
 }
 

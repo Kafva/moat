@@ -1,8 +1,6 @@
-use super::*;
 use crate::Muted;
 use sqlx::SqliteConnection;
 
-#[allow(unused)]
 #[derive(Debug,Default,sqlx::FromRow,serde::Serialize)]
 pub struct RssFeed {
     /// First column in urls file
@@ -20,10 +18,24 @@ pub struct RssFeed {
     muted: bool
 }
 
+/// Each attribute corresponds to a column in the `rss_item` table.
+#[derive(Debug,Default,sqlx::FromRow,serde::Serialize)]
+pub struct RssItem {
+    /// Internal database ID
+    id: u32,
+    title: String,
+    /// Corresponds to a `rss_feed.title` in a `RssFeed` object.
+    author: String,
+    url: String,
+    pubdate: u32,
+    unread: bool,
+}
+
 
 //============================================================================//
 
-pub async fn feeds(conn: &mut SqliteConnection, muted: &Muted) -> Result<Vec<RssFeed>, sqlx::Error> {
+pub async fn feeds(conn: &mut SqliteConnection,
+                   muted: &Muted) -> Result<Vec<RssFeed>, sqlx::Error> {
     let muted_entries = muted.as_quoted_csv();
 
     // .bind() is not supported for IN (...)
@@ -46,4 +58,9 @@ pub async fn feeds(conn: &mut SqliteConnection, muted: &Muted) -> Result<Vec<Rss
     .fetch_all(conn).await
 }
 
+pub async fn items(_conn: &mut SqliteConnection, 
+                   _rssurl: String) -> Result<Vec<RssItem>, sqlx::Error> {
+
+    Ok(vec![ RssItem::default() ])
+}
 

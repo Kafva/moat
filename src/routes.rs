@@ -8,7 +8,9 @@
 // `NewsboatActor`.
 //
 //============================================================================//
+use crate::newsboat_actor::ItemsMessage;
 use crate::{moat_log_prefix,moat_err};
+use crate::db::RssItem;
 use crate::db::RssFeed;
 use crate::{
     util::get_env_key,
@@ -70,13 +72,25 @@ pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) 
         let rss_feeds = rss_feeds.unwrap();
         web::Json(rss_feeds)
     } else {
-        moat_err!("/feeds request failed");
+        moat_err!("/feeds request error");
         web::Json(vec![])
     }
 }
 
-#[get("/items")]
-pub async fn items(_: Creds) -> impl Responder {
-    HttpResponse::Ok().body("TODO")
+
+/// Fetch all `RssItem` objects for a given rssurl.
+#[get("/items/{b64_rssurl}")]
+pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>, 
+                   path: web::Path<(String,)>) -> web::Json<Vec<RssItem>> {
+    
+    let rssurl = path.into_inner().0; // TODO decode b64
+
+    if let Ok(rss_items) = actor_addr.send(ItemsMessage { rssurl } ).await {
+        let rss_items = rss_items.unwrap();
+        web::Json(rss_items)
+    } else {
+        moat_err!("/items request error");
+        web::Json(vec![])
+    }
 }
 

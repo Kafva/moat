@@ -108,9 +108,9 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::new("%a %{User-Agent}i"))
             .app_data(web::Data::new(actor_addr.to_owned()))
             .service(reload)
-            .service(unread)
             .service(feeds)
             .service(items)
+            .service(unread)
     })
     .workers(2)
     .bind((args.addr, args.port))?
