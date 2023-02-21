@@ -99,6 +99,7 @@ pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>,
     web::Json(vec![])
 }
 
+//============================================================================//
 
 #[cfg(test)]
 mod tests {
@@ -108,11 +109,13 @@ mod tests {
         util::run_setup_script,
         config::{Config, MOAT_KEY_ENV},
         muted::Muted,
+        db::RssFeed,
         newsboat_actor::NewsboatActor,
+        routes
     };
     use actix_web::{test, App, web};
 
-    async fn setup() {
+    async fn setup() -> Addr<NewsboatActor> {
         run_setup_script();
         std::env::set_var(MOAT_KEY_ENV, "1");
 
@@ -128,22 +131,23 @@ mod tests {
         let conn = SqliteConnection::connect(&config.cache_db).await
                 .expect("Could not open database");
 
-        // let actor_addr = NewsboatActor { config, muted, conn }.start();
+        NewsboatActor { config, muted, conn }.start()
     }
 
     #[actix_web::test]
     async fn test_feeds_not_empty() {
+        let actor_addr = setup().await;
 
-        // let app = test::init_service(
-        //     App::new()
-        //         .app_data(web::Data::new(AppState { count: 4 }))
-        //         .route("/", web::get().to(index)),
-        // )
-        // .await;
-        // let req = test::TestRequest::get().uri("/").to_request();
-        // let resp: AppState = test::call_and_read_body_json(&app, req).await;
+        let app = test::init_service(App::new()
+                .app_data(web::Data::new(actor_addr))
+                .service(routes::feeds)).await;
 
-        // assert_eq!(resp.count, 4);
+        let req = test::TestRequest::get().uri("/feeds")
+                    .insert_header(("x-creds", "1")).to_request();
+
+        let res: Vec<RssFeed> = test::call_and_read_body_json(&app, req).await;
+
+        assert_ne!(res.len(), 0);
     }
 
 

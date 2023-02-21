@@ -1,7 +1,7 @@
 use crate::Muted;
 use sqlx::SqliteConnection;
 
-#[derive(Debug,Default,sqlx::FromRow,serde::Serialize)]
+#[derive(Debug,Default,sqlx::FromRow,serde::Serialize,serde::Deserialize)]
 pub struct RssFeed {
     /// First column in urls file
     feedurl: String,
