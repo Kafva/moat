@@ -85,6 +85,7 @@ async fn main() -> std::io::Result<()> {
 
     env_logger::builder().format_target(false).init();
 
+    // Ensure that MOAT_KEY_ENV is set.
     let _ = get_env_key();
 
     let muted = Muted::from_urls_file(&urls)?;
@@ -94,13 +95,11 @@ async fn main() -> std::io::Result<()> {
     } else {
         SqliteConnectOptions::from_str(&config.cache_db).unwrap()
                 .disable_statement_logging().connect().await
-
     }.expect("Could not open database");
 
     let actor_addr = NewsboatActor { config, muted, conn }.start();
 
     moat_info!("Listening on {}:{}...", args.addr, args.port);
-
 
     HttpServer::new(move || {
         App::new()

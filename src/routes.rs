@@ -102,37 +102,54 @@ pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>,
 
 #[cfg(test)]
 mod tests {
+    use actix::prelude::*;
+    use sqlx::{SqliteConnection,Connection};
     use crate::{
         util::run_setup_script,
-        routes::feeds,
-        config::MOAT_KEY_ENV
+        config::{Config, MOAT_KEY_ENV},
+        muted::Muted,
+        newsboat_actor::NewsboatActor,
     };
-    use actix_web::{
-        http::{header::ContentType, header::HeaderName, header::HeaderValue},
-        test,
-    };
+    use actix_web::{test, App, web};
 
-    fn setup() {
+    async fn setup() {
         run_setup_script();
         std::env::set_var(MOAT_KEY_ENV, "1");
+
+        let config = Config {
+            cache_db: "/tmp/moat/cache.db".to_string(),
+            urls: "/tmp/moat/urls".to_string(),
+            newsboat_config: "/tmp/moat/config".to_string(),
+            newsboat_bin: "newsboat".to_string(),
+        };
+
+        let muted = Muted::from_urls_file(&config.urls).unwrap();
+
+        let conn = SqliteConnection::connect(&config.cache_db).await
+                .expect("Could not open database");
+
+        // let actor_addr = NewsboatActor { config, muted, conn }.start();
     }
 
     #[actix_web::test]
     async fn test_feeds_not_empty() {
-        let req = test::TestRequest::default()
-            .insert_header(ContentType::json())
-            .to_http_request();
-        req.headers().append(
-            HeaderName::from_static("x-creds"), 
-            HeaderValue::from_static("1"));
 
-        //test::call_service(feeds)
-        //let res = feeds(req).await;
-        //assert_ne!(res.len(), 0);
+        // let app = test::init_service(
+        //     App::new()
+        //         .app_data(web::Data::new(AppState { count: 4 }))
+        //         .route("/", web::get().to(index)),
+        // )
+        // .await;
+        // let req = test::TestRequest::get().uri("/").to_request();
+        // let resp: AppState = test::call_and_read_body_json(&app, req).await;
+
+        // assert_eq!(resp.count, 4);
     }
 
-    /// Example:
-    ///
-    /// curl -X GET -H "x-creds: 1" http://127.0.0.1:7654/items/$(echo -n 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64)
-    ///
+
+    // TODO
+    // Example:
+    //
+    // curl -X GET -H "x-creds: 1" http://127.0.0.1:7654/items/$(echo -n 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64)
+    //
 }
