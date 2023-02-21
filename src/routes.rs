@@ -8,6 +8,14 @@
 // `NewsboatActor`.
 //
 //============================================================================//
+use actix_web::{
+        patch, get, post, web, HttpResponse, HttpRequest, Responder,
+        FromRequest,
+        http::{
+            StatusCode,
+            header::ContentType
+        }
+};
 use crate::newsboat_actor::ItemsMessage;
 use crate::{moat_log_prefix,moat_err,moat_debug};
 use crate::db::RssItem;
@@ -17,10 +25,9 @@ use crate::{
     newsboat_actor::{NewsboatActor,ReloadMessage,FeedsMessage},
     config::{OK_RESPONSE,ERR_RESPONSE}
 };
-use actix_web::{patch, get, post, web, HttpResponse, HttpRequest, Responder,
-                FromRequest};
 use std::future::{ready, Ready};
 use base64::{Engine as _, engine::general_purpose};
+use derive_more::{Display,Error};
 
 //============================================================================//
 
@@ -43,6 +50,26 @@ impl FromRequest for Creds {
             }
         }
         ready(Err(actix_web::error::ErrorUnauthorized("")))
+    }
+}
+
+#[derive(Debug,Display,Error)]
+enum MoatError {
+    #[display(fmt = "SQL query error")]
+    SqlError,
+    #[display(fmt = "base64 decoding error")]
+    DecodeError(base64::DecodeError)
+}
+
+impl actix_web::error::ResponseError for MoatError {
+    fn error_response(&self) -> HttpResponse {
+        HttpResponse::build(self.status_code())
+            .insert_header(ContentType::html())
+            .body("bad.")
+    }
+
+    fn status_code(&self) -> StatusCode {
+        return StatusCode::BAD_REQUEST
     }
 }
 
@@ -76,12 +103,18 @@ pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) 
     }
 }
 
+// TODO this: https://doc.rust-lang.org/rust-by-example/error/multiple_error_types/wrap_error.html
+// instead of derive_more.
 
 /// Fetch all `RssItem` objects for a given rssurl.
 #[get("/items/{b64_rssurl}")]
-pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>, 
-                   path: web::Path<(String,)>) -> web::Json<Vec<RssItem>> {
+pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>,
+                   path: web::Path<(String,)>)
+                -> Result<web::Json<Vec<RssItem>>, MoatError> {
     let b64_rssurl = path.into_inner().0;
+
+
+    let rssurl = general_purpose::STANDARD.decode(b64_rssurl)?;
 
     // TODO un-nested pattern, error response + ?
     if let Ok(rssurl) = general_purpose::STANDARD.decode(b64_rssurl) {
@@ -91,12 +124,12 @@ pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>,
 
             if let Ok(rss_items) = actor_addr.send(ItemsMessage { rssurl } ).await {
                 let rss_items = rss_items.unwrap();
-                return web::Json(rss_items)
+                return Ok(web::Json(rss_items))
             }
         }
     }
     moat_err!("/items request error");
-    web::Json(vec![])
+    Ok(web::Json(vec![]))
 }
 
 //============================================================================//
@@ -150,7 +183,6 @@ mod tests {
 
         assert_ne!(res.len(), 0);
     }
-
 
     #[actix_web::test]
     async fn test_items_not_empty() {
