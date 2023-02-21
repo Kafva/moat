@@ -1,6 +1,7 @@
 use crate::MOAT_KEY_ENV;
 use std::path::Path;
 
+
 pub fn expand_tilde(value: &str) -> String {
     value.replace("~", std::env::var("HOME").unwrap().as_str())
 }
@@ -72,4 +73,14 @@ macro_rules! moat_err {
                    file!(), line!());
     };
 }
+
+//============================================================================//
+
+#[cfg(test)]
+pub fn run_setup_script() {
+    std::process::Command::new("./scripts/test_setup.sh").output()
+        .expect("Test setup failed");
+}
+
+
 

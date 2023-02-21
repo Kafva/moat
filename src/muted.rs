@@ -50,17 +50,16 @@ impl Muted {
 }
 
 //============================================================================//
+
 #[cfg(test)]
 mod tests {
-    use crate::util::expand_tilde;
+    use crate::util::{expand_tilde,run_setup_script};
     use crate::muted::Muted;
     use std::fs::File;
 
     fn setup() {
-        std::process::Command::new("./scripts/test_setup.sh").output()
-            .expect("Test setup failed");
+        run_setup_script()
     }
-
 
     /// To see stdout of tests:
     ///  cargo test -- --nocapture

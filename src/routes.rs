@@ -55,7 +55,6 @@ pub async fn unread(_: Creds) -> impl Responder {
 
 #[patch("/reload")]
 pub async fn reload(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) -> impl Responder {
-
     let status = actor_addr.send(ReloadMessage).await;
 
     if status.is_ok() {
@@ -68,7 +67,6 @@ pub async fn reload(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>)
 /// Responds with an empty list on failure.
 #[get("/feeds")]
 pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) -> web::Json<Vec<RssFeed>> {
-
     if let Ok(rss_feeds) = actor_addr.send(FeedsMessage).await {
         let rss_feeds = rss_feeds.unwrap();
         web::Json(rss_feeds)
@@ -79,16 +77,10 @@ pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) 
 }
 
 
-
 /// Fetch all `RssItem` objects for a given rssurl.
-/// Example:
-///
-/// curl -X GET -H "x-creds: 1" http://127.0.0.1:7654/items/$(echo -n 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA')
-///
 #[get("/items/{b64_rssurl}")]
 pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>, 
                    path: web::Path<(String,)>) -> web::Json<Vec<RssItem>> {
-    
     let b64_rssurl = path.into_inner().0;
 
     // TODO un-nested pattern, error response + ?
@@ -107,3 +99,40 @@ pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>,
     web::Json(vec![])
 }
 
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        util::run_setup_script,
+        routes::feeds,
+        config::MOAT_KEY_ENV
+    };
+    use actix_web::{
+        http::{header::ContentType, header::HeaderName, header::HeaderValue},
+        test,
+    };
+
+    fn setup() {
+        run_setup_script();
+        std::env::set_var(MOAT_KEY_ENV, "1");
+    }
+
+    #[actix_web::test]
+    async fn test_feeds_not_empty() {
+        let req = test::TestRequest::default()
+            .insert_header(ContentType::json())
+            .to_http_request();
+        req.headers().append(
+            HeaderName::from_static("x-creds"), 
+            HeaderValue::from_static("1"));
+
+        //test::call_service(feeds)
+        //let res = feeds(req).await;
+        //assert_ne!(res.len(), 0);
+    }
+
+    /// Example:
+    ///
+    /// curl -X GET -H "x-creds: 1" http://127.0.0.1:7654/items/$(echo -n 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64)
+    ///
+}
