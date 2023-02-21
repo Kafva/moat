@@ -109,11 +109,12 @@ mod tests {
         util::run_setup_script,
         config::{Config, MOAT_KEY_ENV},
         muted::Muted,
-        db::RssFeed,
+        db::{RssFeed,RssItem},
         newsboat_actor::NewsboatActor,
         routes
     };
     use actix_web::{test, App, web};
+    use base64::{Engine as _, engine::general_purpose};
 
     async fn setup() -> Addr<NewsboatActor> {
         run_setup_script();
@@ -151,9 +152,22 @@ mod tests {
     }
 
 
-    // TODO
-    // Example:
-    //
-    // curl -X GET -H "x-creds: 1" http://127.0.0.1:7654/items/$(echo -n 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64)
-    //
+    #[actix_web::test]
+    async fn test_items_not_empty() {
+        let actor_addr = setup().await;
+
+        let app = test::init_service(App::new()
+                .app_data(web::Data::new(actor_addr))
+                .service(routes::items)).await;
+
+        let b64_rssurl = general_purpose::STANDARD.encode(
+            "https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA");
+
+        let req = test::TestRequest::get().uri(&format!("/items/{}", b64_rssurl))
+                    .insert_header(("x-creds", "1")).to_request();
+
+        let res: Vec<RssItem> = test::call_and_read_body_json(&app, req).await;
+
+        assert_ne!(res.len(), 0);
+    }
 }

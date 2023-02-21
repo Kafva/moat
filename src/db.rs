@@ -1,7 +1,8 @@
 use crate::Muted;
 use sqlx::SqliteConnection;
 
-#[derive(Debug,Default,sqlx::FromRow,serde::Serialize,serde::Deserialize)]
+#[derive(Debug,Default,sqlx::FromRow,serde::Serialize)]
+#[cfg_attr(test, derive(serde::Deserialize))]
 pub struct RssFeed {
     /// First column in urls file
     feedurl: String,
@@ -20,6 +21,7 @@ pub struct RssFeed {
 
 /// Each attribute corresponds to a column in the `rss_item` table.
 #[derive(Debug,Default,sqlx::FromRow,serde::Serialize)]
+#[cfg_attr(test, derive(serde::Deserialize))]
 pub struct RssItem {
     /// Internal database ID
     id: u32,
