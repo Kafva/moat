@@ -5,6 +5,7 @@ use actix_web::{
         header::ContentType
     }
 };
+use crate::routes::MoatResponse;
 use std::{error,fmt};
 
 /// Enumeration of all possible errors for the endpoints of the application.
@@ -19,12 +20,6 @@ pub enum MoatError {
     Base64Error(base64::DecodeError),
     Utf8Error(std::string::FromUtf8Error),
     ActorError(actix::MailboxError)
-}
-
-#[derive(Debug,serde::Serialize)]
-struct MoatResponse {
-    success: bool,
-    message: Option<String>,
 }
 
 //============================================================================//

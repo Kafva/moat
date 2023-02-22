@@ -13,11 +13,9 @@ use actix_web::{
         FromRequest
 };
 use crate::newsboat_actor::ItemsMessage;
-use crate::{moat_log_prefix,moat_err};
 use crate::{
     util::get_env_key,
     newsboat_actor::{NewsboatActor,ReloadMessage,FeedsMessage},
-    config::{OK_RESPONSE,ERR_RESPONSE},
     err::MoatError,
     db::{RssItem,RssFeed}
 };
@@ -48,6 +46,12 @@ impl FromRequest for Creds {
     }
 }
 
+#[derive(Debug,serde::Serialize)]
+pub struct MoatResponse {
+    pub success: bool,
+    pub message: Option<String>,
+}
+
 //============================================================================//
 
 // TODO renamed from unread
@@ -57,26 +61,20 @@ pub async fn update(_: Creds) -> impl Responder {
 }
 
 #[patch("/reload")]
-pub async fn reload(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) -> impl Responder {
-    let status = actor_addr.send(ReloadMessage).await;
+pub async fn reload(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) 
+    -> Result<web::Json<MoatResponse>, MoatError> {
+    let _ = actor_addr.send(ReloadMessage).await?;
 
-    if status.is_ok() {
-        HttpResponse::Ok().body(OK_RESPONSE)
-    } else {
-        HttpResponse::InternalServerError().body(ERR_RESPONSE)
-    }
+    Ok(web::Json(MoatResponse { success: true, message: None }))
 }
 
 /// Responds with an empty list on failure.
 #[get("/feeds")]
-pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) -> web::Json<Vec<RssFeed>> {
-    if let Ok(rss_feeds) = actor_addr.send(FeedsMessage).await {
-        let rss_feeds = rss_feeds.unwrap();
-        web::Json(rss_feeds)
-    } else {
-        moat_err!("/feeds request error");
-        web::Json(vec![])
-    }
+pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) 
+    -> Result<web::Json<Vec<RssFeed>>, MoatError> {
+
+    let rss_feeds = actor_addr.send(FeedsMessage).await?;
+    Ok(web::Json(rss_feeds.unwrap()))
 }
 
 /// Fetch all `RssItem` objects for a given rssurl.
