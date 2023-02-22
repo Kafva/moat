@@ -47,6 +47,7 @@ impl FromRequest for Creds {
 }
 
 #[derive(Debug,serde::Serialize)]
+#[cfg_attr(test, derive(serde::Deserialize))]
 pub struct MoatResponse {
     pub success: bool,
     pub message: Option<String>,
@@ -56,7 +57,10 @@ pub struct MoatResponse {
 
 /// Update the `unread` field of one or more `RssItem` objects in the database.
 /// A single entry can be targeted using the `id` parameter and all items
-/// for a feed can be targeted using the `rssurl` parameter.
+/// for a feed can be targeted using the (base64 encoded) `feedurl` parameter.
+///
+/// The `success` key will only be `true` in the response if the update query
+/// affected at least one row.
 #[post("/update")]
 pub async fn update(_: Creds, actor_addr:
                     web::Data<actix::Addr<NewsboatActor>>,
@@ -112,6 +116,7 @@ mod tests {
         muted::Muted,
         db::{RssFeed,RssItem},
         newsboat_actor::NewsboatActor,
+        routes::MoatResponse,
         routes
     };
     use actix_web::{test, App, web};
@@ -170,4 +175,27 @@ mod tests {
 
         assert_ne!(res.len(), 0);
     }
+
+    // TODO
+    #[actix_web::test]
+    async fn test_can_update() {
+        let actor_addr = setup().await;
+
+        let app = test::init_service(App::new()
+                .app_data(web::Data::new(actor_addr))
+                .service(routes::update)).await;
+
+        let b64_rssurl = general_purpose::STANDARD.encode(
+            "https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA");
+
+        let req = test::TestRequest::get().uri("/update")
+                    .insert_header(("x-creds", "1"))
+                    .set_form(&format!("unread=true&feedurl={}", b64_rssurl))
+                    .to_request();
+
+        let res: MoatResponse = test::call_and_read_body_json(&app, req).await;
+
+        assert!(res.success);
+    }
+
 }

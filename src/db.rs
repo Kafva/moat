@@ -36,17 +36,36 @@ pub struct RssItem {
 
 //============================================================================//
 
-pub async fn update_feed(conn: &mut SqliteConnection, rssurl: String, unread: bool)
- -> Result<(), sqlx::Error> {
-    Ok(())
+pub async fn update_feed(conn: &mut SqliteConnection, feedurl: String,
+                         unread: bool)
+ -> Result<bool, sqlx::Error> {
+    let rows_affected = sqlx::query!("
+        UPDATE rss_item
+            SET unread = ?
+        WHERE feedurl = ?
+        ", unread, feedurl
+    )
+    .execute(conn)
+    .await?
+    .rows_affected();
+
+    Ok(rows_affected > 0)
 }
 
 pub async fn update_item(conn: &mut SqliteConnection, id: u32, unread: bool)
- -> Result<(), sqlx::Error> {
-    Ok(())
+ -> Result<bool, sqlx::Error> {
+    let rows_affected = sqlx::query!("
+        UPDATE rss_item
+            SET unread = ?
+        WHERE id = ?
+        ", unread, id
+    )
+    .execute(conn)
+    .await?
+    .rows_affected();
+
+    Ok(rows_affected > 0)
 }
-
-
 
 pub async fn feeds(conn: &mut SqliteConnection,
                    muted: &Muted) -> Result<Vec<RssFeed>, sqlx::Error> {

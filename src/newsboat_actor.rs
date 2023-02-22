@@ -5,15 +5,17 @@ use sqlx::SqliteConnection;
 use actix::prelude::*;
 use crate::{
     db::{RssFeed,RssItem,feeds,items,update_item,update_feed},
-    config::Config
+    config::Config,
+    err::MoatError,
 };
+use base64::{Engine as _, engine::general_purpose};
 
 #[derive(Message, serde::Deserialize)]
-#[rtype(result = "Result<bool, sqlx::Error>")]
+#[rtype(result = "Result<bool, MoatError>")]
 pub struct UpdateMessage {
     pub unread: bool,
     pub id: Option<u32>,
-    pub rssurl: Option<String>,
+    pub feedurl: Option<String>,
 }
 
 #[derive(Message)]
@@ -53,18 +55,22 @@ impl Actor for NewsboatActor {
 
 //============================================================================//
 impl Handler<UpdateMessage> for NewsboatActor {
-    type Result = Result<bool, sqlx::Error>;
+    type Result = Result<bool, MoatError>;
 
     fn handle(&mut self, msg: UpdateMessage, _: &mut Context<Self>) -> Self::Result {
         if let Some(id) = msg.id {
-            futures::executor::block_on(update_item(&mut self.conn, id, msg.unread))?;
-            return Ok(true)
+            let changed = futures::executor::block_on(update_item(&mut self.conn, id, msg.unread))?;
+            Ok(changed)
         }
-        if let Some(rssurl) = msg.rssurl {
-            futures::executor::block_on(update_feed(&mut self.conn, rssurl, msg.unread))?;
-            return Ok(true)
+        else if let Some(feedurl) = msg.feedurl {
+            let feedurl = general_purpose::STANDARD.decode(feedurl)?;
+            let feedurl = String::from_utf8(feedurl)?;
+            let changed = futures::executor::block_on(update_feed(&mut self.conn, feedurl, msg.unread))?;
+            Ok(changed)
+
+        } else {
+            Ok(false)
         }
-        Ok(false)
     }
 }
 
