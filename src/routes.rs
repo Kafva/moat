@@ -78,30 +78,17 @@ pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) 
     }
 }
 
-// TODO this: https://doc.rust-lang.org/rust-by-example/error/multiple_error_types/wrap_error.html
-// instead of derive_more.
-
 /// Fetch all `RssItem` objects for a given rssurl.
 #[get("/items/{b64_rssurl}")]
 pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>,
                    path: web::Path<(String,)>)
                 -> Result<web::Json<Vec<RssItem>>, MoatError> {
-    let b64_rssurl = path.into_inner().0;
+    let rssurl = path.into_inner().0;
+    let rssurl = general_purpose::STANDARD.decode(rssurl)?;
+    let rssurl = String::from_utf8(rssurl)?;
+    let res = actor_addr.send(ItemsMessage { rssurl } ).await?;
 
-
-    let rssurl = general_purpose::STANDARD.decode(b64_rssurl)?;
-
-    if let Ok(rssurl) = String::from_utf8(rssurl) {
-        moat_debug!("rssurl: {:#?}", rssurl);
-
-        if let Ok(rss_items) = actor_addr.send(ItemsMessage { rssurl } ).await {
-            let rss_items = rss_items.unwrap();
-            return Ok(web::Json(rss_items))
-        }
-    }
-
-    moat_err!("/items request error");
-    Ok(web::Json(vec![]))
+    Ok(web::Json(res.unwrap()))
 }
 
 //============================================================================//
