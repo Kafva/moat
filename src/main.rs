@@ -4,6 +4,7 @@ mod util;
 mod db;
 mod muted;
 mod newsboat_actor;
+mod err;
 
 use actix::prelude::*;
 use sqlx::{SqliteConnection,Connection,ConnectOptions};

@@ -10,24 +10,19 @@
 //============================================================================//
 use actix_web::{
         patch, get, post, web, HttpResponse, HttpRequest, Responder,
-        FromRequest,
-        http::{
-            StatusCode,
-            header::ContentType
-        }
+        FromRequest
 };
 use crate::newsboat_actor::ItemsMessage;
 use crate::{moat_log_prefix,moat_err,moat_debug};
-use crate::db::RssItem;
-use crate::db::RssFeed;
 use crate::{
     util::get_env_key,
     newsboat_actor::{NewsboatActor,ReloadMessage,FeedsMessage},
-    config::{OK_RESPONSE,ERR_RESPONSE}
+    config::{OK_RESPONSE,ERR_RESPONSE},
+    err::MoatError,
+    db::{RssItem,RssFeed}
 };
 use std::future::{ready, Ready};
 use base64::{Engine as _, engine::general_purpose};
-use derive_more::{Display,Error};
 
 //============================================================================//
 
@@ -50,26 +45,6 @@ impl FromRequest for Creds {
             }
         }
         ready(Err(actix_web::error::ErrorUnauthorized("")))
-    }
-}
-
-#[derive(Debug,Display,Error)]
-enum MoatError {
-    #[display(fmt = "SQL query error")]
-    SqlError,
-    #[display(fmt = "base64 decoding error")]
-    DecodeError(base64::DecodeError)
-}
-
-impl actix_web::error::ResponseError for MoatError {
-    fn error_response(&self) -> HttpResponse {
-        HttpResponse::build(self.status_code())
-            .insert_header(ContentType::html())
-            .body("bad.")
-    }
-
-    fn status_code(&self) -> StatusCode {
-        return StatusCode::BAD_REQUEST
     }
 }
 
@@ -116,18 +91,15 @@ pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>,
 
     let rssurl = general_purpose::STANDARD.decode(b64_rssurl)?;
 
-    // TODO un-nested pattern, error response + ?
-    if let Ok(rssurl) = general_purpose::STANDARD.decode(b64_rssurl) {
+    if let Ok(rssurl) = String::from_utf8(rssurl) {
+        moat_debug!("rssurl: {:#?}", rssurl);
 
-        if let Ok(rssurl) = String::from_utf8(rssurl) {
-            moat_debug!("rssurl: {:#?}", rssurl);
-
-            if let Ok(rss_items) = actor_addr.send(ItemsMessage { rssurl } ).await {
-                let rss_items = rss_items.unwrap();
-                return Ok(web::Json(rss_items))
-            }
+        if let Ok(rss_items) = actor_addr.send(ItemsMessage { rssurl } ).await {
+            let rss_items = rss_items.unwrap();
+            return Ok(web::Json(rss_items))
         }
     }
+
     moat_err!("/items request error");
     Ok(web::Json(vec![]))
 }
