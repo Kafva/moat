@@ -21,14 +21,24 @@ pub enum MoatError {
     ActorError(actix::MailboxError)
 }
 
+#[derive(Debug,serde::Serialize)]
+struct MoatResponse {
+    success: bool,
+    message: Option<String>,
+}
 
 //============================================================================//
 
 impl actix_web::error::ResponseError for MoatError {
     fn error_response(&self) -> HttpResponse {
+        let res = MoatResponse {
+            success: false,
+            message: Some(self.to_string())
+        };
+
         HttpResponse::build(self.status_code())
             .insert_header(ContentType::json())
-            .body(self.to_string())
+            .json(actix_web::web::Json(res))
     }
 
     fn status_code(&self) -> StatusCode {
@@ -46,7 +56,6 @@ impl actix_web::error::ResponseError for MoatError {
 
 impl fmt::Display for MoatError {
    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        // TODO return JSON
         use MoatError::*;
         match *self {
             SqlError(..) => f.write_str("SQL query error"),

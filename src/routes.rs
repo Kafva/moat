@@ -1,7 +1,7 @@
 // Endpoints will not return 415 when the wrong method is provided
 //  https://github.com/actix/actix-web/issues/2735
 //
-// The /unread and /reload endpoints both write to the db, however, `/reload`
+// The /update and /reload endpoints both write to the db, however, `/reload`
 // interacts indirectly with it via the newsboat executable, not the connection
 // pool of the app. To avoid having to lock the database, we therefore use a
 // a dedicated actor. Every endpoint defers its operations to the
@@ -13,7 +13,7 @@ use actix_web::{
         FromRequest
 };
 use crate::newsboat_actor::ItemsMessage;
-use crate::{moat_log_prefix,moat_err,moat_debug};
+use crate::{moat_log_prefix,moat_err};
 use crate::{
     util::get_env_key,
     newsboat_actor::{NewsboatActor,ReloadMessage,FeedsMessage},
@@ -50,8 +50,9 @@ impl FromRequest for Creds {
 
 //============================================================================//
 
-#[post("/unread")]
-pub async fn unread(_: Creds) -> impl Responder {
+// TODO renamed from unread
+#[post("/update")]
+pub async fn update(_: Creds) -> impl Responder {
     HttpResponse::Ok().body("TODO")
 }
 
@@ -86,7 +87,7 @@ pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>,
     let rssurl = path.into_inner().0;
     let rssurl = general_purpose::STANDARD.decode(rssurl)?;
     let rssurl = String::from_utf8(rssurl)?;
-    let res = actor_addr.send(ItemsMessage { rssurl } ).await?;
+    let res = actor_addr.send(ItemsMessage { rssurl }).await?;
 
     Ok(web::Json(res.unwrap()))
 }

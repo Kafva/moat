@@ -110,7 +110,7 @@ async fn main() -> std::io::Result<()> {
             .service(reload)
             .service(feeds)
             .service(items)
-            .service(unread)
+            .service(update)
     })
     .workers(2)
     .bind((args.addr, args.port))?
