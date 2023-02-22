@@ -36,6 +36,18 @@ pub struct RssItem {
 
 //============================================================================//
 
+pub async fn update_feed(conn: &mut SqliteConnection, rssurl: String, unread: bool)
+ -> Result<(), sqlx::Error> {
+    Ok(())
+}
+
+pub async fn update_item(conn: &mut SqliteConnection, id: u32, unread: bool)
+ -> Result<(), sqlx::Error> {
+    Ok(())
+}
+
+
+
 pub async fn feeds(conn: &mut SqliteConnection,
                    muted: &Muted) -> Result<Vec<RssFeed>, sqlx::Error> {
     let muted_entries = muted.as_quoted_csv();

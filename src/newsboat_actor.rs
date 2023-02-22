@@ -4,9 +4,17 @@ use std::process::Command;
 use sqlx::SqliteConnection;
 use actix::prelude::*;
 use crate::{
-    db::{RssFeed,RssItem,feeds,items},
+    db::{RssFeed,RssItem,feeds,items,update_item,update_feed},
     config::Config
 };
+
+#[derive(Message, serde::Deserialize)]
+#[rtype(result = "Result<bool, sqlx::Error>")]
+pub struct UpdateMessage {
+    pub unread: bool,
+    pub id: Option<u32>,
+    pub rssurl: Option<String>,
+}
 
 #[derive(Message)]
 #[rtype(result = "Result<Vec<RssFeed>, sqlx::Error>")]
@@ -44,6 +52,21 @@ impl Actor for NewsboatActor {
 }
 
 //============================================================================//
+impl Handler<UpdateMessage> for NewsboatActor {
+    type Result = Result<bool, sqlx::Error>;
+
+    fn handle(&mut self, msg: UpdateMessage, _: &mut Context<Self>) -> Self::Result {
+        if let Some(id) = msg.id {
+            futures::executor::block_on(update_item(&mut self.conn, id, msg.unread))?;
+            return Ok(true)
+        }
+        if let Some(rssurl) = msg.rssurl {
+            futures::executor::block_on(update_feed(&mut self.conn, rssurl, msg.unread))?;
+            return Ok(true)
+        }
+        Ok(false)
+    }
+}
 
 impl Handler<FeedsMessage> for NewsboatActor {
     type Result = Result<Vec<RssFeed>, sqlx::Error>;

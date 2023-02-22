@@ -9,13 +9,13 @@
 //
 //============================================================================//
 use actix_web::{
-        patch, get, post, web, HttpResponse, HttpRequest, Responder,
+        patch, get, post, web, HttpRequest,
         FromRequest
 };
 use crate::newsboat_actor::ItemsMessage;
 use crate::{
     util::get_env_key,
-    newsboat_actor::{NewsboatActor,ReloadMessage,FeedsMessage},
+    newsboat_actor::{NewsboatActor,ReloadMessage,FeedsMessage,UpdateMessage},
     err::MoatError,
     db::{RssItem,RssFeed}
 };
@@ -54,23 +54,33 @@ pub struct MoatResponse {
 
 //============================================================================//
 
-// TODO renamed from unread
+/// Update the `unread` field of one or more `RssItem` objects in the database.
+/// A single entry can be targeted using the `id` parameter and all items
+/// for a feed can be targeted using the `rssurl` parameter.
 #[post("/update")]
-pub async fn update(_: Creds) -> impl Responder {
-    HttpResponse::Ok().body("TODO")
+pub async fn update(_: Creds, actor_addr:
+                    web::Data<actix::Addr<NewsboatActor>>,
+                    form: web::Form<UpdateMessage>)
+ -> Result<web::Json<MoatResponse>, MoatError> {
+    let message = form.into_inner();
+    let success = actor_addr.send(message).await?;
+    let success = success.unwrap_or(false);
+
+    Ok(web::Json(MoatResponse { success, message: None }))
 }
 
+/// Reload all feeds.
 #[patch("/reload")]
-pub async fn reload(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) 
+pub async fn reload(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>)
     -> Result<web::Json<MoatResponse>, MoatError> {
     let _ = actor_addr.send(ReloadMessage).await?;
 
     Ok(web::Json(MoatResponse { success: true, message: None }))
 }
 
-/// Responds with an empty list on failure.
+/// Fetch a list of all `RssFeed` objects.
 #[get("/feeds")]
-pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>) 
+pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>)
     -> Result<web::Json<Vec<RssFeed>>, MoatError> {
 
     let rss_feeds = actor_addr.send(FeedsMessage).await?;
