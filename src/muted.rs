@@ -1,8 +1,8 @@
+use super::*;
 use std::{
     fs::File,
     io::{prelude::*, BufReader},
 };
-
 
 #[derive(Debug)]
 pub struct Muted {
@@ -32,11 +32,11 @@ impl Muted {
                             let entry = String::from(*rssurl);
                             entries.push(entry);
                         } else {
-                            log::error!("Error parsing {}:{}", urls, i);
+                            moat_err!("Error parsing {}:{}", urls, i);
                         }
                     }
                 } else {
-                    log::error!("Error parsing {}:{}", urls, i);
+                    moat_err!("Error parsing {}:{}", urls, i);
                 }
             }
         }
