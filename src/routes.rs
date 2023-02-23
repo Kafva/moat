@@ -27,8 +27,8 @@ use base64::{Engine as _, engine::general_purpose};
 pub struct Creds;
 
 impl FromRequest for Creds {
-    type Error = actix_web::Error;
-    type Future = Ready<Result<Creds,Self::Error>>;
+    type Error = MoatError;
+    type Future = Ready<Result<Creds,MoatError>>;
 
     /// Verify the `x-creds` header of an incoming request, ran for every
     /// endpoint that takes `Creds` as an argument.
@@ -42,7 +42,7 @@ impl FromRequest for Creds {
                 return ready(Ok(Creds))
             }
         }
-        ready(Err(actix_web::error::ErrorUnauthorized("")))
+        ready(Err(MoatError::AuthError))
     }
 }
 
@@ -50,6 +50,8 @@ impl FromRequest for Creds {
 #[cfg_attr(test, derive(serde::Deserialize))]
 pub struct MoatResponse {
     pub success: bool,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
 }
 

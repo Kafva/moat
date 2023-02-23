@@ -19,7 +19,8 @@ pub enum MoatError {
     SqlError(sqlx::Error),
     Base64Error(base64::DecodeError),
     Utf8Error(std::string::FromUtf8Error),
-    ActorError(actix::MailboxError)
+    ActorError(actix::MailboxError),
+    AuthError
 }
 
 //============================================================================//
@@ -43,6 +44,7 @@ impl actix_web::error::ResponseError for MoatError {
             Base64Error(..) => StatusCode::BAD_REQUEST,
             Utf8Error(..) => StatusCode::BAD_REQUEST,
             ActorError(..) => StatusCode::INTERNAL_SERVER_ERROR,
+            AuthError => StatusCode::UNAUTHORIZED,
         }
     }
 }
@@ -54,9 +56,10 @@ impl fmt::Display for MoatError {
         use MoatError::*;
         match *self {
             SqlError(..) => f.write_str("SQL query error"),
-            Base64Error(..) => f.write_str("base64 decoding error"),
-            Utf8Error(..) => f.write_str("utf8 decoding error"),
-            ActorError(..) => f.write_str("internal messaging error"),
+            Base64Error(..) => f.write_str("Base64 decoding error"),
+            Utf8Error(..) => f.write_str("Utf8 decoding error"),
+            ActorError(..) => f.write_str("Internal messaging error"),
+            AuthError => f.write_str("Unauthorized")
         }
    }
 }
@@ -69,6 +72,7 @@ impl error::Error for MoatError {
             Base64Error(ref e) => Some(e),
             Utf8Error(ref e) => Some(e),
             ActorError(ref e) => Some(e),
+            AuthError => None
         }
     }
 }
