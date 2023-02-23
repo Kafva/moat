@@ -10,11 +10,16 @@ use crate::{
 };
 use base64::{Engine as _, engine::general_purpose};
 
-#[derive(Message, serde::Deserialize)]
+#[derive(Message, serde::Deserialize, Debug)]
+#[cfg_attr(test, derive(serde::Serialize))]
 #[rtype(result = "Result<bool, MoatError>")]
 pub struct UpdateMessage {
     pub unread: bool,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<u32>,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub feedurl: Option<String>,
 }
 

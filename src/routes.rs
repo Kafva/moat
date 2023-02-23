@@ -118,7 +118,7 @@ mod tests {
         config::{Config, MOAT_KEY_ENV},
         muted::Muted,
         db::{RssFeed,RssItem},
-        newsboat_actor::NewsboatActor,
+        newsboat_actor::{NewsboatActor,UpdateMessage},
         routes::MoatResponse,
         routes
     };
@@ -179,7 +179,6 @@ mod tests {
         assert_ne!(res.len(), 0);
     }
 
-    // TODO
     #[actix_web::test]
     async fn test_can_update() {
         let actor_addr = setup().await;
@@ -191,14 +190,17 @@ mod tests {
         let b64_rssurl = general_purpose::STANDARD.encode(
             "https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA");
 
-        let req = test::TestRequest::get().uri("/update")
+        let req = test::TestRequest::post().uri("/update")
                     .insert_header(("x-creds", "1"))
-                    .set_form(&format!("unread=true&feedurl={}", b64_rssurl))
+                    .set_form(UpdateMessage {
+                        unread: true,
+                        id: None,
+                        feedurl: Some(b64_rssurl)
+                    })
                     .to_request();
 
         let res: MoatResponse = test::call_and_read_body_json(&app, req).await;
 
         assert!(res.success);
     }
-
 }

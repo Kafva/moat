@@ -19,18 +19,24 @@ impl Muted {
     /// part of the output vector.
     /// Except for the <name>, no fields are allowed to contain blankspace.
     pub fn from_urls_file(urls: &str) -> Result<Self,std::io::Error> {
-        let mut entries: Vec<String> = Vec::new();
+        let mut entries: Vec<String> = vec![];
         let file = File::open(urls)?;
 
-        for line in BufReader::new(file).lines().map(|l| l.unwrap()) {
+        for (i,line) in BufReader::new(file).lines().map(|l| l.unwrap()).enumerate() {
             if line.trim().starts_with("http") {
                 let fields: Vec<&str> = line.split_whitespace().collect();
 
-                let last_field = fields.get(3).expect("error parsing urls file");
-                if last_field.trim_matches('"').starts_with("!") {
-                    let rssurl = fields.get(0).expect("error parsing urls file");
-                    let entry = String::from(*rssurl);
-                    entries.push(entry);
+                if let Some(last_field) = fields.get(3) {
+                    if last_field.trim_matches('"').starts_with("!") {
+                        if let Some(rssurl) = fields.get(0) {
+                            let entry = String::from(*rssurl);
+                            entries.push(entry);
+                        } else {
+                            log::error!("Error parsing {}:{}", urls, i);
+                        }
+                    }
+                } else {
+                    log::error!("Error parsing {}:{}", urls, i);
                 }
             }
         }
