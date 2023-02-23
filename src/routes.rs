@@ -46,6 +46,7 @@ impl FromRequest for Creds {
     }
 }
 
+
 #[derive(Debug,serde::Serialize)]
 #[cfg_attr(test, derive(serde::Deserialize))]
 pub struct MoatResponse {

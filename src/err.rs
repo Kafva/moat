@@ -20,6 +20,7 @@ pub enum MoatError {
     Base64Error(base64::DecodeError),
     Utf8Error(std::string::FromUtf8Error),
     ActorError(actix::MailboxError),
+    FormError(actix_web::error::UrlencodedError),
     AuthError
 }
 
@@ -44,6 +45,7 @@ impl actix_web::error::ResponseError for MoatError {
             Base64Error(..) => StatusCode::BAD_REQUEST,
             Utf8Error(..) => StatusCode::BAD_REQUEST,
             ActorError(..) => StatusCode::INTERNAL_SERVER_ERROR,
+            FormError(..) => StatusCode::BAD_REQUEST,
             AuthError => StatusCode::UNAUTHORIZED,
         }
     }
@@ -59,6 +61,7 @@ impl fmt::Display for MoatError {
             Base64Error(..) => f.write_str("Base64 decoding error"),
             Utf8Error(..) => f.write_str("Utf8 decoding error"),
             ActorError(..) => f.write_str("Internal messaging error"),
+            FormError(..) => f.write_str("Invalid form data"),
             AuthError => f.write_str("Unauthorized")
         }
    }
@@ -72,8 +75,15 @@ impl error::Error for MoatError {
             Base64Error(ref e) => Some(e),
             Utf8Error(ref e) => Some(e),
             ActorError(ref e) => Some(e),
-            AuthError => None
+            FormError(ref e) => Some(e),
+            AuthError => None,
         }
+    }
+}
+
+impl From<actix_web::error::UrlencodedError> for MoatError {
+    fn from(err: actix_web::error::UrlencodedError) -> MoatError {
+        MoatError::FormError(err)
     }
 }
 

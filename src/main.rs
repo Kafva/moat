@@ -20,6 +20,7 @@ use crate::{
     newsboat_actor::NewsboatActor,
     muted::Muted,
     routes::*,
+    err::MoatError,
 };
 
 #[derive(Parser, Debug)]
@@ -67,8 +68,6 @@ struct Args {
 
 //============================================================================//
 
-
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let args: Args = Args::parse();
@@ -107,6 +106,10 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
             .app_data(web::Data::new(actor_addr.to_owned()))
+            .app_data(web::FormConfig::default().error_handler(|err, _| {
+                // Return custom error on failed form validation
+                MoatError::FormError(err).into()
+            }))
             .service(reload)
             .service(feeds)
             .service(items)
