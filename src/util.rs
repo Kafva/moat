@@ -3,71 +3,88 @@ use std::path::Path;
 
 // Import log::error() and log::info() as println!() during
 // tests so that output is shown when using cargo test -- --nocapture
-
-//#[macro_export]
-//macro_rules! use_log_error {
-//    () => {
-//        #[cfg(test)]
-//        use std::{println as error};
-//
-//        #[cfg(not(test))]
-//        use log::error;
-//    }
-//}
-//
-//#[macro_export]
-//macro_rules! use_log_info {
-//    () => {
-//        #[cfg(test)]
-//        use std::{println as info};
-//
-//        #[cfg(not(test))]
-//        use log::info;
-//    }
-//}
-
 #[macro_export]
-macro_rules! moat_log_prefix {
-    () => {
-        "\x1b[90m[\x1b[0m{}:{}\x1b[90m]\x1b[0m "
+macro_rules! _moat_debug {
+    ($fmt:literal, $($x:expr),*) => {
+        #[cfg(test)]
+        use std::{println as debug};
+        #[cfg(not(test))]
+        use log::debug;
+
+        debug!(concat!(_moat_log_prefix!(), $fmt), $($x),*);
     };
 }
 
-// TODO insert println here during [cfg(test)]
+#[macro_export]
+macro_rules! _moat_info {
+    ($fmt:literal, $($x:expr),*) => {
+        #[cfg(test)]
+        use std::{println as info};
+        #[cfg(not(test))]
+        use log::info;
+
+        info!(concat!(_moat_log_prefix!(), $fmt), $($x),*);
+    };
+}
+
+#[macro_export]
+macro_rules! _moat_error {
+    ($fmt:literal, $($x:expr),*) => {
+        #[cfg(test)]
+        use std::{println as error};
+        #[cfg(not(test))]
+        use log::error;
+
+        error!(concat!(_moat_log_prefix!(), $fmt), $($x),*);
+    };
+}
+
+#[macro_export]
+macro_rules! _moat_log_prefix {
+        () => {
+            "\x1b[90m[\x1b[0m{}:{}\x1b[90m]\x1b[0m "
+    };
+}
+
+//============================================================================//
+
 #[macro_export]
 macro_rules! moat_debug {
     // Match a format literal + one or more expressions
     ($fmt:literal, $($x:expr),*) => {
-        log::debug!(concat!(moat_log_prefix!(), $fmt),
-                   file!(), line!(), $($x),*);
+        _moat_debug!($fmt, file!(), line!(), $($x),*);
     };
     ($fmt:literal) => {
-        log::debug!(concat!(moat_log_prefix!(), $fmt),
-                   file!(), line!());
+        _moat_debug!($fmt, file!(), line!());
     };
 }
 
 #[macro_export]
 macro_rules! moat_info {
     ($fmt:literal, $($x:expr),*) => {
-        log::info!(concat!(moat_log_prefix!(), $fmt),
-                   file!(), line!(), $($x),*);
+        {
+            use {_moat_log_prefix,_moat_info};
+            _moat_info!($fmt, file!(), line!(), $($x),*);
+        }
     };
     ($fmt:literal) => {
-        log::info!(concat!(moat_log_prefix!(), $fmt),
-                   file!(), line!());
+        {
+            use super::{_moat_log_prefix,_moat_info};
+            _moat_info!($fmt, file!(), line!());
+        }
     };
 }
 
 #[macro_export]
-macro_rules! moat_err {
+macro_rules! moat_error {
     ($fmt:literal, $($x:expr),*) => {
-        log::error!(concat!(moat_log_prefix!(), $fmt),
-                   file!(), line!(), $($x),*);
+        {
+            use super::{_moat_log_prefix,_moat_error};
+            _moat_error!($fmt, file!(), line!(), $($x),*);
+        }
     };
     ($fmt:literal) => {
-        log::error!(concat!(moat_log_prefix!(), $fmt),
-                   file!(), line!());
+        _moat_error!($fmt, file!(), line!());
     };
 }
 
@@ -80,11 +97,11 @@ pub fn expand_tilde(value: &str) -> String {
 pub fn get_env_key() -> String {
     let key = std::env::var(MOAT_KEY_ENV)
               .unwrap_or_else(|_| {
-                  moat_err!("Missing '{}'", MOAT_KEY_ENV);
+                  moat_error!("Missing '{}'", MOAT_KEY_ENV);
                   panic!("Error retrieving key")
               });
     if key == "" {
-        moat_err!("Missing '{}'", MOAT_KEY_ENV);
+        moat_error!("Missing '{}'", MOAT_KEY_ENV);
         panic!("Key is unset")
     }
     key

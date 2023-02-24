@@ -1,4 +1,4 @@
-use super::*;
+use super::moat_info;
 use crate::Muted;
 use std::process::Command;
 use sqlx::SqliteConnection;

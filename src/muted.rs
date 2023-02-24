@@ -1,4 +1,4 @@
-use super::*;
+use super::moat_error;
 use std::{
     fs::File,
     io::{prelude::*, BufReader},
@@ -32,11 +32,11 @@ impl Muted {
                             let entry = String::from(*rssurl);
                             entries.push(entry);
                         } else {
-                            moat_err!("Error parsing {}:{}", urls, i);
+                            moat_error!("Error parsing {}:{}", urls, i);
                         }
                     }
                 } else {
-                    moat_err!("Error parsing {}:{}", urls, i);
+                    moat_error!("Error parsing {}:{}", urls, i);
                 }
             }
         }
