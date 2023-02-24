@@ -1,50 +1,67 @@
 use crate::MOAT_KEY_ENV;
 use std::path::Path;
 
+// TODO generalise into one macro
+
 // Import log::error() and log::info() as println!() during
 // tests so that output is shown when using cargo test -- --nocapture
 #[macro_export]
 macro_rules! _moat_debug {
     ($fmt:literal, $($x:expr),*) => {
-        #[cfg(test)]
-        use std::{println as debug};
-        #[cfg(not(test))]
-        use log::debug;
-
-        debug!(concat!(_moat_log_prefix!(), $fmt), $($x),*);
+        #[cfg(test)] {
+            std::println!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!(), $($x),*);
+        }
+        #[cfg(not(test))] {
+            log::debug!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!(), $($x),*);
+        }
+    };
+    ($fmt:literal) => {
+        #[cfg(test)] {
+            std::println!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!());
+        }
+        #[cfg(not(test))] {
+            log::debug!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!());
+        }
     };
 }
 
 #[macro_export(local_inner_macros)]
 macro_rules! _moat_info {
     ($fmt:literal, $($x:expr),*) => {
-        // #[cfg(test)]
-        // use std::{println as info};
-        // #[cfg(not(test))]
-        // use log::info;
-
-        log::info!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!(), $($x),*);
+        #[cfg(test)] {
+            std::println!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!(), $($x),*);
+        }
+        #[cfg(not(test))] {
+            log::info!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!(), $($x),*);
+        }
     };
     ($fmt:literal) => {
-        // #[cfg(test)]
-        // use std::{println as info};
-        // #[cfg(not(test))]
-        // use log::info;
-
-        log::info!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!());
+        #[cfg(test)] {
+            std::println!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!());
+        }
+        #[cfg(not(test))] {
+            log::info!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!());
+        }
     };
-
 }
 
-#[macro_export]
+#[macro_export(local_inner_macros)]
 macro_rules! _moat_error {
     ($fmt:literal, $($x:expr),*) => {
-        #[cfg(test)]
-        use std::{println as error};
-        #[cfg(not(test))]
-        use log::error;
-
-        error!($fmt, $($x),*);
+        #[cfg(test)] {
+            std::println!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!(), $($x),*);
+        }
+        #[cfg(not(test))] {
+            log::error!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!(), $($x),*);
+        }
+    };
+    ($fmt:literal) => {
+        #[cfg(test)] {
+            std::println!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!());
+        }
+        #[cfg(not(test))] {
+            log::error!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!());
+        }
     };
 }
 
@@ -61,10 +78,10 @@ macro_rules! _moat_log_prefix {
 macro_rules! moat_debug {
     // Match a format literal + one or more expressions
     ($fmt:literal, $($x:expr),*) => {
-        _moat_debug!($fmt, file!(), line!(), $($x),*);
+        _moat_debug!($fmt, $($x),*);
     };
     ($fmt:literal) => {
-        _moat_debug!($fmt, file!(), line!());
+        _moat_debug!($fmt);
     };
 }
 
@@ -84,7 +101,7 @@ macro_rules! moat_error {
         _moat_error!($fmt, $($x),*);
     };
     ($fmt:literal) => {
-        _moat_error!($fmt, file!(), line!());
+        _moat_error!($fmt);
     };
 }
 
