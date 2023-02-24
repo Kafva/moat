@@ -15,16 +15,25 @@ macro_rules! _moat_debug {
     };
 }
 
-#[macro_export]
+#[macro_export(local_inner_macros)]
 macro_rules! _moat_info {
     ($fmt:literal, $($x:expr),*) => {
-        #[cfg(test)]
-        use std::{println as info};
-        #[cfg(not(test))]
-        use log::info;
+        // #[cfg(test)]
+        // use std::{println as info};
+        // #[cfg(not(test))]
+        // use log::info;
 
-        info!(concat!(_moat_log_prefix!(), $fmt), $($x),*);
+        log::info!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!(), $($x),*);
     };
+    ($fmt:literal) => {
+        // #[cfg(test)]
+        // use std::{println as info};
+        // #[cfg(not(test))]
+        // use log::info;
+
+        log::info!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!());
+    };
+
 }
 
 #[macro_export]
@@ -35,7 +44,7 @@ macro_rules! _moat_error {
         #[cfg(not(test))]
         use log::error;
 
-        error!(concat!(_moat_log_prefix!(), $fmt), $($x),*);
+        error!($fmt, $($x),*);
     };
 }
 
@@ -48,7 +57,7 @@ macro_rules! _moat_log_prefix {
 
 //============================================================================//
 
-#[macro_export]
+#[macro_export(local_inner_macros)]
 macro_rules! moat_debug {
     // Match a format literal + one or more expressions
     ($fmt:literal, $($x:expr),*) => {
@@ -59,29 +68,20 @@ macro_rules! moat_debug {
     };
 }
 
-#[macro_export]
+#[macro_export(local_inner_macros)]
 macro_rules! moat_info {
     ($fmt:literal, $($x:expr),*) => {
-        {
-            use {_moat_log_prefix,_moat_info};
-            _moat_info!($fmt, file!(), line!(), $($x),*);
-        }
+        _moat_info!($fmt, $($x),*);
     };
     ($fmt:literal) => {
-        {
-            use super::{_moat_log_prefix,_moat_info};
-            _moat_info!($fmt, file!(), line!());
-        }
+        _moat_info!($fmt);
     };
 }
 
-#[macro_export]
+#[macro_export(local_inner_macros)]
 macro_rules! moat_error {
     ($fmt:literal, $($x:expr),*) => {
-        {
-            use super::{_moat_log_prefix,_moat_error};
-            _moat_error!($fmt, file!(), line!(), $($x),*);
-        }
+        _moat_error!($fmt, $($x),*);
     };
     ($fmt:literal) => {
         _moat_error!($fmt, file!(), line!());
