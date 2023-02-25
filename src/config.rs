@@ -8,6 +8,11 @@ pub const MOAT_KEY_ENV: &'static str = "MOAT_KEY";
 
 pub const DEFAULT_LOG_LEVEL: &'static str = "info";
 
+pub const TLS_KEY: &'static str = "tls/server.key";
+pub const TLS_CERT: &'static str = "tls/server.crt";
+
+pub const WORKER_CNT: usize = 2;
+
 #[derive(Clone)]
 pub struct Config {
     pub cache_db: String,

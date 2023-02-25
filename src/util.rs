@@ -1,99 +1,16 @@
+use crate::moat_error;
+use crate::config::{TLS_KEY,TLS_CERT};
 use crate::MOAT_KEY_ENV;
-use std::path::Path;
-
-// Import log::error() and log::info() as println!() during
-// tests so that output is shown when using cargo test -- --nocapture
-#[macro_export(local_inner_macros)]
-macro_rules! _moat_log {
-    ($log_cmd:tt, $fmt:literal, $($x:expr),*) => {
-        #[cfg(test)] {
-            std::println!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!(), $($x),*);
-        }
-        #[cfg(not(test))] {
-            log::$log_cmd!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!(), $($x),*);
-        }
-    };
-    ($log_cmd:tt, $fmt:literal) => {
-        #[cfg(test)] {
-            std::println!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!());
-        }
-        #[cfg(not(test))] {
-            log::$log_cmd!(std::concat!(_moat_log_prefix!(), $fmt), std::file!(), std::line!());
-        }
-    };
-}
-
-#[macro_export]
-macro_rules! _moat_debug {
-    ($fmt:literal, $($x:expr),*) => {
-        _moat_log!(debug, $fmt, $($x),*)
-    };
-    ($fmt:literal) => {
-        _moat_log!(debug, $fmt)
-    };
-}
-
-#[macro_export(local_inner_macros)]
-macro_rules! _moat_info {
-    ($fmt:literal, $($x:expr),*) => {
-        _moat_log!(info, $fmt, $($x),*)
-    };
-    ($fmt:literal) => {
-        _moat_log!(info, $fmt)
-    };
-}
-
-#[macro_export(local_inner_macros)]
-macro_rules! _moat_error {
-    ($fmt:literal, $($x:expr),*) => {
-        _moat_log!(error, $fmt, $($x),*)
-    };
-    ($fmt:literal) => {
-        _moat_log!(error, $fmt)
-    };
-}
-
-#[macro_export]
-macro_rules! _moat_log_prefix {
-        () => {
-            "\x1b[90m[\x1b[0m{}:{}\x1b[90m]\x1b[0m "
-    };
-}
-
-//============================================================================//
-
-#[macro_export(local_inner_macros)]
-macro_rules! moat_debug {
-    // Match a format literal + one or more expressions
-    ($fmt:literal, $($x:expr),*) => {
-        _moat_debug!($fmt, $($x),*);
-    };
-    ($fmt:literal) => {
-        _moat_debug!($fmt);
-    };
-}
-
-#[macro_export(local_inner_macros)]
-macro_rules! moat_info {
-    ($fmt:literal, $($x:expr),*) => {
-        _moat_info!($fmt, $($x),*);
-    };
-    ($fmt:literal) => {
-        _moat_info!($fmt);
-    };
-}
-
-#[macro_export(local_inner_macros)]
-macro_rules! moat_error {
-    ($fmt:literal, $($x:expr),*) => {
-        _moat_error!($fmt, $($x),*);
-    };
-    ($fmt:literal) => {
-        _moat_error!($fmt);
-    };
-}
-
-//============================================================================//
+use rustls::{
+    Certificate,
+    PrivateKey,
+    ServerConfig
+};
+use std::{
+  io::BufReader,
+  fs::File,
+  path::Path,
+};
 
 pub fn expand_tilde(value: &str) -> String {
     value.replace("~", std::env::var("HOME").unwrap().as_str())
@@ -110,6 +27,34 @@ pub fn get_env_key() -> String {
         panic!("Key is unset")
     }
     key
+}
+
+pub fn get_tls_config() -> rustls::ServerConfig {
+    let key_file = File::open(TLS_KEY).unwrap_or_else(|_| {
+        moat_error!("Missing '{}'", TLS_KEY);
+        panic!("No TLS key");
+    });
+    let cert_file = File::open(TLS_CERT).unwrap_or_else(|_| {
+        moat_error!("Missing '{}'", TLS_CERT);
+        panic!("No TLS certficate");
+    });
+
+    let key_file = &mut BufReader::new(key_file);
+    let cert_file = &mut BufReader::new(cert_file);
+
+    let cert_chain = rustls_pemfile::certs(cert_file)
+        .unwrap()
+        .into_iter()
+        .map(Certificate)
+        .collect();
+
+    let mut keys = rustls_pemfile::rsa_private_keys(key_file).unwrap();
+
+    ServerConfig::builder()
+        .with_safe_defaults()
+        .with_no_client_auth()
+        .with_single_cert(cert_chain, PrivateKey(keys.remove(0)))
+        .unwrap()
 }
 
 pub fn path_exists(path_str: &str) -> Result<String,String> {

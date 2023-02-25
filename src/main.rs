@@ -1,6 +1,7 @@
 mod config;
 mod routes;
 mod util;
+mod macros;
 mod db;
 mod muted;
 mod newsboat_actor;
@@ -12,16 +13,20 @@ use sqlx::sqlite::SqliteConnectOptions;
 use actix_web::middleware::Logger;
 use actix_web::{web, App, HttpServer};
 use clap::Parser;
-use std::{env, str::FromStr};
+use std::{env, 
+  str::FromStr,
+};
 
 use crate::{
-    util::{expand_tilde,get_env_key,path_exists},
-    config::{DEFAULT_NEWSBOAT_BIN,Config,MOAT_KEY_ENV,DEFAULT_LOG_LEVEL},
+    util::{expand_tilde,get_env_key,path_exists,get_tls_config},
+    config::{DEFAULT_NEWSBOAT_BIN,Config,MOAT_KEY_ENV,DEFAULT_LOG_LEVEL,
+             WORKER_CNT},
     newsboat_actor::NewsboatActor,
     muted::Muted,
     routes::*,
     err::MoatError,
 };
+
 
 #[derive(Parser, Debug)]
 #[clap(
@@ -63,7 +68,12 @@ struct Args {
 
     /// Port to listen on
     #[clap(short, long, default_value_t = 7654)]
-    port: u16
+    port: u16,
+
+    /// Enable TLS, requires ./tls/server.crt and ./tls/server.key to exist
+    #[clap(short = 's', long, takes_value = false)]
+    tls: bool
+
 }
 
 //============================================================================//
@@ -88,6 +98,7 @@ async fn main() -> std::io::Result<()> {
     // Ensure that MOAT_KEY_ENV is set.
     let _ = get_env_key();
 
+    // The server needs to be restarted for changes in `urls` to be applied.
     let muted = Muted::from_urls_file(&urls)?;
 
     let conn = if env::var("RUST_LOG").unwrap_or("".to_string()) == "debug" {
@@ -99,12 +110,9 @@ async fn main() -> std::io::Result<()> {
 
     let actor_addr = NewsboatActor { config, muted, conn }.start();
 
-    moat_info!("Listening on {}:{}...", args.addr, args.port);
-
-    HttpServer::new(move || {
+    let server = HttpServer::new(move || {
         App::new()
             .wrap(Logger::default())
-            .wrap(Logger::new("%a %{User-Agent}i"))
             .app_data(web::Data::new(actor_addr.to_owned()))
             .app_data(web::FormConfig::default().error_handler(|err, _| {
                 // Return custom error on failed form validation
@@ -115,8 +123,15 @@ async fn main() -> std::io::Result<()> {
             .service(items)
             .service(update)
     })
-    .workers(2)
-    .bind((args.addr, args.port))?
-    .run()
-    .await
+    .workers(WORKER_CNT);
+
+    if args.tls {
+        let tls_config = get_tls_config();
+        moat_info!("Listening on https://{}:{}...", args.addr, args.port);
+        server.bind_rustls((args.addr,args.port), tls_config)?.run().await
+
+    } else {
+        moat_info!("Listening on http://{}:{}...", args.addr, args.port);
+        server.bind((args.addr, args.port))?.run().await
+    }
 }
