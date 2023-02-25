@@ -44,17 +44,21 @@ Maintaining a synchronized state when using `newsboat` on another machine than
 the moat server requires a wrapper function similar to the one below
 ```bash
 newsmoat() {
-  MOAT_SERVER="..."
+    [ -z "$MOAT_SERVER" ] && return -1
+    # XXX the rsync user needs rwx access to /srv/moat/.newsboat
+    local rflags=(-q --perms --chmod 666)
 
-  # Update the local cache with the cache from the moat server in
-  # case articles were read through the iOS client
-  rsync -q $MOAT_SERVER:~/.newsboat/cache.db ~/.newsboat/cache.db
+    # Update the local db with the db from the remote server in
+    # case articles were read through the iOS client.
+    rsync ${rflags[@]} $MOAT_SERVER:/srv/moat/.newsboat/cache.db  ~/.newsboat
 
-  newsboat -r
+    # Update the urls on the server
+    rsync ${rflags[@]} $(readlink ~/.newsboat/urls)  $MOAT_SERVER:/srv/moat/.newsboat/urls
 
-  # Copy the cache and changes to other files back to the server on exit
-  rsync -q ~/.newsboat/cache.db   $MOAT_SERVER:~/.newsboat/cache.db
-  rsync -q ~/.newsboat/urls       $MOAT_SERVER:~/.newsboat/urls
+    newsboat -r 2> /dev/null
+
+    # Copy back the potentially changed cache on exit
+    rsync ${rflags[@]}  ~/.newsboat/cache.db         $MOAT_SERVER:/srv/moat/.newsboat
 }
 ```
 This solution does **not** work if one were to use several 'newsboat clients'
