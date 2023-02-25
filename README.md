@@ -5,7 +5,7 @@
 An iOS client for [newsboat](https://github.com/newsboat/newsboat).
 
 ## Setup
-Install all dependencies
+Install all dependencies for the client
 ```bash
 brew install cocoapods
 pod install
@@ -13,10 +13,11 @@ pod install
 and open `moat.xcworkspace` with Xcode. Connect your device and install with
 <kbd>CMD</kbd> <kbd>R</kbd>.
 
-Build and run the server
+Refer to:
 ```bash
 cargo run -- --help
 ```
+for information on how to run the server.
 
 ### Newsboat `urls` file
 The feeds that are shown in the app are determined by `~/.newsboat/urls` on
@@ -65,8 +66,7 @@ more robust synchronization framework was therefore not deemed preferable.
 * The project was mainly modelled with YouTube feeds in mind and therefore
   supports fetching YouTube thumbnails and YouTube channel icons.
 
-* Templates for Systemd (`/etc/systemd/system`) and OpenRC (`/etc/init.d`)
-  services are available under [conf](/conf).
+* A template to run moat as an OpenRC service is available under [conf](/conf).
 
 * The server process needs to be restarted for changes to the muted feeds to
   take-effect.
