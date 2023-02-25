@@ -9,7 +9,7 @@ class ApiWrapper<T: Codable> {
                 forKey: "serverLocation")
         else {
             alert.makeAlert(
-                title: "Incomplete configuration",
+                title: ServerConnectionErrorTitle.incomplete,
                 err: ServerConnectionError.noServerLocation,
                 isLoading: isLoading
             )
@@ -20,7 +20,7 @@ class ApiWrapper<T: Codable> {
             let serverPort = UserDefaults.standard.string(forKey: "serverPort")
         else {
             alert.makeAlert(
-                title: "Incomplete configuration",
+                title: ServerConnectionErrorTitle.incomplete,
                 err: ServerConnectionError.noServerPort,
                 isLoading: isLoading
             )
@@ -30,7 +30,7 @@ class ApiWrapper<T: Codable> {
 
         if serverKey == "" {
             alert.makeAlert(
-                title: "Incomplete configuration",
+                title: ServerConnectionErrorTitle.incomplete,
                 err: ServerConnectionError.noServerKey,
                 isLoading: isLoading
             )
@@ -59,7 +59,7 @@ class ApiWrapper<T: Codable> {
             // Create a background task to fetch data from the server
             if (res as? HTTPURLResponse)?.statusCode == 401 {
                 alert.makeAlert(
-                    title: "Unauthorized",
+                    title: ServerConnectionErrorTitle.unauthorized,
                     err: ServerConnectionError.invalidKey,
                     isLoading: isLoading
                 )
@@ -68,7 +68,7 @@ class ApiWrapper<T: Codable> {
                     callback(data!)
                 } else {
                     alert.makeAlert(
-                        title: "Connection error", err: err,
+                        title: ServerConnectionErrorTitle.internalFailure, err: err,
                         isLoading: isLoading
                     )
                 }
@@ -111,15 +111,15 @@ class ApiWrapper<T: Codable> {
                             rows: rows, alert: alert, isLoading: isLoading)
                     } else {
                         alert.makeAlert(
-                            title: "Server error",
+                            title: ServerConnectionErrorTitle.internalFailure,
                             err: ServerConnectionError.feedReloadFailure,
                             isLoading: isLoading
                         )
                     }
                 } catch {
                     alert.makeAlert(
-                        title: "Decoding error",
-                        err: ServerConnectionError.unexpected(code: 400),
+                        title: ServerConnectionErrorTitle.decoding,
+                        err: error,
                         isLoading: isLoading
                     )
                 }
@@ -153,7 +153,9 @@ class ApiWrapper<T: Codable> {
             req: req, alert: alert, isLoading: isLoading,
             callback: { data in
                 do {
+                    print("data:", data)
                     let decoded = try JSONDecoder().decode([T].self, from: data)
+                    print("decoded:", decoded)
 
                     // If the response data was successfully decoded dispatch an update in the
                     // main thread (all UI updates should be done in the main thread)
@@ -164,8 +166,8 @@ class ApiWrapper<T: Codable> {
                     }
                 } catch {
                     alert.makeAlert(
-                        title: "Decoding error",
-                        err: ServerConnectionError.unexpected(code: 400),
+                        title: ServerConnectionErrorTitle.decoding,
+                        err: error,
                         isLoading: isLoading
                     )
                 }
@@ -209,7 +211,7 @@ class ApiWrapper<T: Codable> {
                     DispatchQueue.main.async {
                         if !decoded.success {
                             alert.makeAlert(
-                                title: "Bad request",
+                                title: ServerConnectionErrorTitle.badRequest,
                                 err: ServerConnectionError.unexpected(
                                     code: 400),
                                 isLoading: nil
@@ -222,8 +224,8 @@ class ApiWrapper<T: Codable> {
                     }
                 } catch {
                     alert.makeAlert(
-                        title: "Decoding error",
-                        err: ServerConnectionError.unexpected(code: 400),
+                        title: ServerConnectionErrorTitle.decoding,
+                        err: error,
                         isLoading: nil
                     )
                 }
@@ -269,7 +271,7 @@ class ApiWrapper<T: Codable> {
                     DispatchQueue.main.async {
                         if !decoded.success {
                             alert.makeAlert(
-                                title: "Bad request",
+                                title: ServerConnectionErrorTitle.badRequest,
                                 err: ServerConnectionError.unexpected(
                                     code: 400),
                                 isLoading: nil
@@ -285,8 +287,8 @@ class ApiWrapper<T: Codable> {
                     }
                 } catch {
                     alert.makeAlert(
-                        title: "Decoding error",
-                        err: ServerConnectionError.unexpected(code: 400),
+                        title: ServerConnectionErrorTitle.decoding,
+                        err: error,
                         isLoading: nil
                     )
                 }

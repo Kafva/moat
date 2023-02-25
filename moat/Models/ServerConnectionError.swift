@@ -26,7 +26,16 @@ enum ServerConnectionError: Error, LocalizedError {
         case .feedReloadFailure:
             return NSLocalizedString("Failed to reload feeds", comment: "")
         case .unexpected(_):
-            return NSLocalizedString("Unexpected error", comment: "")
+            return NSLocalizedString("Unexpected failure", comment: "")
         }
     }
 }
+
+enum ServerConnectionErrorTitle : String {
+    case decoding = "Decoding error"
+    case incomplete = "Incomplete configuration"
+    case unauthorized = "Unauthorized"
+    case internalFailure = "Internal error"
+    case badRequest = "Bad request"
+}
+
