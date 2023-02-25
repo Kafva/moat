@@ -1,5 +1,9 @@
 use crate::Muted;
-use sqlx::SqliteConnection;
+use sqlx::{SqliteConnection,Connection,ConnectOptions};
+use sqlx::sqlite::SqliteConnectOptions;
+use std::{env,
+  str::FromStr,
+};
 
 #[derive(Debug,Default,sqlx::FromRow,serde::Serialize)]
 #[cfg_attr(test, derive(serde::Deserialize))]
@@ -35,6 +39,15 @@ pub struct RssItem {
 
 
 //============================================================================//
+
+pub async fn open_connection(cache_db: &String) -> SqliteConnection {
+    if env::var("RUST_LOG").unwrap_or("".to_string()) == "debug" {
+        SqliteConnection::connect(&cache_db).await
+    } else {
+        SqliteConnectOptions::from_str(&cache_db).unwrap()
+                .disable_statement_logging().connect().await
+    }.expect("Could not open database")
+}
 
 pub async fn update_feed(conn: &mut SqliteConnection, feedurl: String,
                          unread: bool)

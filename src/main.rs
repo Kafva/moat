@@ -8,14 +8,9 @@ mod newsboat_actor;
 mod err;
 
 use actix::prelude::*;
-use sqlx::{SqliteConnection,Connection,ConnectOptions};
-use sqlx::sqlite::SqliteConnectOptions;
 use actix_web::middleware::Logger;
 use actix_web::{web, App, HttpServer};
 use clap::Parser;
-use std::{env, 
-  str::FromStr,
-};
 
 use crate::{
     util::{expand_tilde,get_env_key,path_exists,get_tls_config},
@@ -25,6 +20,7 @@ use crate::{
     routes::*,
     err::MoatError,
 };
+use std::env;
 
 
 #[derive(Parser, Debug)]
@@ -100,17 +96,7 @@ async fn main() -> std::io::Result<()> {
     // Ensure that MOAT_KEY_ENV is set.
     let _ = get_env_key();
 
-    // The server needs to be restarted for changes in `urls` to be applied.
-    let muted = Muted::from_urls_file(&urls)?;
-
-    let conn = if env::var("RUST_LOG").unwrap_or("".to_string()) == "debug" {
-        SqliteConnection::connect(&config.cache_db).await
-    } else {
-        SqliteConnectOptions::from_str(&config.cache_db).unwrap()
-                .disable_statement_logging().connect().await
-    }.expect("Could not open database");
-
-    let actor_addr = NewsboatActor { config, muted, conn }.start();
+    let actor_addr = NewsboatActor::from_config(&config).await?.start();
 
     let server = HttpServer::new(move || {
         App::new()

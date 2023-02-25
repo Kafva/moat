@@ -12,13 +12,34 @@ pub struct Muted {
 //============================================================================//
 
 impl Muted {
+    pub fn update(&mut self, urls: &str) -> Result<(),std::io::Error> {
+        self.entries = Self::entries_from_urls(urls)?;
+        Ok(())
+    }
+
+    pub fn from_urls_file(urls: &str) -> Result<Self,std::io::Error> {
+        let entries = Self::entries_from_urls(urls)?;
+        return Ok(Self { entries });
+    }
+
+
+    /// Create a comma separated string of all entries, with each being
+    /// enclosed in double quotes.
+    pub fn as_quoted_csv(&self) -> String {
+        let enclosed: Vec<String> = self.entries.iter()
+            .map(|e| format!("'{}'", e).to_string())
+            .collect();
+
+        enclosed.join(",")
+    }
+
     /// Extract a list of all muted feeds from the provided ~/.newsboat/urls file
     /// Each line is expected to follow this format:
     ///   <rss url>  <display url>    <tag> <name>
     /// Names that start with '!' are muted and the corresponding <rss url> will be
     /// part of the output vector.
     /// Except for the <name>, no fields are allowed to contain blankspace.
-    pub fn from_urls_file(urls: &str) -> Result<Self,std::io::Error> {
+    fn entries_from_urls(urls: &str) -> Result<Vec<String>,std::io::Error> {
         let mut entries: Vec<String> = vec![];
         let file = File::open(urls)?;
 
@@ -40,19 +61,9 @@ impl Muted {
                 }
             }
         }
-
-        return Ok(Self { entries });
+        Ok(entries)
     }
 
-    /// Create a comma separated string of all entries, with each being
-    /// enclosed in double quotes.
-    pub fn as_quoted_csv(&self) -> String {
-        let enclosed: Vec<String> = self.entries.iter()
-            .map(|e| format!("'{}'", e).to_string())
-            .collect();
-
-        enclosed.join(",")
-    }
 }
 
 //============================================================================//

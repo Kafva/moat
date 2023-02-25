@@ -1,10 +1,11 @@
 use super::moat_info;
+use sqlx::{SqliteConnection,Connection};
+
 use crate::Muted;
 use std::process::Command;
-use sqlx::SqliteConnection;
 use actix::prelude::*;
 use crate::{
-    db::{RssFeed,RssItem,feeds,items,update_item,update_feed},
+    db::{RssFeed,RssItem,feeds,items,update_item,update_feed,open_connection},
     config::Config,
     err::MoatError,
 };
@@ -37,12 +38,46 @@ pub struct ItemsMessage {
     pub rssurl: String
 }
 
+//#[derive(Message)]
+//#[rtype(result = "Result<(), std::io:Error>")]
+////#[rtype(result = "Result<std::process::ExitStatus, std::io::Error>")]
+//pub struct ResetMessage;
+//impl Handler<ResetMessage> for NewsboatActor {
+//    type Result = Result<(), std::io::Error>;
+//
+//    fn handle(&mut self, msg: ResetMessage, _: &mut Context<Self>) -> Self::Result {
+//       futures::executor::block_on(self.reconfigure())?;
+//       Ok(())
+//    }
+//
+//}
+
+
 //============================================================================//
 
 pub struct NewsboatActor {
     pub config: Config,
     pub muted: Muted,
     pub conn: SqliteConnection,
+}
+
+impl NewsboatActor {
+    /// TODO close()
+    pub async fn reconfigure(&mut self) -> Result<(),std::io::Error> {
+         self.muted.update(&self.config.urls)?;
+         self.conn = open_connection(&self.config.cache_db).await;
+         Ok(())
+    }
+
+    pub async fn from_config(config: &Config) -> Result<Self,std::io::Error> {
+        let muted = Muted::from_urls_file(&config.urls)?;
+        let conn = open_connection(&config.cache_db).await;
+        Ok(Self {
+             config: config.clone(),
+             muted,
+             conn
+        })
+    }
 }
 
 // Provide Actor implementation for our actor
@@ -113,4 +148,3 @@ impl Handler<ItemsMessage> for NewsboatActor {
        futures::executor::block_on(items(&mut self.conn, msg.rssurl))
     }
 }
-
