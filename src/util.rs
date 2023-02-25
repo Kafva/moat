@@ -7,6 +7,7 @@ use rustls::{
     ServerConfig
 };
 use std::{
+  io::prelude::*,
   io::BufReader,
   fs::File,
   path::Path,
@@ -30,6 +31,10 @@ pub fn get_env_key() -> String {
 }
 
 pub fn get_tls_config(tls_dir: String) -> rustls::ServerConfig {
+    let ec_header = "-----BEGIN EC PRIVATE KEY-----";
+    let pkcs8_header = "-----BEGIN PRIVATE KEY-----";
+    let mut pem_header = String::default();
+
     let config = ServerConfig::builder()
         .with_safe_defaults()
         .with_no_client_auth();
@@ -46,29 +51,33 @@ pub fn get_tls_config(tls_dir: String) -> rustls::ServerConfig {
         panic!("No TLS certficate");
     });
 
-    let key_file = &mut BufReader::new(key_file);
-    let cert_file = &mut BufReader::new(cert_file);
+    let key_buf = &mut BufReader::new(key_file);
+    let cert_buf = &mut BufReader::new(cert_file);
 
-    let cert_chain = rustls_pemfile::certs(cert_file)
-        .unwrap()
-        .into_iter()
-        .map(Certificate)
-        .collect();
+    key_buf.read_line(&mut pem_header).unwrap();
+    key_buf.seek(std::io::SeekFrom::Start(0)).unwrap();
 
-    // Look for RSA and EC keys in the key file.
-    let mut keys = rustls_pemfile::pkcs8_private_keys(key_file)
-        .unwrap();
+    // Look for a RSA or EC key in `key.pem`.
+    let mut keys = if pem_header.starts_with(ec_header) {
+        rustls_pemfile::ec_private_keys(key_buf).unwrap()
 
-    if keys.is_empty() {
-        keys = rustls_pemfile::rsa_private_keys(key_file).unwrap();
-    }
-    if keys.is_empty() {
-        keys = rustls_pemfile::ec_private_keys(key_file).unwrap();
-    }
+    } else if pem_header.starts_with(pkcs8_header) {
+        rustls_pemfile::pkcs8_private_keys(key_buf).unwrap()
+
+    } else {
+        panic!("Unknown PEM key format")
+    };
+
     if keys.is_empty() {
         moat_error!("No RSA or EC private key in '{}'", TLS_KEY);
         panic!("Failed to read private key")
     }
+
+    let cert_chain = rustls_pemfile::certs(cert_buf)
+        .unwrap()
+        .into_iter()
+        .map(Certificate)
+        .collect();
 
     // Pop out the first key from the PEM file
     config.with_single_cert(cert_chain, PrivateKey(keys.remove(0))).unwrap()
