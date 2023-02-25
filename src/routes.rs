@@ -112,12 +112,11 @@ pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>,
 #[cfg(test)]
 mod tests {
     use actix::prelude::*;
-    use sqlx::{SqliteConnection,Connection};
     use crate::{
         util::run_setup_script,
         config::{Config, MOAT_KEY_ENV},
         muted::Muted,
-        db::{RssFeed,RssItem},
+        db::{RssFeed,RssItem,Db},
         newsboat_actor::{NewsboatActor,UpdateMessage},
         routes::MoatResponse,
         routes
@@ -137,11 +136,9 @@ mod tests {
         };
 
         let muted = Muted::from_urls_file(&config.urls).unwrap();
+        let db = Db::new(config.cache_db.clone());
 
-        let conn = SqliteConnection::connect(&config.cache_db).await
-                .expect("Could not open database");
-
-        NewsboatActor { config, muted, conn }.start()
+        NewsboatActor { config, muted, db }.start()
     }
 
     #[actix_web::test]

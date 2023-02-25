@@ -1,11 +1,9 @@
 use super::moat_info;
-use sqlx::{SqliteConnection,Connection};
-
 use crate::Muted;
 use std::process::Command;
 use actix::prelude::*;
 use crate::{
-    db::{RssFeed,RssItem,feeds,items,update_item,update_feed,open_connection},
+    db::{RssFeed,RssItem,Db},
     config::Config,
     err::MoatError,
 };
@@ -38,44 +36,21 @@ pub struct ItemsMessage {
     pub rssurl: String
 }
 
-//#[derive(Message)]
-//#[rtype(result = "Result<(), std::io:Error>")]
-////#[rtype(result = "Result<std::process::ExitStatus, std::io::Error>")]
-//pub struct ResetMessage;
-//impl Handler<ResetMessage> for NewsboatActor {
-//    type Result = Result<(), std::io::Error>;
-//
-//    fn handle(&mut self, msg: ResetMessage, _: &mut Context<Self>) -> Self::Result {
-//       futures::executor::block_on(self.reconfigure())?;
-//       Ok(())
-//    }
-//
-//}
-
 
 //============================================================================//
 
 pub struct NewsboatActor {
     pub config: Config,
     pub muted: Muted,
-    pub conn: SqliteConnection,
+    pub db: Db
 }
 
 impl NewsboatActor {
-    /// TODO close()
-    pub async fn reconfigure(&mut self) -> Result<(),std::io::Error> {
-         self.muted.update(&self.config.urls)?;
-         self.conn = open_connection(&self.config.cache_db).await;
-         Ok(())
-    }
-
     pub async fn from_config(config: &Config) -> Result<Self,std::io::Error> {
-        let muted = Muted::from_urls_file(&config.urls)?;
-        let conn = open_connection(&config.cache_db).await;
         Ok(Self {
              config: config.clone(),
-             muted,
-             conn
+             muted: Muted::from_urls_file(&config.urls)?,
+             db: Db::new(config.cache_db.clone())
         })
     }
 }
@@ -99,13 +74,13 @@ impl Handler<UpdateMessage> for NewsboatActor {
 
     fn handle(&mut self, msg: UpdateMessage, _: &mut Context<Self>) -> Self::Result {
         if let Some(id) = msg.id {
-            let changed = futures::executor::block_on(update_item(&mut self.conn, id, msg.unread))?;
+            let changed = futures::executor::block_on(self.db.update_item(id, msg.unread))?;
             Ok(changed)
         }
         else if let Some(feedurl) = msg.feedurl {
             let feedurl = general_purpose::STANDARD.decode(feedurl)?;
             let feedurl = String::from_utf8(feedurl)?;
-            let changed = futures::executor::block_on(update_feed(&mut self.conn, feedurl, msg.unread))?;
+            let changed = futures::executor::block_on(self.db.update_feed(feedurl, msg.unread))?;
             Ok(changed)
 
         } else {
@@ -120,7 +95,7 @@ impl Handler<FeedsMessage> for NewsboatActor {
     fn handle(&mut self, _: FeedsMessage, _: &mut Context<Self>) -> Self::Result {
        // This is the only way I found for executing an async task in the
        // handler for an actor...
-       futures::executor::block_on(feeds(&mut self.conn, &self.muted))
+       futures::executor::block_on(self.db.feeds(&self.muted))
     }
 }
 
@@ -145,6 +120,6 @@ impl Handler<ItemsMessage> for NewsboatActor {
     type Result = Result<Vec<RssItem>, sqlx::Error>;
 
     fn handle(&mut self, msg: ItemsMessage, _: &mut Context<Self>) -> Self::Result {
-       futures::executor::block_on(items(&mut self.conn, msg.rssurl))
+       futures::executor::block_on(self.db.items(msg.rssurl))
     }
 }
