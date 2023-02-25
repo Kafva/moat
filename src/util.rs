@@ -48,7 +48,16 @@ pub fn get_tls_config() -> rustls::ServerConfig {
         .map(Certificate)
         .collect();
 
+    // Look for RSA and EC keys in the key file.
     let mut keys = rustls_pemfile::rsa_private_keys(key_file).unwrap();
+
+    if keys.len() == 0 {
+        keys = rustls_pemfile::ec_private_keys(key_file).unwrap();
+    }
+    if keys.len() == 0 {
+        moat_error!("No RSA or EC private key in '{}'", TLS_KEY);
+        panic!("Failed to read private key")
+    }
 
     ServerConfig::builder()
         .with_safe_defaults()
