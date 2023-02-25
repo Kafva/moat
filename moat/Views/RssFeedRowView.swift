@@ -100,7 +100,7 @@ struct RssFeedRowView: View {
         }
         .padding(.bottom, 5)
         // We need to handle both a choice and error alert for each row
-        // in case the '/unread' endpoint returns an error
+        // in case the '/update' endpoint returns an error
         .alert(isPresented: $alertState.show) {
             var a: Alert
             if alertState.type == AlertType.Choice {

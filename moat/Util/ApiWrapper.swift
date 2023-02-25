@@ -1,7 +1,6 @@
 import SwiftUI
 
 class ApiWrapper<T: Codable> {
-
     private func getServerConfig(alert: AlertState, isLoading: Binding<Bool>?)
         -> (String, String)?
     {
@@ -91,10 +90,12 @@ class ApiWrapper<T: Codable> {
         else { return }
 
         guard
-            let req = self.makeBaseRequest(
+            var req = self.makeBaseRequest(
                 api_url: "https://\(serverLocation)/reload",
                 serverKey: serverKey)
         else { return }
+
+        req.httpMethod = "PATCH"
 
         self.sendRequest(
             req: req, alert: alert, isLoading: isLoading,
@@ -181,7 +182,7 @@ class ApiWrapper<T: Codable> {
         else { return }
 
         var req = self.makeBaseRequest(
-            api_url: "https://\(serverLocation)/unread",
+            api_url: "https://\(serverLocation)/update",
             serverKey: serverKey
         )!
 
@@ -190,7 +191,7 @@ class ApiWrapper<T: Codable> {
         req.setValue(
             "application/x-www-form-urlencoded",
             forHTTPHeaderField: "Content-Type")
-        req.httpBody = "rssurl=\(rssurl.toBase64())&unread=false".data(
+        req.httpBody = "feedurl=\(rssurl.toBase64())&unread=false".data(
             using: .ascii)
 
         self.sendRequest(
@@ -242,7 +243,7 @@ class ApiWrapper<T: Codable> {
         else { return }
 
         var req = self.makeBaseRequest(
-            api_url: "https://\(serverLocation)/unread",
+            api_url: "https://\(serverLocation)/update",
             serverKey: serverKey
         )!
 
