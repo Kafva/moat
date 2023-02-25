@@ -1,97 +1,125 @@
-#[macro_use]
-extern crate rocket;
-use crate::urls_parser::get_muted;
-use clap::Parser;
-use rocket::{Build, Rocket};
-
-// The `mod` keyword will expand to the contents of the file
-// with the corresponding name
-mod dataguards;
-mod db_parser;
-mod errors;
-mod models;
+mod config;
 mod routes;
-mod urls_parser;
-use crate::db_parser::get_feed_list;
-use models::Config;
-use rocket::shield::{Hsts, Shield};
+mod util;
+mod macros;
+mod db;
+mod muted;
+mod newsboat_actor;
+mod err;
+
+use actix::prelude::*;
+use actix_web::middleware::Logger;
+use actix_web::{web, App, HttpServer};
+use clap::Parser;
+
+use crate::{
+    util::{expand_tilde,get_env_key,path_exists,get_tls_config},
+    config::{DEFAULT_NEWSBOAT_BIN,Config,MOAT_KEY_ENV,DEFAULT_LOG_LEVEL},
+    newsboat_actor::NewsboatActor,
+    muted::Muted,
+    routes::*,
+    err::MoatError,
+};
+use std::env;
+
 
 #[derive(Parser, Debug)]
 #[clap(
-    version = "0.1.0",
+    version = "0.2.0",
     author = "Kafva <https://github.com/Kafva>",
-    about = "moat server"
+    about = "A pre-shared key needs to be set in `MOAT_KEY` on launch, the client application needs to supply the same value in its configuration after being installed."
 )]
 struct Args {
     /// Path to newsboat executable
     #[cfg(target_os = "macos")]
-    #[clap(
-        short,
-        long,
-        default_value = "/opt/homebrew/bin/newsboat",
-        value_parser
+    #[clap(short, long, default_value = DEFAULT_NEWSBOAT_BIN,
+        value_parser = path_exists
     )]
-    newsboat_path: String,
+    newsboat_bin: String,
 
     #[cfg(target_os = "linux")]
-    #[clap(short, long, default_value = "/usr/bin/newsboat", value_parser)]
-    newsboat_path: String,
+    #[clap(short = 'b', long, default_value = DEFAULT_NEWSBOAT_BIN,
+           value_parser = path_exists)]
+    newsboat_bin: String,
+
+    /// Path to newsboat config
+    #[clap(short = 'C', long, default_value = "~/.newsboat/config",
+           value_parser = path_exists)]
+    newsboat_config: String,
 
     /// Path to newsboat cache.db
-    #[clap(short, long, default_value = "~/.newsboat/cache.db", value_parser)]
-    cache_path: String,
+    #[clap(short = 'c', long, default_value = "~/.newsboat/cache.db",
+           value_parser = path_exists)]
+    cache_db: String,
 
     /// Path to newsboat urls file
-    #[clap(short, long, default_value = "~/.newsboat/urls", value_parser)]
-    urls_path: String,
+    #[clap(short, long, default_value = "~/.newsboat/urls",
+           value_parser = path_exists)]
+    urls: String,
+
+    /// Address to bind to
+    #[clap(short, long, default_value = "127.0.0.1", value_parser)]
+    addr: String,
+
+    /// Port to listen on
+    #[clap(short, long, default_value_t = 7654)]
+    port: u16,
+
+    /// Directory with cert.pem and key.pem to use for TLS.
+    #[clap(short = 's', long, value_parser)]
+    tls_dir: Option<String>,
+
+    /// Number of workers
+    #[clap(short, long, default_value_t = 2)]
+    workers: usize
 }
 
-fn expand_tilde(value: String) -> String {
-    value.replace("~", std::env::var("HOME").unwrap().as_str())
-}
+//============================================================================//
 
-// The launch attribute generates a main() function
-#[launch]
-fn rocket() -> Rocket<Build> {
-    let opts: Args = Args::parse();
-
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    let args: Args = Args::parse();
+    let urls = expand_tilde(args.urls.as_str());
     let config = Config {
-        cache_path: expand_tilde(opts.cache_path),
-        newsboat_path: expand_tilde(opts.newsboat_path),
-        muted_list: get_muted(expand_tilde(opts.urls_path)).unwrap(),
+           cache_db: expand_tilde(args.cache_db.as_str()),
+           newsboat_config: expand_tilde(args.newsboat_config.as_str()),
+           newsboat_bin: expand_tilde(args.newsboat_bin.as_str()),
+           urls: urls.clone()
     };
 
-    // Sanity check, verify that the cache.db exists and has at least one entry
-    let feeds = get_feed_list(&config.cache_path, &config.muted_list);
-    if feeds.is_err() || feeds.unwrap().is_empty() {
-        panic!("cache.db does not exist or is empty")
+    if env::var("RUST_LOG").unwrap_or("".to_string()) == "" {
+        env::set_var("RUST_LOG", DEFAULT_LOG_LEVEL)
     }
 
-    // HTTP headers that should be included in all responses
-    // are configured through 'Shields', here we add 'Strict-Transport-Security'
-    let shield = Shield::default().enable(Hsts::default());
+    env_logger::builder().format_target(false).init();
 
-    // Pass the config into the global state of rocket and
-    // start the server with each route mounted at '/'
-    rocket::build()
-        .manage(Config::from(config))
-        .register(
-            "/",
-            catchers![
-                errors::internal_error,
-                errors::unauthorized,
-                errors::not_found,
-                errors::default
-            ],
-        )
-        .mount(
-            "/",
-            routes![
-                routes::feeds,
-                routes::items,
-                routes::reload,
-                routes::unread
-            ],
-        )
-        .attach(shield)
+    // Ensure that MOAT_KEY_ENV is set.
+    let _ = get_env_key();
+
+    let actor_addr = NewsboatActor::from_config(&config).await?.start();
+
+    let server = HttpServer::new(move || {
+        App::new()
+            .wrap(Logger::default())
+            .app_data(web::Data::new(actor_addr.to_owned()))
+            .app_data(web::FormConfig::default().error_handler(|err, _| {
+                // Return custom error on failed form validation
+                MoatError::FormError(err).into()
+            }))
+            .service(reload)
+            .service(feeds)
+            .service(items)
+            .service(update)
+    })
+    .workers(args.workers);
+
+    if args.tls_dir.is_some() {
+        let tls_config = get_tls_config(args.tls_dir.unwrap());
+        moat_info!("Listening on https://{}:{}...", args.addr, args.port);
+        server.bind_rustls((args.addr,args.port), tls_config)?.run().await
+
+    } else {
+        moat_info!("Listening on http://{}:{}...", args.addr, args.port);
+        server.bind((args.addr, args.port))?.run().await
+    }
 }

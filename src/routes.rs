@@ -1,87 +1,203 @@
-use crate::dataguards::{Creds, ReadToggleData};
-use crate::db_parser::{
-    get_feed_list, get_items_from_feed, toggle_read_status,
+// Endpoints will not return 415 when the wrong method is provided
+//  https://github.com/actix/actix-web/issues/2735
+//
+// The /update and /reload endpoints both write to the db, however, `/reload`
+// interacts indirectly with it via the newsboat executable, not the connection
+// pool of the app. To avoid having to lock the database, we therefore use a
+// a dedicated actor. Every endpoint defers its operations to the
+// `NewsboatActor`.
+//
+//============================================================================//
+use actix_web::{
+        patch, get, post, web, HttpRequest,
+        FromRequest
 };
-use crate::errors::{ERR_RESPONSE, OK_RESPONSE};
-use crate::models::{Config, RssFeed, RssItem};
-use rocket::serde::json::Json;
-use rocket::State;
+use crate::newsboat_actor::ItemsMessage;
+use crate::{
+    util::get_env_key,
+    newsboat_actor::{NewsboatActor,ReloadMessage,FeedsMessage,UpdateMessage},
+    err::MoatError,
+    db::{RssItem,RssFeed}
+};
+use std::future::{ready, Ready};
+use base64::{Engine as _, engine::general_purpose};
 
-/// curl -X POST -H "x-creds: test" https://moat:7654/unread -d "id=5384&unread=0"
-/// curl -X POST -H "x-creds: test" https://moat:7654/unread/ -d "rssurl=$(printf 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA'|base64 )"
-/// If the <id> parameter does not conform to the u32 type rocket
-/// will try other potentially matching routes (based on `rank`) until
-/// no matching alternatives remain, at which point 404 is returned
-#[post("/unread", data = "<data>")]
-pub fn unread(
-    _key: Creds<'_>,
-    config: &State<Config>,
-    data: ReadToggleData,
-) -> &'static str {
-    let success = toggle_read_status(
-        &config.cache_path.as_str(),
-        data.rssurl,
-        data.id,
-        data.unread,
-    )
-    .unwrap();
+//============================================================================//
 
-    if success > 0 {
-        OK_RESPONSE
-    } else {
-        ERR_RESPONSE
-    }
-}
+pub struct Creds;
 
-#[get("/reload")]
-pub fn reload(_key: Creds<'_>, config: &State<Config>) -> &'static str {
-    // Newsboat has a built-in command to reload all feeds in the background
-    //      `newsboat -x reload`
-    let output = std::process::Command::new(config.newsboat_path.as_str())
-        // The arguments need to be passed seperatly, otherwise we effectivly run
-        // `newsboat "-x reload"`
-        .arg("-x")
-        .arg("reload")
-        .output()
-        .expect("Failed to update cache.db"); // (panic!)
+impl FromRequest for Creds {
+    type Error = MoatError;
+    type Future = Ready<Result<Creds,MoatError>>;
 
-    if output.stderr.len() == 0 && output.stdout.len() == 0 {
-        OK_RESPONSE
-    } else {
-        ERR_RESPONSE
-    }
-}
+    /// Verify the `x-creds` header of an incoming request, ran for every
+    /// endpoint that takes `Creds` as an argument.
+    fn from_request(req: &HttpRequest, _: &mut actix_web::dev::Payload) ->
+       <Self as FromRequest>::Future {
 
-#[get("/feeds")]
-pub fn feeds(_key: Creds<'_>, config: &State<Config>) -> Json<Vec<RssFeed>> {
-    match get_feed_list(config.cache_path.as_str(), &config.muted_list) {
-        Ok(a) => Json(a),
-        Err(_) => Json(Vec::new()),
-    }
-}
+        let key = get_env_key();
 
-/// The API uses 'GET /items/<rssurl|base64url>'
-///  curl -X GET -H "x-creds: test" https://moat:7654/items/$(base64 -w <<< 'https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA')
-#[get("/items/<b64_rssurl>")]
-pub fn items(
-    _key: Creds<'_>,
-    config: &State<Config>,
-    b64_rssurl: &str,
-) -> Json<Vec<RssItem>> {
-    // Decode the rssurl from base64
-    let decoded = base64::decode(b64_rssurl).unwrap_or_default();
-    let rssurl = String::from_utf8(decoded).unwrap_or_default();
-
-    // Empty response on error
-    if rssurl.is_empty() {
-        Json(Vec::new())
-    } else {
-        match get_items_from_feed(
-            config.cache_path.as_str(),
-            rssurl.as_str().trim(),
-        ) {
-            Ok(a) => Json(a),
-            Err(_) => Json(Vec::new()),
+        if let Some(creds) = req.headers().get("x-creds") {
+            if creds.to_str().unwrap_or("") == key {
+                return ready(Ok(Creds))
+            }
         }
+        ready(Err(MoatError::AuthError))
+    }
+}
+
+
+#[derive(Debug,serde::Serialize)]
+#[cfg_attr(test, derive(serde::Deserialize))]
+pub struct MoatResponse {
+    pub success: bool,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+//============================================================================//
+
+/// Update the `unread` field of one or more `RssItem` objects in the database.
+/// A single entry can be targeted using the `id` parameter and all items
+/// for a feed can be targeted using the (base64 encoded) `feedurl` parameter.
+///
+/// The `success` key will only be `true` in the response if the update query
+/// affected at least one row.
+#[post("/update")]
+pub async fn update(_: Creds, actor_addr:
+                    web::Data<actix::Addr<NewsboatActor>>,
+                    form: web::Form<UpdateMessage>)
+ -> Result<web::Json<MoatResponse>, MoatError> {
+    let message = form.into_inner();
+    let success = actor_addr.send(message).await?;
+    let success = success.unwrap_or(false);
+
+    Ok(web::Json(MoatResponse { success, message: None }))
+}
+
+/// Reload all feeds.
+#[patch("/reload")]
+pub async fn reload(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>)
+    -> Result<web::Json<MoatResponse>, MoatError> {
+    let _ = actor_addr.send(ReloadMessage).await?;
+
+    Ok(web::Json(MoatResponse { success: true, message: None }))
+}
+
+/// Fetch a list of all `RssFeed` objects.
+#[get("/feeds")]
+pub async fn feeds(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>)
+    -> Result<web::Json<Vec<RssFeed>>, MoatError> {
+
+    let rss_feeds = actor_addr.send(FeedsMessage).await?;
+    Ok(web::Json(rss_feeds.unwrap()))
+}
+
+/// Fetch all `RssItem` objects for a given rssurl.
+#[get("/items/{b64_rssurl}")]
+pub async fn items(_: Creds, actor_addr: web::Data<actix::Addr<NewsboatActor>>,
+                   path: web::Path<(String,)>)
+                -> Result<web::Json<Vec<RssItem>>, MoatError> {
+    let rssurl = path.into_inner().0;
+    let rssurl = general_purpose::STANDARD.decode(rssurl)?;
+    let rssurl = String::from_utf8(rssurl)?;
+    let res = actor_addr.send(ItemsMessage { rssurl }).await?;
+
+    Ok(web::Json(res.unwrap()))
+}
+
+//============================================================================//
+
+#[cfg(test)]
+mod tests {
+    use actix::prelude::*;
+    use crate::{
+        util::run_setup_script,
+        config::{Config, MOAT_KEY_ENV},
+        muted::Muted,
+        db::{RssFeed,RssItem,Db},
+        newsboat_actor::{NewsboatActor,UpdateMessage},
+        routes::MoatResponse,
+        routes
+    };
+    use actix_web::{test, App, web};
+    use base64::{Engine as _, engine::general_purpose};
+
+    async fn setup() -> Addr<NewsboatActor> {
+        run_setup_script();
+        std::env::set_var(MOAT_KEY_ENV, "1");
+
+        let config = Config {
+            cache_db: "/tmp/moat/cache.db".to_string(),
+            urls: "/tmp/moat/urls".to_string(),
+            newsboat_config: "/tmp/moat/config".to_string(),
+            newsboat_bin: "newsboat".to_string(),
+        };
+
+        let muted = Muted::from_urls_file(&config.urls).unwrap();
+        let db = Db::new(config.cache_db.clone());
+
+        NewsboatActor { config, muted, db }.start()
+    }
+
+    #[actix_web::test]
+    async fn test_feeds_not_empty() {
+        let actor_addr = setup().await;
+
+        let app = test::init_service(App::new()
+                .app_data(web::Data::new(actor_addr))
+                .service(routes::feeds)).await;
+
+        let req = test::TestRequest::get().uri("/feeds")
+                    .insert_header(("x-creds", "1")).to_request();
+
+        let res: Vec<RssFeed> = test::call_and_read_body_json(&app, req).await;
+
+        assert_ne!(res.len(), 0);
+    }
+
+    #[actix_web::test]
+    async fn test_items_not_empty() {
+        let actor_addr = setup().await;
+
+        let app = test::init_service(App::new()
+                .app_data(web::Data::new(actor_addr))
+                .service(routes::items)).await;
+
+        let b64_rssurl = general_purpose::STANDARD.encode(
+            "https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA");
+
+        let req = test::TestRequest::get().uri(&format!("/items/{}", b64_rssurl))
+                    .insert_header(("x-creds", "1")).to_request();
+
+        let res: Vec<RssItem> = test::call_and_read_body_json(&app, req).await;
+
+        assert_ne!(res.len(), 0);
+    }
+
+    #[actix_web::test]
+    async fn test_can_update() {
+        let actor_addr = setup().await;
+
+        let app = test::init_service(App::new()
+                .app_data(web::Data::new(actor_addr))
+                .service(routes::update)).await;
+
+        let b64_rssurl = general_purpose::STANDARD.encode(
+            "https://www.youtube.com/feeds/videos.xml?channel_id=UCXU7XVK_2Wd6tAHYO8g9vAA");
+
+        let req = test::TestRequest::post().uri("/update")
+                    .insert_header(("x-creds", "1"))
+                    .set_form(UpdateMessage {
+                        unread: true,
+                        id: None,
+                        feedurl: Some(b64_rssurl)
+                    })
+                    .to_request();
+
+        let res: MoatResponse = test::call_and_read_body_json(&app, req).await;
+
+        assert!(res.success);
     }
 }

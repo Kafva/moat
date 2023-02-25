@@ -10,8 +10,8 @@ struct UrlImageView: View {
     }
 
     var body: some View {
-          Image(uiImage: UIImage(data: self.imageLoader.imageData) ?? UIImage())
-              .resizable() // Must be applied before modifying the frame size
-              .clipped()
+        Image(uiImage: UIImage(data: self.imageLoader.imageData) ?? UIImage())
+            .resizable()  // Must be applied before modifying the frame size
+            .clipped()
     }
 }
