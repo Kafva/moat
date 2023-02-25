@@ -153,9 +153,7 @@ class ApiWrapper<T: Codable> {
             req: req, alert: alert, isLoading: isLoading,
             callback: { data in
                 do {
-                    print("data:", data)
                     let decoded = try JSONDecoder().decode([T].self, from: data)
-                    print("decoded:", decoded)
 
                     // If the response data was successfully decoded dispatch an update in the
                     // main thread (all UI updates should be done in the main thread)
@@ -175,7 +173,7 @@ class ApiWrapper<T: Codable> {
     }
 
     func setAllItemsAsRead(
-        unread_count: Binding<Int>, rssurl: String, alert: AlertState
+        unread_count: Binding<Int>, feedurl: String, alert: AlertState
     ) {
 
         guard
@@ -193,7 +191,7 @@ class ApiWrapper<T: Codable> {
         req.setValue(
             "application/x-www-form-urlencoded",
             forHTTPHeaderField: "Content-Type")
-        req.httpBody = "feedurl=\(rssurl.toBase64())&unread=false".data(
+        req.httpBody = "feedurl=\(feedurl.toBase64())&unread=false".data(
             using: .ascii)
 
         self.sendRequest(

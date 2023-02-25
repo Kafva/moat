@@ -6,7 +6,7 @@ class RssFeed: ObservableObject, Codable, Equatable {
     // https://www.hackingwithswift.com/swift4
     // https://www.hackingwithswift.com/books/ios-swiftui/sending-and-receiving-codable-data-with-urlsession-and-swiftui
     @Published var unread_count: Int
-    let rssurl: String
+    let feedurl: String
     let url: String
     let title: String
     var item_count: Int
@@ -16,7 +16,7 @@ class RssFeed: ObservableObject, Codable, Equatable {
     /// Returns true if the provided feeds have the same
     /// properties, ignores differences in the `id` property
     public static func == (lhs: RssFeed, rhs: RssFeed) -> Bool {
-        return lhs.rssurl == rhs.rssurl && lhs.url == rhs.url
+        return lhs.feedurl == rhs.feedurl && lhs.url == rhs.url
             && lhs.title == rhs.title && lhs.unread_count == rhs.unread_count
             && lhs.item_count == rhs.item_count
     }
@@ -25,7 +25,7 @@ class RssFeed: ObservableObject, Codable, Equatable {
         // An enum which impllements the CodingKey protocol can be used to
         // map different JSON keys to different attributes in a codable object
         // i.e. a key-name could be mapped to an internal attribute named something else
-        case rssurl
+        case feedurl
         case url
         case title
         case unread_count
@@ -35,7 +35,7 @@ class RssFeed: ObservableObject, Codable, Equatable {
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(self.rssurl, forKey: .rssurl)
+        try container.encode(self.feedurl, forKey: .feedurl)
         try container.encode(self.url, forKey: .url)
         try container.encode(self.title, forKey: .title)
         try container.encode(self.unread_count, forKey: .unread_count)
@@ -46,7 +46,7 @@ class RssFeed: ObservableObject, Codable, Equatable {
     required init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
 
-        self.rssurl = try values.decode(String.self, forKey: .rssurl)
+        self.feedurl = try values.decode(String.self, forKey: .feedurl)
         self.url = try values.decode(String.self, forKey: .url)
         self.title = try values.decode(String.self, forKey: .title)
         self.unread_count = try values.decode(Int.self, forKey: .unread_count)
@@ -55,10 +55,10 @@ class RssFeed: ObservableObject, Codable, Equatable {
     }
 
     init(
-        rssurl: String, url: String, title: String, unread_count: Int,
+        feedurl: String, url: String, title: String, unread_count: Int,
         item_count: Int, muted: Bool
     ) {
-        self.rssurl = rssurl
+        self.feedurl = feedurl
         self.url = url
         self.title = title
         self.unread_count = unread_count
@@ -70,7 +70,7 @@ class RssFeed: ObservableObject, Codable, Equatable {
         // If the feed is a YouTube channel on the form
         //  https://www.youtube.com/feeds/videos.xml?channel_id=<...>
         // return the video ID
-        guard let url_params = URL(string: self.rssurl)?.query else {
+        guard let url_params = URL(string: self.feedurl)?.query else {
             return nil
         }
 

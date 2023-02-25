@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct RssFeedRowView: View {
-
     var feed: RssFeed
     var screenWidth: CGFloat
     @StateObject var alertState: AlertState = AlertState()
@@ -25,7 +24,7 @@ struct RssFeedRowView: View {
             if self.showLogos {
                 NavigationLink(
                     destination: ItemsView(
-                        feedurl: feed.rssurl, muted: feed.muted,
+                        feedurl: feed.feedurl, muted: feed.muted,
                         unread_count: $unread_count)
                 ) {
                     FeedLogoView(channelId: feed.getChannelId() ?? "")
@@ -35,7 +34,7 @@ struct RssFeedRowView: View {
             VStack(alignment: .leading, spacing: 5) {
                 NavigationLink(
                     destination: ItemsView(
-                        feedurl: feed.rssurl, muted: feed.muted,
+                        feedurl: feed.feedurl, muted: feed.muted,
                         unread_count: $unread_count)
                 ) {
                     Text("\(feed.title)")
@@ -115,7 +114,7 @@ struct RssFeedRowView: View {
                         action: {
                             self.apiWrapper.setAllItemsAsRead(
                                 unread_count: self.$unread_count,
-                                rssurl: self.feed.rssurl,
+                                feedurl: self.feed.feedurl,
                                 alert: self.alertState
                             )
                         }
