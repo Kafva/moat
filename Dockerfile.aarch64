@@ -12,4 +12,9 @@ ENV CC_aarch64_unknown_linux_musl=clang \
     AR_aarch64_unknown_linux_musl=llvm-ar \
     CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_RUSTFLAGS="-Clink-self-contained=yes -Clinker=rust-lld"
 
+# Compile time checks by sqlx require /root/.newsboat/cache.db to exist
+COPY .env .
+RUN apk add newsboat
+RUN newsboat &> /dev/null || true
+
 ENTRYPOINT ["cargo", "build", "--release", "--target", "aarch64-unknown-linux-musl"]

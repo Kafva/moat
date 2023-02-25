@@ -4,7 +4,7 @@
 
 An iOS client for [newsboat](https://github.com/newsboat/newsboat).
 
-## Client setup
+## Setup
 Install all dependencies
 ```bash
 brew install cocoapods
@@ -13,28 +13,10 @@ pod install
 and open `moat.xcworkspace` with Xcode. Connect your device and install with
 <kbd>CMD</kbd> <kbd>R</kbd>.
 
-## Server setup
-The server is configured through command line options and `Rocket.toml`.
-A secret key needs to be set on startup, `MOAT_KEY`, the corresponding value
-needs to be present in the `x-creds` header of all client requests.
+Build and run the server
 ```bash
-cargo build --release
-cargo install --path=.
-MOAT_KEY="secret value" ~/.cargo/bin/moat_server
+cargo run -- --help
 ```
-The certificate and key used for TLS are read from `./tls/server.{crt,key}` by
-default.
-
-The certificate needs to be signed by an entity that the iOS client trusts.
-To install your own CA as a trusted root authority on iOS:
-
-1. Serve up the `.crt` from a machine and download it through Safari on the iOS
-   device
-2. This should give a prompt to install a profile for your CA
-3. To trust the certificate as a root authority go to *Settings > General >
-   About > Certificate Trust Settings*, and toggle *Enable Full Trust for Root
-   Certificates* for the certificate as described
-   [here](https://apple.stackexchange.com/a/371757/290763).
 
 ### Newsboat `urls` file
 The feeds that are shown in the app are determined by `~/.newsboat/urls` on
@@ -51,7 +33,7 @@ The tag field is unused by moat.
 The server can be built for `aarch64-unknown-linux-musl` (Alpine) using
 [Dockerfile.aarch64](/Dockerfile.aarch64).
 ```bash
-docker build -f Dockerfile.aarch64 --rm  --tag=moat .
+docker build -f Dockerfile.aarch64 --rm  --tag=moat . &&
 docker run --name=moat_builder -v `pwd`:/build -it moat
 # => ./target/aarch64-unknown-linux-musl/release/moat_server
 ```

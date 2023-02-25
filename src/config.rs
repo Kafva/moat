@@ -11,8 +11,6 @@ pub const DEFAULT_LOG_LEVEL: &'static str = "info";
 pub const TLS_KEY: &'static str = "key.pem";
 pub const TLS_CERT: &'static str = "cert.pem";
 
-pub const WORKER_CNT: usize = 2;
-
 #[derive(Clone)]
 pub struct Config {
     pub cache_db: String,

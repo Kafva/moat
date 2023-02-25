@@ -19,8 +19,7 @@ use std::{env,
 
 use crate::{
     util::{expand_tilde,get_env_key,path_exists,get_tls_config},
-    config::{DEFAULT_NEWSBOAT_BIN,Config,MOAT_KEY_ENV,DEFAULT_LOG_LEVEL,
-             WORKER_CNT},
+    config::{DEFAULT_NEWSBOAT_BIN,Config,MOAT_KEY_ENV,DEFAULT_LOG_LEVEL},
     newsboat_actor::NewsboatActor,
     muted::Muted,
     routes::*,
@@ -32,7 +31,7 @@ use crate::{
 #[clap(
     version = "0.2.0",
     author = "Kafva <https://github.com/Kafva>",
-    about = "moat server"
+    about = "A pre-shared key needs to be set in `MOAT_KEY` on launch, the client application needs to supply the same value in its configuration after being installed."
 )]
 struct Args {
     /// Path to newsboat executable
@@ -72,7 +71,11 @@ struct Args {
 
     /// Directory with cert.pem and key.pem to use for TLS.
     #[clap(short = 's', long, value_parser)]
-    tls_dir: Option<String>
+    tls_dir: Option<String>,
+
+    /// Number of workers
+    #[clap(short, long, default_value_t = 2)]
+    workers: usize
 }
 
 //============================================================================//
@@ -122,7 +125,7 @@ async fn main() -> std::io::Result<()> {
             .service(items)
             .service(update)
     })
-    .workers(WORKER_CNT);
+    .workers(args.workers);
 
     if args.tls_dir.is_some() {
         let tls_config = get_tls_config(args.tls_dir.unwrap());
