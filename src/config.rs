@@ -8,8 +8,8 @@ pub const MOAT_KEY_ENV: &'static str = "MOAT_KEY";
 
 pub const DEFAULT_LOG_LEVEL: &'static str = "info";
 
-pub const TLS_KEY: &'static str = "tls/server.key";
-pub const TLS_CERT: &'static str = "tls/server.crt";
+pub const TLS_KEY: &'static str = "key.pem";
+pub const TLS_CERT: &'static str = "cert.pem";
 
 pub const WORKER_CNT: usize = 2;
 

@@ -70,10 +70,9 @@ struct Args {
     #[clap(short, long, default_value_t = 7654)]
     port: u16,
 
-    /// Enable TLS, requires ./tls/server.crt and ./tls/server.key to exist
-    #[clap(short = 's', long, takes_value = false)]
-    tls: bool
-
+    /// Directory with cert.pem and key.pem to use for TLS.
+    #[clap(short = 's', long, value_parser)]
+    tls_dir: Option<String>
 }
 
 //============================================================================//
@@ -125,8 +124,8 @@ async fn main() -> std::io::Result<()> {
     })
     .workers(WORKER_CNT);
 
-    if args.tls {
-        let tls_config = get_tls_config();
+    if args.tls_dir.is_some() {
+        let tls_config = get_tls_config(args.tls_dir.unwrap());
         moat_info!("Listening on https://{}:{}...", args.addr, args.port);
         server.bind_rustls((args.addr,args.port), tls_config)?.run().await
 

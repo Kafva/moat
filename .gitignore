@@ -1,6 +1,6 @@
+*tls*
 .env
 ssl
-tls
 .vscode
 Pods
 build
