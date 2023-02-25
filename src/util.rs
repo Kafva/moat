@@ -39,13 +39,13 @@ pub fn get_tls_config(tls_dir: String) -> rustls::ServerConfig {
         .with_safe_defaults()
         .with_no_client_auth();
 
-    let key_path =  &format!("{}/{}", tls_dir.clone(), TLS_KEY);
+    let key_path =  &format!("{}/{}", tls_dir, TLS_KEY);
     let key_file = File::open(&key_path).unwrap_or_else(|_| {
         moat_error!("Missing '{}'", key_path);
         panic!("No TLS key");
     });
 
-    let cert_path =  &format!("{}/{}", tls_dir.clone(), TLS_CERT);
+    let cert_path =  &format!("{}/{}", tls_dir, TLS_CERT);
     let cert_file = File::open(&cert_path).unwrap_or_else(|_| {
         moat_error!("Missing '{}'", cert_path);
         panic!("No TLS certficate");
@@ -69,7 +69,7 @@ pub fn get_tls_config(tls_dir: String) -> rustls::ServerConfig {
     };
 
     if keys.is_empty() {
-        moat_error!("No RSA or EC private key in '{}'", TLS_KEY);
+        moat_error!("No RSA or EC private key in '{}'", key_path);
         panic!("Failed to read private key")
     }
 
