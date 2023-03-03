@@ -67,6 +67,8 @@ application](https://github.com/newsboat/newsboat/issues/471) and pursuing a
 more robust synchronization framework was therefore not deemed preferable.
 
 ## Additional notes
+* Tested to work with Newsboat 2.30.1
+
 * The project was mainly modelled with YouTube feeds in mind and therefore
   supports fetching YouTube thumbnails and YouTube channel icons.
 
