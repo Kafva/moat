@@ -1,22 +1,42 @@
 import SwiftUI
 
+/// To bypass the consent screen we need to inject a cookie into the request
+/// XXX: these values need to be manually updated 🤐
+private func setupCookies() {
+    let cookies: [[HTTPCookiePropertyKey: Any]] = [
+        [
+            .domain: ".youtube.com",
+            .path: "/",
+            .name: "CONSENT",
+            .value: "PENDING+879",
+            .secure: "TRUE",
+            .expires: "2025-08-25 08:46:38 +0000",
+        ],
+        [
+            .domain: ".youtube.com",
+            .path: "/",
+            .name: "SOCS",
+            .value: "CAESEwgDEgk1NTk0MTEzMzIaAmVuIAEaBgiAgaWnBg",
+            .secure: "TRUE",
+            .expires: "2024-09-24 08:46:42 +0000",
+        ],
+    ]
+
+    HTTPCookieStorage.shared
+        .cookies?
+        .forEach(HTTPCookieStorage.shared.deleteCookie)
+
+    cookies.forEach({
+        HTTPCookieStorage.shared.setCookie(HTTPCookie(properties: $0)!)
+    })
+
+}
+
 func getLogoUrl(
     channelId: String, name: String, completion: @escaping (String) -> Void
 ) {
     let channel_url = URL(
         string: "https://www.youtube.com/channel/\(channelId)/about")!
-
-    // To bypass the consent screen we need to inject a cookie into the request
-    if let cookie = HTTPCookie(properties: [
-        .domain: ".youtube.com",
-        .path: "/",
-        .name: "CONSENT",
-        .value: "YES+cb.20210615-14-p0.en-GB+FX+503",
-        .secure: "TRUE",
-    ]) {
-        // Note that we use both the 'shared' session and cookie storage
-        HTTPCookieStorage.shared.setCookie(cookie)
-    }
 
     let req = URLRequest(url: channel_url)
 
@@ -66,6 +86,8 @@ func setLogosInUserDefaults(
     var logos = [String: String]()
 
     finishedCount.wrappedValue = 0
+
+    setupCookies()
 
     for feed in feeds {
 
